@@ -3537,58 +3537,120 @@ try{lvRender();}catch(e){console.error(e);}
 </script>
 
 <style>
-.gsc{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0 10px}
+.gsc{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;margin:6px 0 10px}
 .gsc span{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:700}
 .gsc span b{color:var(--red)}
+.gsc .tm{font-variant-numeric:tabular-nums}
+.gsc .tm.low{border-color:var(--bad);color:var(--bad);animation:gtick 1s steps(2) infinite}
+.gsc .tm.low b{color:var(--bad)}
+@keyframes gtick{50%{opacity:.55}}
+@media (prefers-reduced-motion:reduce){.gsc .tm.low{animation:none}}
+.gtb{height:6px;background:var(--soft);border-radius:3px;overflow:hidden;margin:-4px 0 10px}
+.gtb i{display:block;height:100%;background:var(--ok);transition:width .25s linear}
+.gtb i.low{background:var(--bad)}
+.gtg{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:4px 12px;cursor:pointer}
+.gtg:hover{border-color:var(--red)}
 .gres{text-align:center;padding:10px 0}
 .gres .res{font-size:44px}
 .gres .stars{font-size:30px;color:var(--gold);letter-spacing:4px}
 </style>
 <script>
-/* Tính điểm cho trò Ghép cặp và Đoán thanh điệu */
+/* Tính điểm và đếm ngược thời gian cho trò Ghép cặp và Đoán thanh điệu */
 (function(){
-  const BK='hh_game_best';
+  const BK='hh_game_best',TK='hh_timer';
+  const MEMO_SEC=60,TONE_SEC=10,N=10;
   const bestGet=k=>{try{return (JSON.parse(localStorage.getItem(BK)||'{}')||{})[k];}catch(e){return undefined;}};
   const bestSet=(k,v)=>{let o={};try{o=JSON.parse(localStorage.getItem(BK)||'{}')||{};}catch(e){}if(o[k]==null||v>o[k]){o[k]=v;try{localStorage.setItem(BK,JSON.stringify(o));}catch(e){}return true;}return false;};
-  const stars=p=>'★'.repeat(p>=90?3:p>=60?2:p>=30?1:0)+'☆'.repeat(3-(p>=90?3:p>=60?2:p>=30?1:0));
+  const nStar=p=>p>=90?3:p>=60?2:p>=30?1:0;
+  const stars=p=>'★'.repeat(nStar(p))+'☆'.repeat(3-nStar(p));
   const log=(n,s,m)=>{if(typeof hhLog==='function')hhLog('trochoi',n,s,m);};
+  const timerOn=()=>{try{return localStorage.getItem(TK)!=='0';}catch(e){return true;}};
+  window.gTimerToggle=function(){try{localStorage.setItem(TK,timerOn()?'0':'1');}catch(e){}memo();T.n=N;tone();};
+  const tgl=()=>`<button type='button' class='gtg' onclick='gTimerToggle()' aria-pressed='${timerOn()}'>⏱ Đếm ngược: ${timerOn()?'Bật':'Tắt'}</button>`;
+  const secs=ms=>Math.max(0,Math.ceil(ms/1000));
 
-  /* Ghép cặp: 100 điểm, mỗi lần lật sai trừ 8 điểm (tối thiểu 10). */
-  const mScore=()=>Math.max(10,100-(G.mv-G.ok)*8);
+  /* ---------- Ghép cặp: 100 điểm, lật sai trừ 8 điểm; có 60 giây, bắt đầu tính từ lần lật đầu tiên ---------- */
+  let MT=null;
+  const mBase=()=>Math.max(10,100-(G.mv-G.ok)*8);
+  const mScore=()=>G.over?Math.round(mBase()*G.ok/6):mBase();
+  const memo0=memo;
+  memo=function(pl){clearInterval(MT);MT=null;memo0(pl);G.t0=0;G.over=false;G.tOn=timerOn();drawM();};
+  let mLast=0;
+  function mTick(){
+    if(!G||G.ok===6||G.over){clearInterval(MT);MT=null;return;}
+    const now=Date.now(),mg=document.getElementById('mg');if(mg&&!mg.offsetParent)G.t0+=now-mLast;mLast=now;
+    if(Date.now()-G.t0>=MEMO_SEC*1000){G.over=true;G.lock=true;clearInterval(MT);MT=null;sfx('lose');drawM();return;}
+    const el=document.getElementById('mgt');if(!el){clearInterval(MT);MT=null;return;}
+    const left=MEMO_SEC*1000-(Date.now()-G.t0),low=left<=10000;
+    el.innerHTML=`⏱ <b>${secs(left)}</b> giây`;el.className='tm'+(low?' low':'');
+    const bar=document.getElementById('mgb');if(bar){bar.style.width=(left/(MEMO_SEC*10))+'%';bar.className=low?'low':'';}
+  }
+  const flip0=flip;
+  flip=function(k){
+    if(G.over)return;
+    if(G.tOn&&!G.t0){G.t0=mLast=Date.now();clearInterval(MT);MT=setInterval(mTick,250);}
+    flip0(k);
+  };
   drawM=function(){
-    $('mg').innerHTML=G.cards.map((c,k)=>`<button class='mc${c.d?' done':''}${G.sel===k?' sel':''}${c.e?' err':''}${c.h?' han':''}' style='${c.h?'font-size:24px':''}' onclick='flip(${k})'>${c.h?c.t:cap(c.t)}</button>`).join('');
+    $('mg').innerHTML=G.cards.map((c,k)=>`<button class='mc${c.d?' done':''}${G.sel===k?' sel':''}${c.e?' err':''}${c.h?' han':''}' style='${c.h?'font-size:24px':''}' onclick='flip(${k})'${G.over&&!c.d?' disabled':''}>${c.h?c.t:cap(c.t)}</button>`).join('');
     const best=bestGet('memo_'+GL),sc=mScore();
-    if(G.ok===6){
-      if(!G.logged){G.logged=1;G.nb=bestSet('memo_'+GL,sc);log('Ghép cặp · HSK '+GL,sc,100);}
-      $('gm').innerHTML=`<div class='gres'><div>HSK ${GL} · Hoàn thành sau ${G.mv} lượt</div><div class='res'>${sc} / 100</div><div class='stars' aria-label='${stars(sc).split('★').length-1} sao'>${stars(sc)}</div><div>${G.nb?'Kỷ lục mới! 太棒了！':'Kỷ lục của bạn: '+bestGet('memo_'+GL)+' điểm'}</div><p><button type='button' class='btn' onclick='memo()'>Chơi lượt mới</button></p></div>`;
+    const used=G.t0?Math.min(MEMO_SEC,Math.round((Date.now()-G.t0)/1000)):0;
+    if(G.ok===6||G.over){
+      clearInterval(MT);MT=null;
+      if(!G.logged){G.logged=1;G.used=used;G.nb=bestSet('memo_'+GL,sc)&&sc>0;log('Ghép cặp · HSK '+GL+(G.over?' (hết giờ)':''),sc,100);}
+      $('gm').innerHTML=`<div class='gres'><div>HSK ${GL} · ${G.over?`<b style='color:var(--bad)'>Hết giờ!</b> Ghép được ${G.ok}/6 cặp`:`Hoàn thành sau ${G.mv} lượt`}${G.tOn&&!G.over?` trong ${G.used} giây`:''}</div><div class='res'>${sc} / 100</div><div class='stars'>${stars(sc)}</div><div>${G.nb?'Kỷ lục mới! 太棒了！':'Kỷ lục của bạn: '+bestGet('memo_'+GL)+' điểm'}</div><p><button type='button' class='btn' onclick='memo()'>Chơi lượt mới</button> ${tgl()}</p></div>`;
     }else{
-      $('gm').innerHTML=`<div class='gsc'><span>HSK ${GL}</span><span>Đã ghép: <b>${G.ok}/6</b></span><span>Lượt: <b>${G.mv}</b></span><span>Điểm: <b>${sc}</b></span>${best!=null?`<span>Kỷ lục: <b>${best}</b></span>`:''}</div>`;
+      const left=G.t0?MEMO_SEC*1000-(Date.now()-G.t0):MEMO_SEC*1000,low=G.t0&&left<=10000;
+      $('gm').innerHTML=`<div class='gsc'><span>HSK ${GL}</span><span>Đã ghép: <b>${G.ok}/6</b></span><span>Điểm: <b>${sc}</b></span>${G.tOn?`<span id='mgt' class='tm${low?' low':''}'>⏱ <b>${secs(left)}</b> giây</span>`:''}${best!=null?`<span>Kỷ lục: <b>${best}</b></span>`:''}${tgl()}</div>${G.tOn?`<div class='gtb'><i id='mgb' class='${low?'low':''}' style='width:${left/(MEMO_SEC*10)}%'></i></div>`:''}${G.tOn&&!G.t0?`<p style='margin:0 0 8px;font-size:13px;color:var(--mut)'>Có ${MEMO_SEC} giây để ghép hết 6 cặp, đồng hồ chạy khi bạn lật thẻ đầu tiên.</p>`:''}`;
     }
   };
 
-  /* Đoán thanh điệu: mỗi lượt 10 từ, 1 điểm mỗi câu đúng. */
-  const N=10;
+  /* ---------- Đoán thanh điệu: mỗi lượt 10 từ, mỗi từ có 10 giây ---------- */
+  let TT=null;
+  function tStop(){clearInterval(TT);TT=null;}
   tone=function(){
-    if(T.n>=N||T.done){T.n=0;T.ok=0;T.done=false;}
-    const P=svPool(),w=P[Math.floor(Math.random()*P.length)];T.w=w;
+    tStop();
+    if(T.n>=N||T.done){T.n=0;T.ok=0;T.done=false;T.tOn=timerOn();}
+    if(T.tOn==null)T.tOn=timerOn();
+    const P=svPool(),w=P[Math.floor(Math.random()*P.length)];T.w=w;T.ans=false;
     const best=bestGet('tone_'+GL);
-    $('tg').innerHTML=`<div class='gsc'><span>HSK ${GL}</span><span>Câu <b>${T.n+1}/${N}</b></span><span>Điểm: <b>${T.ok}</b></span>${best!=null?`<span>Kỷ lục: <b>${best}/${N}</b></span>`:''}</div><div class='bar'><i style='width:${T.n*100/N}%'></i></div><div class='w han'>${w[0]}</div><p>${cap(w[2])} · Từ này mang thanh mấy?</p><div class='opts'>${[1,2,3,4].map(t=>`<button class='opt' onclick='ansT(${t},this)'>Thanh ${t}</button>`).join('')}</div><div class='fb' id='tf'></div><button class='btn ghost' id='tnx' style='display:none' onclick='tone()'>${T.n+1>=N?'Xem kết quả':'Từ tiếp theo'}</button>`;
+    $('tg').innerHTML=`<div class='gsc'><span>HSK ${GL}</span><span>Câu <b>${T.n+1}/${N}</b></span><span id='tgs'>Điểm: <b>${T.ok}</b></span>${T.tOn?`<span id='tgt' class='tm'>⏱ <b>${TONE_SEC}</b> giây</span>`:''}${best!=null?`<span>Kỷ lục: <b>${best}/${N}</b></span>`:''}${tgl()}</div>${T.tOn?`<div class='gtb'><i id='tgb' style='width:100%'></i></div>`:`<div class='bar'><i style='width:${T.n*100/N}%'></i></div>`}<div class='w han'>${w[0]}</div><p>${cap(w[2])} · Từ này mang thanh mấy?</p><div class='opts'>${[1,2,3,4].map(t=>`<button class='opt' onclick='ansT(${t},this)'>Thanh ${t}</button>`).join('')}</div><div class='fb' id='tf'></div><button class='btn ghost' id='tnx' style='display:none' onclick='tone()'>${T.n+1>=N?'Xem kết quả':'Từ tiếp theo'}</button>`;
+    if(T.tOn){
+      let t0=Date.now(),last=t0;
+      TT=setInterval(()=>{
+        const el=document.getElementById('tgt');if(!el||T.ans){tStop();return;}
+        const now=Date.now();if(!el.offsetParent)t0+=now-last;last=now;
+        const left=TONE_SEC*1000-(Date.now()-t0),low=left<=3000;
+        el.innerHTML=`⏱ <b>${secs(left)}</b> giây`;el.className='tm'+(low?' low':'');
+        const bar=document.getElementById('tgb');if(bar){bar.style.width=Math.max(0,left/(TONE_SEC*10))+'%';bar.className=low?'low':'';}
+        if(left<=0){tStop();tTimeout();}
+      },200);
+    }
   };
+  function after(){
+    const nx=$('tnx');if(nx){nx.textContent=T.n>=N?'Xem kết quả':'Từ tiếp theo';if(T.n>=N)nx.onclick=toneEnd;}
+    const sc=document.getElementById('tgs');if(sc)sc.innerHTML=`Điểm: <b>${T.ok}</b>`;
+  }
+  function tTimeout(){
+    if(T.ans||T.n>=N)return;T.ans=true;
+    const c=toneOf(T.w[1]);T.n++;sfx('bad');
+    document.querySelectorAll('#tg .opt').forEach((o,i)=>{o.disabled=true;if(i+1===c)o.classList.add('ok');});
+    const f=$('tf');f.className='fb bad';f.textContent='Hết giờ! Đáp án: thanh '+c+' · '+T.w[1];
+    $('tnx').style.display='inline-block';after();
+  }
   const ans0=ansT;
   ansT=function(t,b){
-    if(T.n>=N)return;
-    ans0(t,b);
-    const nx=$('tnx');if(nx)nx.textContent=T.n>=N?'Xem kết quả':'Từ tiếp theo';
-    const sc=document.querySelector('#tg .gsc');if(sc)sc.children[2].innerHTML=`Điểm: <b>${T.ok}</b>`;
-    if(T.n>=N&&nx)nx.onclick=toneEnd;
+    if(T.ans||T.n>=N)return;T.ans=true;tStop();
+    ans0(t,b);after();
   };
   function toneEnd(){
-    T.done=true;const p=Math.round(T.ok*100/N),nb=bestSet('tone_'+GL,T.ok);
+    tStop();T.done=true;const p=Math.round(T.ok*100/N),nb=bestSet('tone_'+GL,T.ok)&&T.ok>0;
     log('Đoán thanh điệu · HSK '+GL,T.ok,N);sfx(p>=60?'win':'lose');
-    $('tg').innerHTML=`<div class='gres'><div>HSK ${GL} · Đoán thanh điệu</div><div class='res'>${T.ok} / ${N}</div><div class='stars'>${stars(p)}</div><div>${nb?'Kỷ lục mới! 太棒了！':'Kỷ lục của bạn: '+bestGet('tone_'+GL)+'/'+N}</div><p>${p>=90?'Xuất sắc! Tai nghe thanh điệu rất tốt.':p>=60?'Khá tốt, cố gắng thêm nhé! 加油！':'Hãy xem lại phần Thanh điệu trong Kho kiến thức rồi thử lại nhé.'}</p><p><button type='button' class='btn' onclick='tone()'>Chơi lượt mới</button></p></div>`;
+    $('tg').innerHTML=`<div class='gres'><div>HSK ${GL} · Đoán thanh điệu${T.tOn?' · '+TONE_SEC+' giây mỗi từ':''}</div><div class='res'>${T.ok} / ${N}</div><div class='stars'>${stars(p)}</div><div>${nb?'Kỷ lục mới! 太棒了！':'Kỷ lục của bạn: '+bestGet('tone_'+GL)+'/'+N}</div><p>${p>=90?'Xuất sắc! Tai nghe thanh điệu rất tốt.':p>=60?'Khá tốt, cố gắng thêm nhé! 加油！':'Hãy xem lại phần Thanh điệu trong Kho kiến thức rồi thử lại nhé.'}</p><p><button type='button' class='btn' onclick='tone()'>Chơi lượt mới</button> ${tgl()}</p></div>`;
   }
-  try{if(G&&$('mg'))drawM();}catch(e){}
-  try{T={n:0,ok:0};if($('tg'))tone();}catch(e){}
+  /* đồng hồ tạm dừng khi học sinh chuyển sang mục khác của app */
+  try{memo();}catch(e){}
+  try{T={n:N,ok:0};if($('tg'))tone();}catch(e){}
 })();
 </script>
 
