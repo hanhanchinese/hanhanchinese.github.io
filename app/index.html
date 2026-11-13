@@ -782,6 +782,53 @@ html.hh-locked,html.hh-locked body{overflow:hidden}
 <script type="module" src="auth.js"></script>
 <style>html.no-leaves #hh-leaves{display:none!important}</style>
 <script>try{if(localStorage.getItem('hh_leaves')==='0')document.documentElement.classList.add('no-leaves');}catch(e){}</script>
+<style>
+/* --- Luyện tập theo cấp độ --- */
+.lt-hold{display:none}
+.lt-head{margin:0 0 10px;color:var(--mut)}
+.lt-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin-bottom:14px}
+.lt-card{font:inherit;text-align:left;display:flex;flex-direction:column;gap:4px;border:2px solid var(--line);border-radius:14px;background:var(--card);color:var(--fg);padding:14px;cursor:pointer;min-height:44px}
+.lt-card:hover{border-color:var(--red)}
+.lt-card.on{border-color:var(--red);background:var(--soft)}
+.lt-card .k{font-size:12px;font-weight:800;color:var(--red);letter-spacing:.04em;text-transform:uppercase}
+.lt-card b{font-size:17px}
+.lt-card span{font-size:14px;color:var(--mut)}
+.lt-card .bs{font-size:13px;color:var(--ok);font-weight:700}
+.lt-empty{color:var(--mut);padding:10px 0}
+/* --- Bổ ngữ xu hướng kép --- */
+#bx .bx-bank{position:sticky;top:0;z-index:5;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:0 0 12px;box-shadow:0 4px 14px rgba(0,0,0,.06)}
+#bx .bx-bank p{margin:0 0 8px;font-size:13.5px;color:var(--mut)}
+#bx .bx-chips{display:flex;flex-wrap:wrap;gap:7px}
+#bx .bx-chip{font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;font-size:18px;border:1px solid var(--line);background:var(--card);color:var(--fg);padding:4px 12px;border-radius:999px;cursor:pointer;min-height:40px}
+#bx .bx-chip:hover{border-color:var(--red);background:var(--soft)}
+@media (max-width:600px){#bx .bx-bank p{display:none}#bx .bx-chips{gap:5px}#bx .bx-chip{font-size:16px;padding:2px 9px;min-height:34px}}
+#bx ol{list-style:none;padding:0;margin:0;counter-reset:q}
+#bx li.bx-q{counter-increment:q;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px 12px 52px;margin-bottom:10px;position:relative}
+#bx li.bx-q::before{content:counter(q);position:absolute;left:12px;top:14px;width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700}
+#bx .bx-s{font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;font-size:20px;line-height:2.1}
+#bx .bx-b{font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;font-size:19px;border:none;border-bottom:2px solid var(--fg);background:transparent;text-align:center;padding:0 2px;margin:0 3px;outline:none;color:var(--red)}
+#bx .bx-b.w2{width:3.6em}#bx .bx-b.w1{width:2em}
+#bx .bx-b:focus{background:var(--soft);border-bottom-color:var(--red)}
+#bx .bx-b.ok{color:var(--ok);border-bottom-color:var(--ok)}
+#bx .bx-b.bad{color:var(--bad);border-bottom-color:var(--bad)}
+#bx .bx-fb{display:none;font-size:14.5px;margin-top:6px;padding:8px 10px;border-radius:8px;background:var(--soft)}
+#bx .bx-fb.show{display:block}
+#bx .bx-fb.ok{border-left:4px solid var(--ok)}#bx .bx-fb.bad{border-left:4px solid var(--bad)}
+#bx .bx-res{display:none;text-align:center;border:2px solid var(--red);border-radius:14px;padding:14px;margin:12px 0;background:var(--card)}
+#bx .bx-res.on{display:block}
+#bx .bx-note{display:none;margin-top:12px;background:var(--soft);border-left:4px solid var(--red);padding:10px 12px;border-radius:0 8px 8px 0;font-size:15px}
+#bx .bx-note.on{display:block}
+#bx details.bx-th{margin-top:14px}
+#bx details.bx-th>summary{cursor:pointer;font-weight:800;color:var(--red);font-size:17px}
+#bx .zh{font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif}
+#bx .bx-f{font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;font-size:18px;text-align:center;padding:10px;background:var(--soft);border-radius:8px;margin:10px 0}
+#bx .bx-ex{font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;font-size:17px}
+#bx .bx-ex .vi{font-family:Nunito,sans-serif;font-size:14px;color:var(--mut)}
+#bx .x{color:var(--bad)}#bx .v{color:var(--ok)}
+#bx table td,#bx table th{text-align:center}
+#bx table td.l{text-align:left}
+#bx .tw{overflow-x:auto}
+</style>
 </head>
 <body>
 <div id="hh-auth" role="dialog" aria-modal="true" aria-labelledby="hh-auth-t"><div class="card">
@@ -1183,8 +1230,69 @@ html.hh-locked,html.hh-locked body{overflow:hidden}
 
 <section id="luyentap">
 <h2>Luyện tập</h2><div class='tabs' data-g='luyentap'></div>
-<div class='sub' data-g='luyentap' data-n='0'><div class="card" id="quiz"></div></div>
-<div class='sub' data-g='luyentap' data-n='1'><div id='sx'>
+<div class='sub' data-g='luyentap' data-n='0'><p class='lt-head'>Bài luyện tập HSK 1</p><div class='lt-list' id='ltl0'></div><div class='lt-stage' id='lts0'></div></div>
+<div class='sub' data-g='luyentap' data-n='1'><p class='lt-head'>Bài luyện tập HSK 2</p><div class='lt-list' id='ltl1'></div><div class='lt-stage' id='lts1'></div></div>
+<div class='sub' data-g='luyentap' data-n='2'><p class='lt-head'>Bài luyện tập HSK 3</p><div class='lt-list' id='ltl2'></div><div class='lt-stage' id='lts2'></div></div>
+<div class='sub' data-g='luyentap' data-n='3'><p class='lt-head'>Bài luyện tập HSK 4</p><div class='lt-list' id='ltl3'></div><div class='lt-stage' id='lts3'></div></div>
+<div class='sub' data-g='luyentap' data-n='4'><p class='lt-head'>Bài luyện tập HSK 5</p><div class='lt-list' id='ltl4'></div><div class='lt-stage' id='lts4'></div></div>
+<div class='sub' data-g='luyentap' data-n='5'><p class='lt-head'>Bài luyện tập HSK 6</p><div class='lt-list' id='ltl5'></div><div class='lt-stage' id='lts5'></div></div>
+<div class='sub' data-g='luyentap' data-n='6'><p class='lt-head'>Bài luyện tập HSK 7–9</p><div class='lt-list' id='ltl6'></div><div class='lt-stage' id='lts6'></div></div>
+<div class='lt-hold'><div class="card" id="quiz"></div></div>
+<div class='lt-hold'><div id='bx'>
+<div class='card'>
+<h3 style='margin-top:0'>Bổ ngữ xu hướng kép <span class='zh' style='color:var(--red)'>复合趋向补语</span></h3>
+<p style='margin:0;color:var(--mut)'>Chọn bổ ngữ xu hướng kép thích hợp điền vào chỗ trống. Một từ có thể dùng nhiều lần.</p>
+</div>
+<div class='bx-bank'><p>👉 Bấm vào ô trống, rồi bấm một từ bên dưới để điền (hoặc tự gõ). Câu 9 và 10 có hai ô vì tân ngữ nằm giữa: bấm từ sẽ tự điền cả hai ô.</p><div class='bx-chips' id='bxChips'></div></div>
+<ol id='bxList'></ol>
+<p><button type='button' class='btn' id='bxSubmit'>Nộp bài</button> <button type='button' class='btn ghost' id='bxReset'>Làm lại</button></p>
+<div class='bx-res' id='bxRes'></div>
+<div class='bx-note' id='bxNote'>📌 <b>Cần nhớ:</b> Khi tân ngữ là <b>nơi chốn</b>, nó luôn đặt <b>giữa</b> hai phần của bổ ngữ kép (<span class='zh'>爬上山去、走进教室来</span>), không đặt sau <span class='zh'>来/去</span>.</div>
+<details class='card bx-th'><summary>📘 Tóm tắt lý thuyết</summary>
+<h4>1. Bổ ngữ xu hướng kép là gì?</h4>
+<p>Bổ ngữ xu hướng kép (<span class='zh'>复合趋向补语</span>) là bổ ngữ gồm <b>hai</b> động từ chỉ phương hướng, đứng sau động từ chính để cho biết hành động diễn ra theo <b>hướng nào</b>.</p>
+<div class='bx-f'>Động từ + 上 / 下 / 进 / 出 / 回 / 过 / 起 + 来 / 去</div>
+<ul><li>Phần thứ nhất (<span class='zh'>上、下、进、出、回、过、起</span>) cho biết hướng di chuyển: lên, xuống, vào, ra, về, qua, dậy.</li><li>Phần thứ hai (<span class='zh'>来 / 去</span>) cho biết hướng so với <b>người nói</b>: <span class='zh'>来</span> là lại gần người nói, <span class='zh'>去</span> là rời xa người nói.</li></ul>
+<div class='bx-ex'>他从楼上走<b>下来</b>了。<span class='vi'>(Anh ấy từ trên lầu đi xuống. Người nói ở dưới.)</span><br>他从楼上走<b>下去</b>了。<span class='vi'>(Anh ấy từ trên lầu đi xuống. Người nói ở trên.)</span></div>
+<h4>2. Bảng bổ ngữ xu hướng kép</h4>
+<div class='tw'><table><tr><th></th><th class='zh'>上</th><th class='zh'>下</th><th class='zh'>进</th><th class='zh'>出</th><th class='zh'>回</th><th class='zh'>过</th><th class='zh'>起</th></tr>
+<tr><th class='zh'>来</th><td class='zh'>上来</td><td class='zh'>下来</td><td class='zh'>进来</td><td class='zh'>出来</td><td class='zh'>回来</td><td class='zh'>过来</td><td class='zh'>起来</td></tr>
+<tr><th class='zh'>去</th><td class='zh'>上去</td><td class='zh'>下去</td><td class='zh'>进去</td><td class='zh'>出去</td><td class='zh'>回去</td><td class='zh'>过去</td><td>—</td></tr>
+<tr><th>Nghĩa</th><td>lên</td><td>xuống</td><td>vào</td><td>ra</td><td>về</td><td>qua / lại</td><td>dậy / lên</td></tr></table></div>
+<p style='font-size:14px;color:var(--mut)'>Lưu ý: không có <span class='zh'>起去</span>.</p>
+<h4>3. Vị trí của tân ngữ</h4>
+<p><b>a) Tân ngữ chỉ nơi chốn:</b> bắt buộc đặt <b>giữa</b> hai phần của bổ ngữ, trước <span class='zh'>来/去</span>.</p>
+<div class='bx-f'>V + 上/下/进… + <u>nơi chốn</u> + 来/去</div>
+<ul class='bx-ex'><li class='v'>✔ 他走进教室来了。</li><li class='v'>✔ 她跑回家去了。</li><li class='x'>✘ 他走进来教室了。</li></ul>
+<p><b>b) Tân ngữ chỉ sự vật:</b> có thể đặt <b>giữa</b> hoặc <b>sau</b> bổ ngữ (đặt sau thường dùng khi hành động đã hoàn thành).</p>
+<ul class='bx-ex'><li>他拿出<b>一本书</b>来。 = 他拿出来<b>一本书</b>。<span class='vi'>(Anh ấy lấy ra một quyển sách.)</span></li></ul>
+<p><b>c) Câu chữ <span class='zh'>把</span>:</b> tân ngữ đưa lên trước động từ.</p>
+<ul class='bx-ex'><li>请你把书拿<b>出来</b>。<span class='vi'>(Em hãy lấy sách ra.)</span></li><li>他把行李搬<b>上去</b>了。<span class='vi'>(Anh ấy đã khiêng hành lý lên.)</span></li></ul>
+<p><b>d) Trợ từ <span class='zh'>了</span>:</b> thường đặt cuối câu hoặc sau cả bổ ngữ, không đặt giữa động từ và bổ ngữ.</p>
+<ul class='bx-ex'><li class='v'>✔ 他跑出去了。</li><li class='x'>✘ 他跑了出去了。</li></ul>
+<h4>4. Nghĩa mở rộng thường gặp</h4>
+<p>Ngoài nghĩa chỉ phương hướng, nhiều bổ ngữ xu hướng kép còn có <b>nghĩa trừu tượng</b>:</p>
+<div class='tw'><table><tr><th>Bổ ngữ</th><th>Nghĩa mở rộng</th><th>Ví dụ</th></tr>
+<tr><td class='zh' rowspan='4'>起来</td><td class='l'>Bắt đầu và tiếp tục</td><td class='zh l'>笑起来、下起雨来</td></tr>
+<tr><td class='l'>Nhớ ra</td><td class='zh l'>想起来</td></tr>
+<tr><td class='l'>Gom lại, cất đi</td><td class='zh l'>收起来、藏起来</td></tr>
+<tr><td class='l'>Nhận xét, đánh giá</td><td class='zh l'>看起来、听起来、说起来容易</td></tr>
+<tr><td class='zh' rowspan='3'>下来</td><td class='l'>Từ động chuyển sang tĩnh</td><td class='zh l'>停下来、安静下来</td></tr>
+<tr><td class='l'>Lưu giữ, cố định lại</td><td class='zh l'>写下来、记下来、留下来</td></tr>
+<tr><td class='l'>Kéo dài từ quá khứ đến nay</td><td class='zh l'>坚持下来、传下来</td></tr>
+<tr><td class='zh'>下去</td><td class='l'>Tiếp tục làm (từ nay về sau)</td><td class='zh l'>说下去、坚持下去</td></tr>
+<tr><td class='zh' rowspan='2'>出来</td><td class='l'>Nghĩ ra, tạo ra</td><td class='zh l'>想出来、写出来</td></tr>
+<tr><td class='l'>Nhận ra, phân biệt được</td><td class='zh l'>认出来、听出来</td></tr>
+<tr><td class='zh'>过来</td><td class='l'>Trở lại trạng thái bình thường</td><td class='zh l'>醒过来、明白过来</td></tr>
+<tr><td class='zh'>过去</td><td class='l'>Mất trạng thái bình thường</td><td class='zh l'>晕过去、昏过去</td></tr></table></div>
+<h4>5. Dạng khả năng</h4>
+<p>Chèn <span class='zh'>得</span> (có thể) hoặc <span class='zh'>不</span> (không thể) giữa động từ và bổ ngữ:</p>
+<div class='bx-f'>V + 得 / 不 + bổ ngữ xu hướng kép</div>
+<ul class='bx-ex'><li>这座山太高了，我爬<b>不上去</b>。<span class='vi'>(Núi cao quá, tôi không leo lên được.)</span></li><li>你想<b>得起来</b>他的名字吗？<span class='vi'>(Bạn có nhớ ra tên anh ấy không?)</span></li></ul>
+</details>
+</div></div>
+
+<div class='lt-hold'><div id='sx'>
 <div class='card'>
 <h3 style='margin-top:0'>Bài tập sắp xếp câu HSK 3</h3>
 <p style='margin-top:0;color:var(--mut)'>Luyện ngữ pháp: sắp xếp từ thành câu hoàn chỉnh (40 câu, 8 dạng).</p>
@@ -1197,7 +1305,7 @@ html.hh-locked,html.hh-locked body{overflow:hidden}
 <div class='sx-bar'><span class='sx-pg' id='sxPg'>Đã làm: 0/40</span><button type='button' class='btn ghost' id='sxReset'>Làm lại từ đầu</button><button type='button' class='btn' onclick='sxSubmit()'>Nộp bài</button></div>
 </div>
 </div>
-<div class='sub' data-g='luyentap' data-n='2'><div id='dc'>
+<div class='lt-hold'><div id='dc'>
 <div class='card'>
 <h3 style='margin-top:0'>Dịch Việt → Trung HSK 7–9 · Chủ đề 终身教育 (Giáo dục suốt đời)</h3>
 <p style='margin:8px 0 0'>Chủ đề này gắn với thuật ngữ về phát triển năng lực cá nhân và xây dựng xã hội học tập. Nên nhớ các cụm từ đắt giá (bấm để nghe):</p>
@@ -1209,8 +1317,8 @@ html.hh-locked,html.hh-locked body{overflow:hidden}
 <div id='dcList'></div>
 </div>
 </div>
-<div class='sub' data-g='luyentap' data-n='3'><div id='lvw'></div></div>
-<div class='sub' data-g='luyentap' data-n='4'><div id='kq'></div></div>
+<div class='sub' data-g='luyentap' data-n='7'><div id='lvw'></div></div>
+<div class='sub' data-g='luyentap' data-n='8'><div id='kq'></div></div>
 </section>
 </main>
 <div id='wm' onclick='if(event.target===this)closeW()'><div class='box' id='wb'></div></div>
@@ -1467,7 +1575,7 @@ const sfx=AU.sfx;
 /* điều hướng */
 const NAV=[['home','Trang chủ'],['gioithieu','Giới thiệu'],['kienthuc','Kho kiến thức'],['tudien','Từ điển'],['congcu','Công cụ'],['trochoi','Trò chơi'],['lotrinh','Lộ trình'],['butthuan','Bút thuận'],['luyentap','Luyện tập'],['luyendoc','Luyện đọc'],['luyennghe','Luyện nghe'],['luyennoi','Luyện nói'],['ontap','Ôn tập'],['bosuutap','Bộ sưu tập'],['sach','Sách và Đề thi']];
 const PAGES=NAV;
-const TB={congcu:['Chuyển pinyin','Đọc số','Dịch Trung–Việt'],trochoi:['Ghép cặp','Đoán thanh điệu','Gấu trúc chạy chữ'],sach:['Sách','Đề thi','Đề mô phỏng HSK 3','Đề mô phỏng HSK 4'],luyentap:['Từ vựng','Sắp xếp câu HSK 3','Dịch Việt–Trung HSK 7–9','Luyện viết chữ','Kết quả của tôi'],lotrinh:['Người mới bắt đầu','HSK 1–3','HSK 4–6'],luyennoi:['Shadowing','Luyện phát âm']};
+const TB={congcu:['Chuyển pinyin','Đọc số','Dịch Trung–Việt'],trochoi:['Ghép cặp','Đoán thanh điệu','Gấu trúc chạy chữ'],sach:['Sách','Đề thi','Đề mô phỏng HSK 3','Đề mô phỏng HSK 4'],luyentap:['HSK 1','HSK 2','HSK 3','HSK 4','HSK 5','HSK 6','HSK 7–9','Luyện viết chữ','Kết quả của tôi'],lotrinh:['Người mới bắt đầu','HSK 1–3','HSK 4–6'],luyennoi:['Shadowing','Luyện phát âm']};
 const GK=Object.keys(TB);
 function dd(b){b.parentNode.classList.toggle('open');}
 function sw(g,n){
@@ -3540,7 +3648,7 @@ function lvCell(cell,c,d,trace,word){word=word||c;
 }
 function lvPg(){const L=LVB[LVK].L[LVL],d=L.c.filter(e=>lvWD(LVK,e)).length,pg=document.querySelector('#lvw .lv-pg');if(pg){pg.querySelector('span').textContent=`Đã viết đúng ${d}/${L.c.length}`;pg.querySelector('i').style.width=(100*d/L.c.length)+'%';}
   const b=document.querySelectorAll('#lvw .lv-ls button')[LVL];if(b){const it=b.querySelector('i');if(it)it.textContent=d+'/'+L.c.length;}}
-function lvOpenBook(k){LVK=k;LVL=0;LVI=0;LVV=0;go('luyentap');const t=document.querySelectorAll('.tabs[data-g=luyentap] button')[3];if(t)t.click();lvRender();setTimeout(()=>{const el=$('lvw');if(el)el.scrollIntoView({behavior:'smooth'});},100);}
+function lvOpenBook(k){LVK=k;LVL=0;LVI=0;LVV=0;go('luyentap');const t=document.querySelectorAll('.tabs[data-g=luyentap] button')[7];if(t)t.click();lvRender();setTimeout(()=>{const el=$('lvw');if(el)el.scrollIntoView({behavior:'smooth'});},100);}
 try{lvRender();}catch(e){console.error(e);}
 </script>
 
@@ -3567,7 +3675,7 @@ try{lvRender();}catch(e){console.error(e);}
    (được đồng bộ lên tài khoản khi học sinh đăng nhập). */
 (function(){
   const KEY='hh_results',MAXN=400;
-  const KIND={tuvung:'Từ vựng',sapxep:'Sắp xếp câu',dich:'Dịch Việt–Trung',dethi:'Đề thi',trochoi:'Trò chơi',luyennoi:'Luyện nói'};
+  const KIND={tuvung:'Từ vựng',sapxep:'Sắp xếp câu',nguphap:'Ngữ pháp',dich:'Dịch Việt–Trung',dethi:'Đề thi',trochoi:'Trò chơi',luyennoi:'Luyện nói'};
   const read=()=>{try{const a=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(a)?a:[];}catch(e){return [];}};
   window.hhLog=function(k,n,s,m){
     const a=read();a.push({t:Date.now(),k,n,s:+s||0,m:m==null?null:+m});
@@ -3576,7 +3684,7 @@ try{lvRender();}catch(e){console.error(e);}
     if(typeof kqDraw==='function'&&document.getElementById('kq'))kqDraw();
   };
   /* gắn vào các phần có chấm điểm */
-  if(typeof show==='function'){const f=show;show=function(){f.apply(this,arguments);if(Q&&Q.i>=Q.list.length&&!Q.hhLogged){Q.hhLogged=1;hhLog('tuvung',Q.mode==='in'?'Nhập pinyin (10 câu)':'Trắc nghiệm nghĩa (10 câu)',Q.score,Q.list.length);}};}
+  if(typeof show==='function'){const f=show;show=function(){f.apply(this,arguments);if(Q&&Q.i>=Q.list.length&&!Q.hhLogged){Q.hhLogged=1;hhLog('tuvung',(Q.mode==='in'?'Nhập pinyin':'Trắc nghiệm nghĩa')+(Q.lv!=null?' · HSK '+(Q.lv+1):''),Q.score,Q.list.length);}};}
   if(typeof xcalc==='function'&&typeof xsub==='function'){
     let lastT=null;const fc=xcalc;xcalc=function(k){const r=fc.apply(this,arguments);const el=document.getElementById(k+'xres');const m=el&&el.textContent.match(/(\d+)\s*\/\s*300/);lastT=m?+m[1]:lastT;return r;};
     const fs=xsub;xsub=function(k){const X=xst(k),was=X.done;lastT=null;fs.apply(this,arguments);if(!was&&lastT!=null)hhLog('dethi','Đề mô phỏng '+(k==='h4'?'HSK 4':'HSK 3'),lastT,300);};
@@ -4071,6 +4179,94 @@ const SHS={
   /* đổi video thì nạp phụ đề của video đó */
   const pick0=shPick;shPick=function(k){if(SS.mode)ssStop();pick0.apply(this,arguments);load();};
   load();
+})();
+</script>
+
+<script>
+/* ===== Bổ ngữ xu hướng kép ===== */
+(function(){
+  const BANK=["上来","上去","下来","下去","进来","进去","出来","出去","回来","回去","过来","过去","起来"];
+  const Q=[
+    {p:["他从楼上跑",{a:"下来"},"，手里拿着一封信。"],ex:"Chạy từ trên lầu <b>xuống</b>, hướng về phía người nói → 下来."},
+    {p:["外面太冷了，你快",{a:"进来"},"吧！"],ex:"Người nói đang ở trong nhà, gọi người kia <b>vào</b> → 进来."},
+    {p:["他从口袋里拿",{a:"出来"},"一张照片给我看。"],ex:"Lấy <b>ra</b> từ trong túi → 出来."},
+    {p:["听到这个笑话，大家都哈哈大笑",{a:"起来"},"。"],ex:"Nghĩa mở rộng của 起来: hành động/trạng thái <b>bắt đầu</b>."},
+    {p:["我认识他，可是一下子想不",{a:"起来"},"他的名字了。"],ex:"想不起来 = không <b>nhớ ra</b> (nghĩa mở rộng: hồi tưởng lại)."},
+    {p:["老师进来以后，教室里慢慢安静",{a:"下来"},"了。"],ex:"Nghĩa mở rộng của 下来: chuyển từ <b>động sang tĩnh</b> (安静下来、停下来)."},
+    {p:["这个好办法是谁想",{a:"出来"},"的？"],ex:"Nghĩa mở rộng của 出来: <b>nghĩ ra / tạo ra</b> cái mới."},
+    {p:["学汉语虽然很难，但是你一定要坚持",{a:"下去"},"。"],ex:"Nghĩa mở rộng của 下去: <b>tiếp tục</b> hành động."},
+    {p:["小猫爬",{a:"上",g:1},"树",{a:"去",g:1},"了，下不来了。"],ex:"爬<b>上</b>树<b>去</b>: tân ngữ nơi chốn (树) phải đặt <b>giữa</b> 上 và 去."},
+    {p:["听到有人叫他，他转",{a:"过",g:1},"身",{a:"来",g:1},"，对我笑了笑。"],ex:"转<b>过</b>身<b>来</b>: quay người lại, hướng về phía người nói; 身 đứng giữa 过 và 来."}
+  ];
+  const KEY='hh_bx_v1',list=$('bxList');let last=null,saved={};
+  try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){}
+  const save=()=>{const o={};all().forEach((b,k)=>{if(b.value)o[k]=b.value;});try{localStorage.setItem(KEY,JSON.stringify(o));}catch(e){}};
+  Q.forEach((q,i)=>{
+    const li=document.createElement('li');li.className='bx-q';const s=document.createElement('div');s.className='bx-s';
+    q.p.forEach(part=>{if(typeof part==='string'){s.appendChild(document.createTextNode(part));return;}
+      const inp=document.createElement('input');inp.type='text';inp.className='bx-b '+(part.g?'w1':'w2');inp.dataset.a=part.a;inp.dataset.q=i;if(part.g)inp.dataset.g='1';
+      inp.autocomplete='off';inp.setAttribute('aria-label','Câu '+(i+1)+' ô trống');inp.addEventListener('focus',()=>last=inp);inp.addEventListener('input',save);s.appendChild(inp);});
+    li.appendChild(s);const fb=document.createElement('div');fb.className='bx-fb';fb.id='bxfb'+i;li.appendChild(fb);list.appendChild(li);
+  });
+  const all=()=>[...document.querySelectorAll('#bx .bx-b')],of=qi=>[...document.querySelectorAll('#bx .bx-b[data-q="'+qi+'"]')];
+  all().forEach((b,k)=>{if(saved[k])b.value=saved[k];});
+  BANK.forEach(w=>{const b=document.createElement('button');b.className='bx-chip';b.type='button';b.textContent=w;b.addEventListener('mousedown',e=>e.preventDefault());b.addEventListener('click',()=>fill(w));$('bxChips').appendChild(b);});
+  function fill(w){let t=last;if(!t||t.disabled)t=all().find(b=>!b.value.trim()&&!b.disabled);if(!t)return;
+    const g=of(t.dataset.q);if(t.dataset.g){g[0].value=w[0];g[1].value=w[1];}else t.value=w;save();
+    const n=all().find(b=>!b.value.trim()&&!b.disabled);if(n){n.focus({preventScroll:false});last=n;}else{t.blur();last=null;}}
+  const norm=v=>v.replace(/\s/g,'');
+  $('bxSubmit').onclick=()=>{let sc=0;
+    Q.forEach((q,i)=>{const bs=of(i),ok=bs.every(b=>norm(b.value)===b.dataset.a);bs.forEach(b=>{b.classList.remove('ok','bad');b.classList.add(ok?'ok':'bad');b.disabled=true;});
+      const fb=$('bxfb'+i),ans=q.p.filter(x=>typeof x!=='string').map(x=>x.a).join('…');fb.className='bx-fb show '+(ok?'ok':'bad');fb.innerHTML=(ok?'✅ Đúng! ':'❌ Đáp án: <b class="zh">'+ans+'</b>. ')+q.ex;if(ok)sc++;});
+    const msg=sc===10?'Xuất sắc! 太棒了！':sc>=8?'Rất tốt! 很好！':sc>=5?'Khá ổn, xem lại các câu sai nhé.':'Cần ôn lại bài, cố lên nhé! 加油！';
+    $('bxRes').innerHTML=`<b>Kết quả</b><div class='res'>${sc} / 10</div><div>${msg}</div>`;$('bxRes').classList.add('on');$('bxNote').classList.add('on');
+    try{sfx(sc>=6?'win':'lose');}catch(e){}
+    if(typeof hhLog==='function')hhLog('nguphap','Bổ ngữ xu hướng kép (HSK 3)',sc,10);
+    $('bxRes').scrollIntoView({behavior:'smooth',block:'center'});};
+  $('bxReset').onclick=()=>{all().forEach(b=>{b.value='';b.disabled=false;b.classList.remove('ok','bad');});document.querySelectorAll('#bx .bx-fb').forEach(f=>f.className='bx-fb');$('bxRes').classList.remove('on');$('bxNote').classList.remove('on');try{localStorage.removeItem(KEY);}catch(e){}$('bx').scrollIntoView({behavior:'smooth'});};
+})();
+
+/* ===== Luyện tập chia theo cấp độ HSK ===== */
+(function(){
+  const LVN=['HSK 1','HSK 2','HSK 3','HSK 4','HSK 5','HSK 6','HSK 7–9'];
+  const pools=[typeof H1!=='undefined'?H1:[],typeof H2!=='undefined'?H2:[],typeof H3!=='undefined'?H3:[],typeof H4!=='undefined'?H4:[],typeof H5!=='undefined'?H5:[],typeof H6!=='undefined'?H6:[]];
+  /* danh sách bài theo cấp: thêm bài mới bằng cách thêm 1 dòng vào đây */
+  const EX=[
+    ...[0,1,2,3,4,5].map(l=>({lv:l,id:'tv-mc-'+l,k:'Từ vựng',t:'Trắc nghiệm nghĩa của từ',d:`10 câu ngẫu nhiên từ ${pools[l].length} từ ${LVN[l]}`,el:'quiz',run:()=>startLv('mc',l)})),
+    ...[0,1,2,3,4,5].map(l=>({lv:l,id:'tv-in-'+l,k:'Từ vựng',t:'Nhập pinyin',d:`Gõ pinyin của 10 từ ${LVN[l]}`,el:'quiz',run:()=>startLv('in',l)})),
+    {lv:2,id:'sx',k:'Ngữ pháp',t:'Sắp xếp câu HSK 3',d:'40 câu, 8 dạng ngữ pháp',el:'sx'},
+    {lv:2,id:'bx',k:'Ngữ pháp',t:'Bổ ngữ xu hướng kép 复合趋向补语',d:'10 câu điền chỗ trống, kèm tóm tắt lý thuyết',el:'bx'},
+    {lv:6,id:'dc',k:'Dịch',t:'Dịch Việt → Trung · 终身教育',d:'3 bài có chấm điểm theo đáp án, 3 bài luyện thêm',el:'dc'}
+  ];
+  window.LTEX=EX;
+  let CUR=0;const open={};
+  function render(lv){
+    const L=$('ltl'+lv);if(!L)return;const xs=EX.filter(x=>x.lv===lv);
+    L.innerHTML=xs.length?xs.map(x=>`<button type='button' class='lt-card${open[lv]===x.id?' on':''}' onclick="ltOpen('${x.id}')"><span class='k'>${x.k}</span><b>${x.t}</b><span>${x.d}</span></button>`).join(''):`<p class='lt-empty'>Bài luyện tập cho ${LVN[lv]} đang được bổ sung. Trong lúc chờ, em có thể học từ vựng ${LVN[lv]} ở mục Ôn tập hoặc chơi trò chơi.</p>`;
+    if(!open[lv]&&$('lts'+lv))$('lts'+lv).innerHTML=xs.length?`<p class='lt-empty'>👆 Chọn một bài ở trên để bắt đầu.</p>`:'';
+  }
+  window.ltOpen=function(id){
+    const x=EX.find(e=>e.id===id);if(!x)return;
+    open[x.lv]=id;EX.forEach(e=>{if(e.lv!==x.lv&&open[e.lv]&&EX.find(z=>z.id===open[e.lv]).el===x.el)delete open[e.lv];});
+    const st=$('lts'+x.lv),el=$(x.el);st.innerHTML='';st.appendChild(el);
+    if(x.run)x.run();
+    [0,1,2,3,4,5,6].forEach(render);
+    setTimeout(()=>st.scrollIntoView({behavior:'smooth',block:'start'}),50);
+  };
+  function startLv(mode,l){Q={mode,pool:pools[l],list:shuffle(pools[l]).slice(0,10),i:0,score:0,done:false,lv:l};show();}
+  /* các phần khác của app gọi start(…) để luyện một nhóm từ: hiện bài ở cấp đang chọn */
+  start=function(mode,pl){
+    pl=pl&&pl.length?pl:pools[Math.min(CUR,5)];
+    const lv=Math.min(CUR,5),st=$('lts'+lv);open[lv]='tv-'+mode+'-'+lv;
+    if(st&&$('quiz').parentNode!==st){st.innerHTML='';st.appendChild($('quiz'));}
+    Q={mode,pool:pl,list:shuffle(pl).slice(0,10),i:0,score:0,done:false};show();
+    go('luyentap',lv);render(lv);
+  };
+  menu=function(){Q=null;const lv=Math.min(CUR,5);
+    $('quiz').innerHTML=`<div class="q"><div class="big han" style="font-size:48px;color:var(--red)">练习</div><p>Từ vựng ${LVN[lv]} · chọn hình thức (10 câu mỗi lượt):</p><button class="btn" onclick="ltOpen('tv-mc-${lv}')">Trắc nghiệm nghĩa của từ</button> <button class="btn ghost" onclick="ltOpen('tv-in-${lv}')">Nhập pinyin</button></div>`;};
+  /* nhớ cấp đang xem */
+  const sw0=sw;sw=function(g,n){const r=sw0.apply(this,arguments);const gg=typeof g==='number'?GK[g]:g;if(gg==='luyentap'&&n<7)CUR=n;return r;};
+  [0,1,2,3,4,5,6].forEach(render);
 })();
 </script>
 

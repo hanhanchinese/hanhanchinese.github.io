@@ -100,7 +100,7 @@ if (!cfg) {
     c.innerHTML = '';
     if (user.photoURL) { const im = document.createElement('img'); im.src = user.photoURL; im.alt = ''; im.referrerPolicy = 'no-referrer'; c.appendChild(im); }
     const nm = document.createElement('span'); nm.textContent = (user.displayName || user.email || 'Học sinh').split(' ').slice(-1)[0]; c.appendChild(nm);
-    const r = document.createElement('button'); r.type = 'button'; r.className = 'kq-btn'; r.textContent = 'Kết quả'; r.onclick = () => { if (typeof go === 'function') go('luyentap', 4); }; c.appendChild(r);
+    const r = document.createElement('button'); r.type = 'button'; r.className = 'kq-btn'; r.textContent = 'Kết quả'; r.onclick = () => { if (typeof go === 'function') go('luyentap', 8); }; c.appendChild(r);
     const b = document.createElement('button'); b.type = 'button'; b.textContent = 'Đăng xuất'; b.onclick = () => onSignOut(doOut); c.appendChild(b);
     c.title = user.email || '';
   }

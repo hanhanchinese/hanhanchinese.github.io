@@ -92,7 +92,7 @@ service cloud.firestore {
 <script type="module">
 const SDK='https://www.gstatic.com/firebasejs/10.12.2/';
 const $=id=>document.getElementById(id);
-const KIND={tuvung:'Từ vựng',sapxep:'Sắp xếp câu',dich:'Dịch Việt–Trung',dethi:'Đề thi',trochoi:'Trò chơi',luyennoi:'Luyện nói'};
+const KIND={tuvung:'Từ vựng',sapxep:'Sắp xếp câu',nguphap:'Ngữ pháp',dich:'Dịch Việt–Trung',dethi:'Đề thi',trochoi:'Trò chơi',luyennoi:'Luyện nói'};
 Object.entries(KIND).forEach(([k,v])=>$('kind').insertAdjacentHTML('beforeend',`<option value="${k}">${v}</option>`));
 const esc=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const fmt=t=>t?new Date(t).toLocaleString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}):'–';
