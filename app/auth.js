@@ -16,8 +16,8 @@ function snapshot() { const d = {}; appKeys().forEach(k => { const v = localStor
 
 const cfg = window.HH_FIREBASE_CONFIG;
 if (!cfg) {
-  say('Trang chưa được kết nối với Firebase nên chưa đăng nhập được. Giáo viên cần dán cấu hình Firebase vào file app/firebase-config.js.', true);
-  btn.disabled = true;
+  /* Chưa có cấu hình Firebase: tạm cho vào app không cần đăng nhập. */
+  unlock();
 } else {
   const [{ initializeApp }, A, F] = await Promise.all([
     import(SDK + 'firebase-app.js'), import(SDK + 'firebase-auth.js'), import(SDK + 'firebase-firestore.js')
