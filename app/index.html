@@ -3927,5 +3927,151 @@ function paMic(){
   if($('luyennoi').classList.contains('on'))shLoad();
 })();
 </script>
+<style>
+/* --- Shadowing: phụ đề chạy chữ và chấm điểm --- */
+#luyennoi .ss-box{margin-top:12px;border:2px solid var(--line);border-radius:14px;background:var(--bg);padding:12px;text-align:center}
+#luyennoi .ss-prev,#luyennoi .ss-next{color:var(--mut);font-size:15px;min-height:22px;cursor:pointer}
+#luyennoi .ss-cur{font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;font-size:clamp(22px,5.5vw,32px);line-height:1.9;margin:4px 0;min-height:44px}
+#luyennoi .ss-cur ruby rt{font-family:Nunito,sans-serif;font-size:.45em;color:var(--red)}
+#luyennoi .ss-cur .on{color:var(--red);font-weight:700}
+#luyennoi .ss-cur .ok{color:var(--ok)}#luyennoi .ss-cur .no{color:var(--bad);text-decoration:underline wavy}
+#luyennoi .ss-vi{color:var(--mut);font-size:15px}
+#luyennoi .ss-bar{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:8px}
+#luyennoi .ss-bar .btn{padding:6px 14px;min-height:40px;font-size:14px}
+#luyennoi .ss-list{max-height:260px;overflow-y:auto;margin-top:10px;border-top:1px dashed var(--line);text-align:left}
+#luyennoi .ss-list button{display:flex;gap:10px;width:100%;text-align:left;font:inherit;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--fg);padding:7px 6px;cursor:pointer}
+#luyennoi .ss-list button.on{background:var(--soft)}
+#luyennoi .ss-list .tm{color:var(--mut);font-size:12px;min-width:40px;font-variant-numeric:tabular-nums}
+#luyennoi .ss-list .zh{font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;flex:1}
+#luyennoi .ss-list .sc{font-weight:800;font-size:13px}
+#luyennoi .ss-res{margin-top:10px}
+#luyennoi .ss-res .res{font-size:42px}
+#luyennoi details.ss-adm{margin-top:12px;border:1px dashed var(--gold);border-radius:12px;padding:8px 12px}
+#luyennoi details.ss-adm summary{cursor:pointer;font-weight:700;color:var(--mut);font-size:14px}
+#luyennoi details.ss-adm textarea{width:100%;min-height:150px;font:inherit;font-size:14px;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--fg)}
+</style>
+<script>
+/* ===== Shadowing: phụ đề chạy theo lời nói + chấm điểm từng câu =====
+   SHS: phụ đề của từng video, mỗi dòng [giây bắt đầu, "câu tiếng Trung", "nghĩa tiếng Việt (không bắt buộc)"].
+   Giáo viên có thể dán phụ đề trong mục "Thêm phụ đề" để xem thử ngay trên máy mình. */
+const SHS={
+  'IU4Sw07L9PU':[],
+  'NVxkskkuJO8':[]
+};
+(function(){
+  const SS={lines:[],cur:-1,py:true,score:{},mode:false,k:0,timer:0,rec:null};
+  const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const fmt=t=>Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,'0');
+  /* chữ Hán → pinyin theo từ điển của app (ghép từ dài nhất) */
+  let PYD=null,PYMAX=1;
+  function pyDict(){if(PYD)return PYD;PYD=new Map();const add=(w,p)=>{if(w&&p&&!PYD.has(w)){PYD.set(w,p);PYMAX=Math.max(PYMAX,w.length);}};
+    try{V.forEach(v=>add(v[0],v[1]));}catch(e){}try{Object.entries(LD.e).forEach(([w,e])=>add(w,e[0]));}catch(e){}return PYD;}
+  function seg(t){const d=pyDict(),a=Array.from(t),out=[];let i=0;
+    while(i<a.length){if(!/\p{Script=Han}/u.test(a[i])){out.push([a[i],'']);i++;continue;}
+      let n=Math.min(PYMAX,a.length-i),hit=null;for(;n>0;n--){const w=a.slice(i,i+n).join('');if(d.has(w)){hit=[w,d.get(w)];break;}}
+      if(!hit)hit=[a[i],''];out.push(hit);i+=Array.from(hit[0]).length;}
+    return out;}
+  const ruby=(t,marks)=>{let j=0;return seg(t).map(([w,p])=>{const chars=Array.from(w).map(c=>{if(!marks||!/\p{Script=Han}|[0-9]/u.test(c))return esc(c);const m=marks[j++];return `<span class='${m?'ok':'no'}'>${esc(c)}</span>`;}).join('');return SS.py&&p?`<ruby>${chars}<rt>${esc(p)}</rt></ruby>`:chars;}).join('');};
+  /* đọc phụ đề dán vào: dạng bản chép lời YouTube ("0:05" + dòng chữ) hoặc .srt/.vtt */
+  function tsec(x){const p=x.replace(',','.').split(':').map(Number);return p.reduce((a,b)=>a*60+b,0);}
+  function parse(txt){
+    const L=[],rows=txt.replace(/\r/g,'').split('\n').map(s=>s.trim());let t=null,buf=[];
+    const flush=()=>{if(t!=null&&buf.length){const zh=buf.join('');if(/\p{Script=Han}/u.test(zh))L.push([t,zh]);}buf=[];};
+    for(const r of rows){
+      let m;
+      if(!r||/^WEBVTT/.test(r)||/^\d+$/.test(r)&&!/:/.test(r)){continue;}
+      if(m=r.match(/^(\d{1,2}:\d{2}(?::\d{2})?(?:[.,]\d+)?)\s*-->\s*/)){flush();t=tsec(m[1]);continue;}
+      if(m=r.match(/^(\d{1,2}:\d{2}(?::\d{2})?)(?:\s+(.*))?$/)){flush();t=tsec(m[1]);if(m[2])buf.push(m[2]);continue;}
+      buf.push(r);
+    }
+    flush();return L.sort((a,b)=>a[0]-b[0]);
+  }
+  const vid=()=>SHV[SHI].id;
+  function load(){
+    let own=null;try{own=JSON.parse(localStorage.getItem('hh_shs_'+vid())||'null');}catch(e){}
+    SS.lines=(own&&own.length?own:(SHS[vid()]||[])).map((l,i,a)=>({t:l[0],e:i+1<a.length?a[i+1][0]:l[0]+6,zh:l[1],vi:l[2]||''}));
+    SS.cur=-1;SS.score={};SS.mode=false;draw();
+  }
+  function curIdx(t){let k=-1;for(let i=0;i<SS.lines.length;i++){if(SS.lines[i].t<=t+.15)k=i;else break;}return k;}
+  function draw(){
+    const box=$('ssbox');if(!box)return;
+    if(!SS.lines.length){box.innerHTML=`<p style='color:var(--mut);margin:0'>Video này chưa có phụ đề chạy chữ. Giáo viên có thể thêm ở mục <b>Thêm phụ đề</b> bên dưới.</p>`;$('ssbar').style.display='none';return;}
+    $('ssbar').style.display='';
+    const k=SS.cur,L=SS.lines,c=L[k];
+    const mk=SS.score[k];
+    box.innerHTML=`<div class='ss-prev' onclick='ssGo(${k-1})'>${k>0?esc(L[k-1].zh):''}</div>
+      <div class='ss-cur' aria-live='polite'>${c?ruby(c.zh,mk&&mk.hit):'<span style="color:var(--mut);font-size:16px">Bấm ▶ trên video, phụ đề sẽ chạy theo lời nói.</span>'}</div>
+      ${c&&c.vi?`<div class='ss-vi'>${esc(c.vi)}</div>`:''}
+      <div class='ss-next' onclick='ssGo(${k+1})'>${k+1<L.length?esc(L[k+1].zh):''}</div>
+      ${SS.msg?`<div class='ss-res'>${SS.msg}</div>`:''}`;
+    $('sslist').innerHTML=L.map((l,i)=>{const s=SS.score[i];return `<button type='button' class='${i===k?'on':''}' onclick='ssGo(${i})'><span class='tm'>${fmt(l.t)}</span><span class='zh'>${esc(l.zh)}</span>${s?`<span class='sc' style='color:${s.p>=80?'var(--ok)':s.p>=50?'#a16b00':'var(--bad)'}'>${s.p}%</span>`:''}</button>`;}).join('');
+    const on=$('sslist').querySelector('.on');if(on&&!SS.mode){const r=on.offsetTop-$('sslist').offsetTop;$('sslist').scrollTop=Math.max(0,r-80);}
+  }
+  window.ssGo=function(i){if(i<0||i>=SS.lines.length||!SHREADY)return;SS.cur=i;SS.msg='';SHP.seekTo(SS.lines[i].t,true);SHP.playVideo();draw();};
+  window.ssPy=function(){SS.py=!SS.py;$('sspy').textContent=SS.py?'Ẩn pinyin':'Hiện pinyin';draw();};
+  /* chạy chữ theo thời gian video */
+  setInterval(()=>{
+    if(!SHREADY||!SS.lines.length||SS.mode||!$('luyennoi').classList.contains('on'))return;
+    let t=0;try{t=SHP.getCurrentTime();}catch(e){return;}
+    const k=curIdx(t);if(k!==SS.cur){SS.cur=k;SS.msg='';draw();}
+  },200);
+  /* chấm điểm: phát từng câu, dừng lại để học sinh nói theo, app nghe và chấm */
+  const clean=x=>Array.from(String(x)).filter(c=>/\p{Script=Han}|[0-9]/u.test(c));
+  function judge(target,alts){const tg=clean(target);let best=null;
+    alts.forEach(h=>{const pool=clean(h),hit=tg.map(c=>{const i=pool.indexOf(c);if(i>=0){pool.splice(i,1);return true;}return false;}),n=hit.filter(Boolean).length;if(!best||n>best.n)best={h,hit,n};});
+    return {hit:best.hit,heard:best.h,p:Math.round(best.n*100/Math.max(1,tg.length))};}
+  window.ssStart=function(){
+    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    if(!SR){SS.msg=`<p style='color:var(--bad)'>Trình duyệt này chưa nhận được giọng nói. Hãy dùng Chrome, Edge (máy tính, Android) hoặc Safari (iPhone).</p>`;draw();return;}
+    if(!SHREADY)return;
+    SS.mode=true;SS.score={};SS.k=0;$('ssgo').textContent='⏹ Dừng chấm điểm';$('ssgo').onclick=ssStop;step();
+  };
+  function ssStop(){SS.mode=false;clearTimeout(SS.timer);if(SS.rec){try{SS.rec.abort();}catch(e){}SS.rec=null;}try{SHP.pauseVideo();}catch(e){}$('ssgo').textContent='🎯 Luyện từng câu & chấm điểm';$('ssgo').onclick=ssStart;SS.msg='';draw();}
+  function step(){
+    if(!SS.mode)return;
+    if(SS.k>=SS.lines.length)return finish();
+    const l=SS.lines[SS.k];SS.cur=SS.k;SS.msg=`<b>Câu ${SS.k+1}/${SS.lines.length}</b> · Nghe câu mẫu…`;draw();
+    SHP.seekTo(l.t,true);SHP.playVideo();
+    const dur=Math.max(1,l.e-l.t)/(SHP.getPlaybackRate?SHP.getPlaybackRate():1);
+    clearTimeout(SS.timer);SS.timer=setTimeout(()=>{if(!SS.mode)return;SHP.pauseVideo();listen(l);},dur*1000+250);
+  }
+  function listen(l){
+    const SR=window.SpeechRecognition||window.webkitSpeechRecognition,r=new SR();SS.rec=r;
+    r.lang='zh-CN';r.interimResults=false;r.maxAlternatives=3;let got=false;
+    SS.msg=`<b>Câu ${SS.k+1}/${SS.lines.length}</b> · <span style='color:var(--bad)'>🎙 Đến lượt em, nói to câu trên!</span> <button type='button' class='btn ghost' onclick='ssSkip()'>Bỏ qua</button>`;draw();
+    r.onresult=e=>{got=true;const j=judge(l.zh,Array.from(e.results[0]).map(a=>a.transcript));SS.score[SS.k]=j;
+      SS.msg=`<b>${j.p}%</b> · App nghe được: <span class='han'>${esc(j.heard)}</span>`;draw();};
+    r.onerror=e=>{if(e.error==='not-allowed'||e.error==='service-not-allowed'){SS.msg=`<p style='color:var(--bad)'>Chưa được phép dùng micro. Hãy cho phép Micro rồi thử lại.</p>`;ssStop();draw();}};
+    r.onend=()=>{SS.rec=null;if(!SS.mode)return;if(!got)SS.score[SS.k]={hit:clean(l.zh).map(()=>false),heard:'',p:0};SS.k++;SS.timer=setTimeout(step,got?1600:600);};
+    try{r.start();}catch(e){SS.k++;step();}
+  }
+  window.ssSkip=function(){if(SS.rec){try{SS.rec.abort();}catch(e){}}};
+  function finish(){
+    const v=Object.values(SS.score),p=v.length?Math.round(v.reduce((a,x)=>a+x.p,0)/v.length):0;
+    SS.mode=false;$('ssgo').textContent='🎯 Luyện từng câu & chấm điểm';$('ssgo').onclick=ssStart;
+    const title=SHV[SHI].t||'video';
+    if(typeof hhLog==='function')hhLog('luyennoi','Shadowing · '+title,p,100);
+    try{sfx(p>=60?'win':'lose');}catch(e){}
+    SS.msg=`<div class='res'>${p} / 100</div><p><b>${p>=85?'Phát âm rất chuẩn! 太棒了！':p>=60?'Khá tốt! Luyện lại các câu dưới 80% nhé. 加油！':'Nghe kỹ từng câu rồi thử lại nhé.'}</b></p><p style='font-size:13px;color:var(--mut)'>Điểm trung bình của ${v.length} câu. Bấm vào câu trong danh sách để nghe lại.</p>`;draw();
+  }
+  /* giáo viên dán phụ đề */
+  window.ssApply=function(){const L=parse($('ssin').value);if(!L.length){$('ssam').textContent='Chưa đọc được dòng nào. Mỗi câu cần có mốc thời gian (ví dụ 0:05) ở trước.';return;}
+    try{localStorage.setItem('hh_shs_'+vid(),JSON.stringify(L));}catch(e){}$('ssam').textContent=`Đã thêm ${L.length} câu cho video này trên máy của bạn. Gửi nội dung này cho người quản lý app để mọi học sinh đều thấy.`;load();};
+  window.ssClear=function(){try{localStorage.removeItem('hh_shs_'+vid());}catch(e){}$('ssam').textContent='Đã xóa phụ đề tạm trên máy này.';load();};
+  /* gắn giao diện dưới video */
+  const host=$('shrl');if(!host)return;
+  host.insertAdjacentHTML('beforebegin',`<div class='ss-box' id='ssbox'></div>
+    <div class='ss-bar' id='ssbar'><button type='button' class='btn' id='ssgo' onclick='ssStart()'>🎯 Luyện từng câu & chấm điểm</button><button type='button' class='btn ghost' id='sspy' onclick='ssPy()'>Ẩn pinyin</button></div>
+    <div class='ss-list' id='sslist'></div>
+    <details class='ss-adm'><summary>Thêm phụ đề cho video (dành cho giáo viên)</summary>
+      <p style='font-size:13px;color:var(--mut)'>Trên YouTube, bấm <b>…Thêm</b> dưới video › <b>Hiện bản chép lời</b>, bôi đen toàn bộ rồi chép vào ô dưới (mỗi câu có mốc thời gian như <i>0:05</i>). Cũng dán được file phụ đề .srt hoặc .vtt.</p>
+      <textarea id='ssin' placeholder='0:01&#10;大家好&#10;0:03&#10;今天我们学习…'></textarea>
+      <p><button type='button' class='btn' onclick='ssApply()'>Áp dụng cho video đang chọn</button> <button type='button' class='btn ghost' onclick='ssClear()'>Xóa phụ đề tạm</button></p><p id='ssam' style='font-size:13px;color:var(--mut)'></p></details>`);
+  /* đổi video thì nạp phụ đề của video đó */
+  const pick0=shPick;shPick=function(k){if(SS.mode)ssStop();pick0.apply(this,arguments);load();};
+  load();
+})();
+</script>
+
 </body>
 </html>
