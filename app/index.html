@@ -3821,7 +3821,7 @@ try{lvRender();}catch(e){console.error(e);}
   /* vẽ lại bài (bật pinyin, đổi cỡ chữ) thì giữ tô sáng; đổi bài hoặc rời mục thì dừng */
   const draw0=ldDraw;ldDraw=function(){draw0.apply(this,arguments);mark();};
   const pick0=ldPick;ldPick=function(){stop();bar.classList.remove('on');b.classList.remove('on');pick0.apply(this,arguments);};
-  const go0=go;go=function(p){if(p!=='luyendoc'&&P.on)stop();return go0.apply(this,arguments);};
+  const go0=go;go=function(p){const id=typeof p==='number'&&NAV[p]?NAV[p][0]:p;if(id!=='luyendoc'&&P.on)stop();return go0.apply(this,arguments);};
   /* "Đọc từ đây" trong bảng nghĩa của từ */
   const show0=ldShow;ldShow=function(i,el){
     show0.apply(this,arguments);
@@ -3860,12 +3860,12 @@ function shList(){$('shvl').innerHTML=SHV.length>1?SHV.map((v,k)=>`<button type=
 function shLoad(){
   if(SHP||!$('shp'))return;
   const mk=()=>{SHP=new YT.Player('shp',{videoId:SHV[SHI].id,playerVars:{rel:0,modestbranding:1,playsinline:1,cc_lang_pref:'zh'},
-    events:{onReady:()=>{SHREADY=true;shTitle();shRate();},onStateChange:()=>shTitle()}});};
+    events:{onReady:()=>{SHREADY=true;shTitle();shRate();},onStateChange:()=>shTitle(),onError:e=>{const id=SHV[SHI].id;$('sht').innerHTML=(e.data===101||e.data===150?'Chủ kênh không cho phát video này bên ngoài YouTube.':'Video này chưa phát được (mã lỗi '+e.data+').')+` <a href='https://www.youtube.com/watch?v=${id}' target='_blank' rel='noopener'>Mở trên YouTube ↗</a>`;}}});};
   if(window.YT&&YT.Player)mk();
   else{window.onYouTubeIframeAPIReady=mk;if(!document.getElementById('yt-api')){const s=document.createElement('script');s.id='yt-api';s.src='https://www.youtube.com/iframe_api';s.onerror=()=>{$('sht').textContent='Không tải được YouTube. Kiểm tra kết nối mạng rồi tải lại trang.';};document.head.appendChild(s);}}
   clearInterval(SHT);SHT=setInterval(()=>{if(!SHREADY||!SHL||SHA==null||SHB==null)return;const t=SHP.getCurrentTime();if(t>=SHB||t<SHA-1)SHP.seekTo(SHA,true);},200);
 }
-function shTitle(){try{const d=SHP.getVideoData();if(d&&d.title){SHV[SHI].t=SHV[SHI].t||d.title;$('sht').textContent=d.title;shList();}}catch(e){}}
+function shTitle(){try{const d=SHP.getVideoData();if(d&&d.title){SHV[SHI].t=SHV[SHI].t||d.title;$('sht').innerHTML=d.title.replace(/[<>&]/g,'')+` <a href='https://www.youtube.com/watch?v=${SHV[SHI].id}' target='_blank' rel='noopener' style='font-weight:400;font-size:13px'>Mở trên YouTube ↗</a>`;shList();}}catch(e){}}
 function shPick(k){SHI=k;SHA=SHB=null;SHL=false;shAB();shList();if(SHREADY)SHP.loadVideoById(SHV[k].id);}
 function shSeek(d){if(SHREADY)SHP.seekTo(Math.max(0,SHP.getCurrentTime()+d),true);}
 function shRate(){if(SHREADY)SHP.setPlaybackRate(+$('shr').value);}
@@ -3923,7 +3923,8 @@ function paMic(){
 /* chỉ tải YouTube khi mở mục Luyện nói */
 (function(){
   shList();try{paTopics();paNew();}catch(e){}
-  const g0=go;go=function(p,s){const r=g0.apply(this,arguments);if(p==='luyennoi'){shLoad();}else if(SHREADY){try{SHP.pauseVideo();}catch(e){}}return r;};
+  const g0=go;go=function(p,s){const r=g0.apply(this,arguments);const id=typeof p==='number'&&NAV[p]?NAV[p][0]:p;if(id==='luyennoi'||$('luyennoi').classList.contains('on')){shLoad();}else if(SHREADY){try{SHP.pauseVideo();}catch(e){}}return r;};
+  if($('luyennoi').classList.contains('on'))shLoad();
 })();
 </script>
 </body>
