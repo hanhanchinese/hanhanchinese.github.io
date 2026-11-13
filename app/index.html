@@ -3655,5 +3655,101 @@ try{lvRender();}catch(e){console.error(e);}
 })();
 </script>
 
+<style>
+/* --- Luyện đọc: nghe bài đọc --- */
+.ld-pl{display:none;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 12px;padding:10px 12px;border:2px solid var(--red);border-radius:14px;background:var(--soft)}
+.ld-pl.on{display:flex}
+.ld-pl .btn{padding:7px 16px;min-height:40px}
+.ld-pl select{font:inherit;padding:6px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);min-height:40px}
+.ld-pl .ld-pp2{flex:1 1 160px;min-width:120px}
+.ld-pl .ld-pg{height:6px;background:var(--card);border-radius:3px;overflow:hidden}
+.ld-pl .ld-pg i{display:block;height:100%;background:var(--red);transition:width .3s}
+.ld-pl small{color:var(--mut);font-size:12px}
+.ld-t p.ld-rp{background:color-mix(in srgb,var(--gold) 12%,transparent);border-radius:8px;box-shadow:0 0 0 6px color-mix(in srgb,var(--gold) 12%,transparent)}
+.ld-t .ld-w.ld-say{background:color-mix(in srgb,var(--gold) 45%,transparent);border-radius:3px}
+</style>
+<script>
+/* Nghe bài đọc: đọc to từng câu bằng giọng tiếng Trung của máy, tô sáng câu đang đọc */
+(function(){
+  const tool=document.querySelector('#luyendoc .ld-tool span:last-child');if(!tool)return;
+  const EN=()=>typeof LANG!=='undefined'&&LANG==='en';
+  const b=document.createElement('button');b.type='button';b.className='trb';b.id='ldlb';b.textContent=EN()?'🎧 Listen':'🎧 Nghe bài đọc';
+  tool.insertBefore(b,tool.firstChild);
+  const bar=document.createElement('div');bar.className='ld-pl';bar.id='ldpl';bar.setAttribute('role','group');bar.setAttribute('aria-label','Nghe bài đọc');
+  bar.innerHTML=`<button type='button' class='btn' id='ldpp'>▶ Phát</button><button type='button' class='btn ghost' id='ldps'>⏹ Dừng</button>
+    <label><span class='sr' style='position:absolute;left:-9999px'>Tốc độ đọc</span><select id='ldrate' aria-label='Tốc độ đọc'><option value='.6'>Chậm</option><option value='.8' selected>Vừa</option><option value='1'>Bình thường</option></select></label>
+    <div class='ld-pp2'><div class='ld-pg'><i id='ldpgi' style='width:0'></i></div><small id='ldpgt'>Bấm ▶ để nghe cả bài. Bấm vào một từ rồi chọn “Đọc từ đây” để nghe từ câu đó.</small></div>`;
+  const art=document.querySelector('#luyendoc .ld-art'),tl=art.querySelector('.ld-tool');tl.insertAdjacentElement('afterend',bar);
+  try{const r=localStorage.getItem('hh_ld_rate');if(r)$('ldrate').value=r;}catch(e){}
+  $('ldrate').onchange=()=>{try{localStorage.setItem('hh_ld_rate',$('ldrate').value);}catch(e){}if(P.on&&!P.pause){speechSynthesis.cancel();P.gen++;speak();}};
+
+  const P={on:false,pause:false,k:0,list:[],gen:0};
+  const ok=()=>'speechSynthesis' in window;
+  /* chia bài thành các câu: mỗi câu biết thuộc đoạn nào và gồm những chữ Hán thứ mấy trong đoạn */
+  function build(){
+    const A=LD.a[LDA],L=[];
+    A.b.forEach(([ty,row],pi)=>{
+      if(ty==='m')return;
+      let txt='',h0=0,h=0;
+      row.forEach((ti,j)=>{const w=LD.w[ti];txt+=w;if(ldHan(w))h++;
+        if(/[。！？!?；;]$/.test(w)||j===row.length-1){if(txt.trim()&&/\p{Script=Han}/u.test(txt))L.push({p:pi,a:h0,b:h,t:txt});txt='';h0=h;}});
+    });
+    return L;
+  }
+  function paras(){return Array.from($('ldt').children);}
+  function mark(){
+    document.querySelectorAll('#ldt .ld-rp').forEach(x=>x.classList.remove('ld-rp'));
+    document.querySelectorAll('#ldt .ld-say').forEach(x=>x.classList.remove('ld-say'));
+    if(!P.on)return;const s=P.list[P.k];if(!s)return;
+    const p=paras()[s.p];if(!p)return;p.classList.add('ld-rp');
+    Array.from(p.querySelectorAll('.ld-w')).slice(s.a,s.b).forEach(x=>x.classList.add('ld-say'));
+    const r=p.getBoundingClientRect();if(r.top<80||r.bottom>innerHeight-60)p.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+  function ui(){
+    const en=EN();
+    $('ldpp').textContent=P.on&&!P.pause?(en?'⏸ Pause':'⏸ Tạm dừng'):(en?'▶ Play':'▶ Phát');
+    const n=P.list.length;$('ldpgi').style.width=(n?Math.round((P.on?P.k:0)*100/n):0)+'%';
+    if(P.on)$('ldpgt').textContent=(en?'Sentence ':'Câu ')+(P.k+1)+' / '+n;
+  }
+  function speak(){
+    const g=P.gen,s=P.list[P.k];
+    if(!s){stop(true);return;}
+    mark();ui();
+    const u=new SpeechSynthesisUtterance(s.t.replace(/\s+/g,''));u.lang='zh-CN';
+    const v=window.hhVoice?hhVoice():null;if(v)u.voice=v;else{const vs=speechSynthesis.getVoices().filter(x=>/^zh/i.test(x.lang));if(vs.length)u.voice=vs.find(x=>/zh[-_]CN/i.test(x.lang))||vs[0];}
+    u.rate=+$('ldrate').value||.8;
+    u.onend=()=>{if(g!==P.gen||!P.on||P.pause)return;P.k++;speak();};
+    u.onerror=e=>{if(g!==P.gen||e.error==='interrupted'||e.error==='canceled')return;P.k++;speak();};
+    speechSynthesis.speak(u);
+  }
+  function play(from){
+    if(!ok()){$('ldpgt').textContent=EN()?'This browser cannot read aloud.':'Trình duyệt này không hỗ trợ đọc to. Hãy dùng Chrome, Edge hoặc Safari.';return;}
+    speechSynthesis.cancel();P.gen++;
+    if(!P.on||from!=null){P.list=build();P.k=from||0;}
+    P.on=true;P.pause=false;speak();
+  }
+  function pause(){P.pause=true;P.gen++;speechSynthesis.cancel();ui();}
+  function stop(done){P.gen++;if(ok())speechSynthesis.cancel();P.on=false;P.pause=false;P.k=0;mark();ui();
+    $('ldpgt').textContent=done?(EN()?'Finished. Press ▶ to listen again.':'Đã đọc hết bài. Bấm ▶ để nghe lại.'):(EN()?'Press ▶ to listen to the whole article.':'Bấm ▶ để nghe cả bài. Bấm vào một từ rồi chọn “Đọc từ đây” để nghe từ câu đó.');}
+  $('ldpp').onclick=()=>{if(P.on&&!P.pause)pause();else play();};
+  $('ldps').onclick=()=>stop();
+  b.onclick=()=>{const on=!bar.classList.contains('on');bar.classList.toggle('on',on);b.classList.toggle('on',on);if(on)play();else stop();};
+
+  /* vẽ lại bài (bật pinyin, đổi cỡ chữ) thì giữ tô sáng; đổi bài hoặc rời mục thì dừng */
+  const draw0=ldDraw;ldDraw=function(){draw0.apply(this,arguments);mark();};
+  const pick0=ldPick;ldPick=function(){stop();bar.classList.remove('on');b.classList.remove('on');pick0.apply(this,arguments);};
+  const go0=go;go=function(p){if(p!=='luyendoc'&&P.on)stop();return go0.apply(this,arguments);};
+  /* "Đọc từ đây" trong bảng nghĩa của từ */
+  const show0=ldShow;ldShow=function(i,el){
+    show0.apply(this,arguments);
+    const pb=document.querySelector('#ldpop .ld-pb');if(!pb||!el)return;
+    const p=el.closest('#ldt > *');if(!p)return;const pi=paras().indexOf(p),hi=Array.from(p.querySelectorAll('.ld-w')).indexOf(el);
+    const x=document.createElement('button');x.type='button';x.className='trb';x.textContent=EN()?'▶ Read from here':'▶ Đọc từ đây';
+    x.onclick=()=>{const L=build(),k=L.findIndex(s=>s.p===pi&&hi>=s.a&&hi<s.b);ldClose();bar.classList.add('on');b.classList.add('on');P.list=L;play(Math.max(0,k));};
+    pb.appendChild(x);
+  };
+})();
+</script>
+
 </body>
 </html>
