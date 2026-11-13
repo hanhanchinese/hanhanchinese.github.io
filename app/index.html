@@ -3853,7 +3853,7 @@ try{lvRender();}catch(e){console.error(e);}
 <script>
 /* ===== Luyện nói ===== */
 /* Danh sách video shadowing: thêm video mới bằng cách thêm {id:'mã video YouTube', t:'tên hiển thị'} */
-const SHV=[{id:'IU4Sw07L9PU',t:''}];
+const SHV=[{id:'IU4Sw07L9PU',t:''},{id:'NVxkskkuJO8',t:''}];
 let SHI=0,SHP=null,SHA=null,SHB=null,SHL=false,SHT=null,SHREADY=false;
 const shFmt=x=>x==null?'–':Math.floor(x/60)+':'+String(Math.floor(x%60)).padStart(2,'0');
 function shList(){$('shvl').innerHTML=SHV.length>1?SHV.map((v,k)=>`<button type='button' class='${k===SHI?'on':''}' onclick='shPick(${k})'>${v.t||'Video '+(k+1)}</button>`).join(''):'';}
