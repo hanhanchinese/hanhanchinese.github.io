@@ -780,6 +780,8 @@ html.hh-locked,html.hh-locked body{overflow:hidden}
 </style>
 <script src="firebase-config.js"></script>
 <script type="module" src="auth.js"></script>
+<style>html.no-leaves #hh-leaves{display:none!important}</style>
+<script>try{if(localStorage.getItem('hh_leaves')==='0')document.documentElement.classList.add('no-leaves');}catch(e){}</script>
 </head>
 <body>
 <div id="hh-auth" role="dialog" aria-modal="true" aria-labelledby="hh-auth-t"><div class="card">
@@ -3751,5 +3753,21 @@ try{lvRender();}catch(e){console.error(e);}
 })();
 </script>
 
+<script>
+/* nút bật/tắt hiệu ứng lá rơi */
+(function(){
+  function add(){
+    const box=document.getElementById('audio-ctl');
+    if(!box||!document.getElementById('hh-leaves')||document.getElementById('au-l'))return !!box;
+    const b=document.createElement('button');b.type='button';b.id='au-l';
+    const on=()=>!document.documentElement.classList.contains('no-leaves');
+    const paint=()=>{const en=typeof LANG!=='undefined'&&LANG==='en';b.textContent=(en?'🍃 Leaves: ':'🍃 Lá rơi: ')+(on()?(en?'On':'Bật'):(en?'Off':'Tắt'));b.classList.toggle('off',!on());b.setAttribute('aria-pressed',on());};
+    b.onclick=()=>{const v=!on();document.documentElement.classList.toggle('no-leaves',!v);try{localStorage.setItem('hh_leaves',v?'1':'0');}catch(e){}paint();};
+    box.appendChild(b);paint();
+    return true;
+  }
+  if(!add()){let n=0;const t=setInterval(()=>{if(add()||++n>40)clearInterval(t);},250);}
+})();
+</script>
 </body>
 </html>
