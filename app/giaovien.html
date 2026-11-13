@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>HanHan Chinese · Theo dõi kết quả học sinh</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+:root{--bg:#fffaf2;--card:#fff;--fg:#2b1a18;--mut:#6e5853;--red:#b3201f;--gold:#c9a24b;--line:#ecd9c6;--soft:#fbeeea;--ok:#1f7a43;--bad:#c0392b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Nunito,system-ui,sans-serif;line-height:1.55}
+header{background:var(--red);color:#fff;border-bottom:4px solid var(--gold)}
+header .in{max-width:1180px;margin:0 auto;padding:12px 20px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+header b{font-size:19px}
+header a{color:#fff}
+#who{display:flex;gap:10px;align-items:center;font-weight:700;font-size:14px}
+#who button{font:inherit;font-size:13px;background:transparent;color:#fff;border:1px solid rgba(255,255,255,.7);border-radius:999px;padding:5px 12px;cursor:pointer}
+main{max-width:1180px;margin:0 auto;padding:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+.btn{font:inherit;font-weight:700;background:var(--red);color:#fff;border:2px solid var(--red);border-radius:999px;padding:9px 18px;cursor:pointer;min-height:44px}
+.btn.ghost{background:transparent;color:var(--red)}
+.gbtn{display:inline-flex;align-items:center;gap:10px;font:inherit;font-weight:700;padding:12px 22px;border-radius:999px;border:1px solid #dadce0;background:#fff;color:#3c4043;cursor:pointer;min-height:48px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:14px}
+.stats div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.stats b{display:block;font-size:28px;color:var(--red);line-height:1.2}
+.stats span{font-size:13px;color:var(--mut)}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px}
+.tools input,.tools select{font:inherit;padding:9px 12px;border:2px solid var(--line);border-radius:10px;background:#fff;min-height:44px}
+.tools input{flex:1 1 220px}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border-bottom:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top}
+th{background:var(--soft);color:var(--red);white-space:nowrap;cursor:pointer;user-select:none}
+tr.st:hover td{background:#fff7f2}
+td.n{text-align:right;white-space:nowrap;font-weight:700}
+.pill{display:inline-block;border-radius:999px;padding:1px 9px;font-size:12px;font-weight:700}
+.pill.g{background:#e6f4ea;color:var(--ok)}.pill.y{background:#fff4d6;color:#7a5a00}.pill.r{background:#fdecea;color:var(--bad)}
+.det td{background:#fffcf8}
+.det table{font-size:13px}
+.av{width:28px;height:28px;border-radius:50%;vertical-align:middle;margin-right:6px}
+.msg{color:var(--mut)}.msg.bad{color:var(--bad);font-weight:600}
+pre{background:#2b1a18;color:#f6e9e4;padding:12px;border-radius:10px;overflow-x:auto;font-size:13px}
+.hide{display:none}
+</style>
+</head>
+<body>
+<header><div class="in"><b>HanHan Chinese · Theo dõi kết quả học sinh</b><div id="who"></div></div></header>
+<main>
+<section id="login" class="card" style="text-align:center;max-width:520px;margin:30px auto">
+<h1 style="margin-top:0;font-size:24px">Trang dành cho giáo viên</h1>
+<p class="msg">Đăng nhập bằng tài khoản Google đã được cấp quyền giáo viên để xem kết quả của học sinh.</p>
+<button type="button" class="gbtn" id="go">Đăng nhập bằng Google</button>
+<p id="lmsg" class="msg" aria-live="polite"></p>
+<p><a href="./">← Về app học</a></p>
+</section>
+
+<section id="noperm" class="card hide">
+<h2 style="margin-top:0">Tài khoản này chưa có quyền giáo viên</h2>
+<p>Để cấp quyền, vào Firebase Console › <b>Firestore Database › Rules</b>, thay nội dung bằng đoạn dưới đây (sửa email trong ngoặc vuông thành email giáo viên, có thể ghi nhiều email cách nhau bằng dấu phẩy), rồi bấm <b>Publish</b> và tải lại trang này.</p>
+<pre>rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid} {
+      allow read, write: if request.auth != null &amp;&amp; request.auth.uid == uid;
+      allow read: if request.auth != null &amp;&amp; request.auth.token.email_verified
+                  &amp;&amp; request.auth.token.email in ['<span id="myemail">email-giao-vien@gmail.com</span>'];
+    }
+  }
+}</pre>
+</section>
+
+<section id="dash" class="hide">
+<div class="stats" id="stats"></div>
+<div class="card">
+<div class="tools">
+<label class="hide" for="q">Tìm học sinh</label>
+<input id="q" type="search" placeholder="Tìm theo tên hoặc email…" aria-label="Tìm học sinh">
+<label for="kind" class="hide">Phần</label>
+<select id="kind" aria-label="Lọc theo phần"><option value="">Tất cả các phần</option></select>
+<label for="days" class="hide">Khoảng thời gian</label>
+<select id="days" aria-label="Khoảng thời gian"><option value="0">Mọi thời gian</option><option value="7">7 ngày qua</option><option value="30">30 ngày qua</option></select>
+<button type="button" class="btn ghost" id="reload">Tải lại</button>
+<button type="button" class="btn" id="csv">Tải file Excel (CSV)</button>
+</div>
+<div class="tw"><table id="tb"></table></div>
+<p class="msg" style="font-size:13px;margin-bottom:0">Bấm vào một học sinh để xem chi tiết từng lần làm bài. Điểm trung bình tính theo % điểm tối đa của các bài có chấm điểm.</p>
+</div>
+</section>
+</main>
+<script src="firebase-config.js"></script>
+<script type="module">
+const SDK='https://www.gstatic.com/firebasejs/10.12.2/';
+const $=id=>document.getElementById(id);
+const KIND={tuvung:'Từ vựng',sapxep:'Sắp xếp câu',dich:'Dịch Việt–Trung',dethi:'Đề thi',trochoi:'Trò chơi'};
+Object.entries(KIND).forEach(([k,v])=>$('kind').insertAdjacentHTML('beforeend',`<option value="${k}">${v}</option>`));
+const esc=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt=t=>t?new Date(t).toLocaleString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}):'–';
+const cfg=window.HH_FIREBASE_CONFIG;
+if(!cfg){$('lmsg').textContent='Chưa có cấu hình Firebase.';$('go').disabled=true;}
+else{
+  const [{initializeApp},A,F]=await Promise.all([import(SDK+'firebase-app.js'),import(SDK+'firebase-auth.js'),import(SDK+'firebase-firestore.js')]);
+  const app=initializeApp(cfg),auth=A.getAuth(app),db=F.getFirestore(app);
+  const prov=new A.GoogleAuthProvider();prov.setCustomParameters({prompt:'select_account'});
+  $('go').onclick=async()=>{try{await A.signInWithPopup(auth,prov);}catch(e){if(e.code==='auth/popup-blocked')return A.signInWithRedirect(auth,prov);$('lmsg').textContent='Chưa đăng nhập được ('+e.code+').';$('lmsg').className='msg bad';}};
+  let S=[],sortK='last',sortD=-1,open={};
+  A.onAuthStateChanged(auth,async u=>{
+    $('who').innerHTML='';
+    if(!u){$('login').classList.remove('hide');$('dash').classList.add('hide');$('noperm').classList.add('hide');return;}
+    $('who').innerHTML=`<span>${esc(u.email)}</span><button type="button" id="out">Đăng xuất</button>`;$('out').onclick=()=>A.signOut(auth);
+    $('login').classList.add('hide');$('myemail').textContent=u.email;
+    await load();
+  });
+  async function load(){
+    try{
+      const snap=await F.getDocs(F.collection(db,'users'));
+      S=snap.docs.map(d=>{const x=d.data();let r=[];try{r=JSON.parse((x.data||{}).hh_results||'[]');}catch(e){}
+        return {id:d.id,name:x.name||'(chưa có tên)',email:x.email||'',photo:x.photo||'',login:x.lastLogin&&x.lastLogin.toMillis?x.lastLogin.toMillis():0,res:Array.isArray(r)?r:[]};});
+      $('noperm').classList.add('hide');$('dash').classList.remove('hide');draw();
+    }catch(e){
+      if(e.code==='permission-denied'){$('dash').classList.add('hide');$('noperm').classList.remove('hide');}
+      else{$('login').classList.remove('hide');$('lmsg').textContent='Không tải được dữ liệu ('+e.code+'). Kiểm tra mạng rồi bấm Tải lại.';$('lmsg').className='msg bad';}
+    }
+  }
+  function rows(){
+    const q=$('q').value.trim().toLowerCase(),k=$('kind').value,dd=+$('days').value,since=dd?Date.now()-dd*864e5:0;
+    return S.filter(s=>!q||(s.name+' '+s.email).toLowerCase().includes(q)).map(s=>{
+      const r=s.res.filter(x=>(!k||x.k===k)&&x.t>=since),sc=r.filter(x=>x.m);
+      const avg=sc.length?Math.round(sc.reduce((a,x)=>a+x.s/x.m,0)/sc.length*100):null;
+      const lastR=r.length?r[r.length-1]:null;
+      return {...s,r,n:r.length,avg,last:Math.max(s.login||0,lastR?lastR.t:0),lastR,days:new Set(r.map(x=>new Date(x.t).toDateString())).size};
+    });
+  }
+  const pill=p=>p==null?'–':`<span class="pill ${p>=80?'g':p>=50?'y':'r'}">${p}%</span>`;
+  function draw(){
+    const R=rows();
+    R.sort((a,b)=>{const x=a[sortK]??-1,y=b[sortK]??-1;return (typeof x==='string'?x.localeCompare(y,'vi'):x-y)*sortD;});
+    const act=R.filter(r=>r.last>Date.now()-7*864e5).length,tot=R.reduce((a,r)=>a+r.n,0),av=R.filter(r=>r.avg!=null);
+    $('stats').innerHTML=`<div><b>${S.length}</b><span>học sinh đã đăng nhập</span></div><div><b>${act}</b><span>hoạt động trong 7 ngày</span></div><div><b>${tot}</b><span>lần làm bài (theo bộ lọc)</span></div><div><b>${av.length?Math.round(av.reduce((a,r)=>a+r.avg,0)/av.length)+'%':'–'}</b><span>điểm trung bình cả lớp</span></div>`;
+    const H=[['name','Học sinh'],['n','Số lần làm bài'],['days','Số ngày học'],['avg','Điểm TB'],['lastR','Bài gần nhất'],['last','Hoạt động gần nhất']];
+    let h='<tr>'+H.map(([k,v])=>`<th scope="col" data-k="${k}">${v}${sortK===k?(sortD<0?' ↓':' ↑'):''}</th>`).join('')+'</tr>';
+    if(!R.length)h+='<tr><td colspan="6" class="msg" style="text-align:center;padding:24px">Chưa có học sinh nào.</td></tr>';
+    R.forEach(r=>{
+      h+=`<tr class="st" data-id="${r.id}" tabindex="0" style="cursor:pointer"><td>${r.photo?`<img class="av" src="${esc(r.photo)}" alt="" referrerpolicy="no-referrer">`:''}<b>${esc(r.name)}</b><br><span class="msg" style="font-size:12px">${esc(r.email)}</span></td><td class="n">${r.n}</td><td class="n">${r.days}</td><td class="n">${pill(r.avg)}</td><td>${r.lastR?`${esc(KIND[r.lastR.k]||r.lastR.k)} · ${esc(r.lastR.n)}<br><b>${r.lastR.m?r.lastR.s+' / '+r.lastR.m:r.lastR.s+' điểm'}</b>`:'–'}</td><td>${fmt(r.last)}</td></tr>`;
+      if(open[r.id])h+=`<tr class="det"><td colspan="6">${r.r.length?`<table><tr><th>Thời gian</th><th>Phần</th><th>Bài</th><th>Điểm</th></tr>${r.r.slice().reverse().map(x=>`<tr><td>${fmt(x.t)}</td><td>${esc(KIND[x.k]||x.k)}</td><td>${esc(x.n)}</td><td class="n">${x.m?x.s+' / '+x.m:x.s+' điểm'}</td></tr>`).join('')}</table>`:'<span class="msg">Chưa có lần làm bài nào trong bộ lọc này.</span>'}</td></tr>`;
+    });
+    $('tb').innerHTML=h;
+    $('tb').querySelectorAll('th').forEach(th=>th.onclick=()=>{const k=th.dataset.k==='lastR'?'last':th.dataset.k;if(sortK===k)sortD=-sortD;else{sortK=k;sortD=k==='name'?1:-1;}draw();});
+    $('tb').querySelectorAll('tr.st').forEach(tr=>{const t=()=>{open[tr.dataset.id]=!open[tr.dataset.id];draw();};tr.onclick=t;tr.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();t();}};});
+  }
+  ['q','kind','days'].forEach(id=>$(id).addEventListener('input',draw));
+  $('reload').onclick=load;
+  $('csv').onclick=()=>{
+    const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+    const lines=[['Học sinh','Email','Thời gian','Phần','Bài','Điểm','Điểm tối đa'].map(q).join(',')];
+    rows().forEach(r=>r.r.forEach(x=>lines.push([r.name,r.email,fmt(x.t),KIND[x.k]||x.k,x.n,x.s,x.m??''].map(q).join(','))));
+    const b=new Blob(['﻿'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');
+    a.href=URL.createObjectURL(b);a.download='ket-qua-hoc-sinh-'+new Date().toISOString().slice(0,10)+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  };
+}
+</script>
+</body>
+</html>

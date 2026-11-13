@@ -1126,6 +1126,7 @@ html.hh-locked,html.hh-locked body{overflow:hidden}
 </div>
 </div>
 <div class='sub' data-g='luyentap' data-n='3'><div id='lvw'></div></div>
+<div class='sub' data-g='luyentap' data-n='4'><div id='kq'></div></div>
 </section>
 </main>
 <div id='wm' onclick='if(event.target===this)closeW()'><div class='box' id='wb'></div></div>
@@ -1382,7 +1383,7 @@ const sfx=AU.sfx;
 /* điều hướng */
 const NAV=[['home','Trang chủ'],['gioithieu','Giới thiệu'],['kienthuc','Kho kiến thức'],['tudien','Từ điển'],['congcu','Công cụ'],['trochoi','Trò chơi'],['lotrinh','Lộ trình'],['butthuan','Bút thuận'],['luyentap','Luyện tập'],['luyendoc','Luyện đọc'],['luyennghe','Luyện nghe'],['ontap','Ôn tập'],['bosuutap','Bộ sưu tập'],['sach','Sách và Đề thi']];
 const PAGES=NAV;
-const TB={congcu:['Chuyển pinyin','Đọc số','Dịch Trung–Việt'],trochoi:['Ghép cặp','Đoán thanh điệu','Gấu trúc chạy chữ'],sach:['Sách','Đề thi','Đề mô phỏng HSK 3','Đề mô phỏng HSK 4'],luyentap:['Từ vựng','Sắp xếp câu HSK 3','Dịch Việt–Trung HSK 7–9','Luyện viết chữ'],lotrinh:['Người mới bắt đầu','HSK 1–3','HSK 4–6']};
+const TB={congcu:['Chuyển pinyin','Đọc số','Dịch Trung–Việt'],trochoi:['Ghép cặp','Đoán thanh điệu','Gấu trúc chạy chữ'],sach:['Sách','Đề thi','Đề mô phỏng HSK 3','Đề mô phỏng HSK 4'],luyentap:['Từ vựng','Sắp xếp câu HSK 3','Dịch Việt–Trung HSK 7–9','Luyện viết chữ','Kết quả của tôi'],lotrinh:['Người mới bắt đầu','HSK 1–3','HSK 4–6']};
 const GK=Object.keys(TB);
 function dd(b){b.parentNode.classList.toggle('open');}
 function sw(g,n){
@@ -3457,6 +3458,82 @@ function lvPg(){const L=LVB[LVK].L[LVL],d=L.c.filter(e=>lvWD(LVK,e)).length,pg=d
   const b=document.querySelectorAll('#lvw .lv-ls button')[LVL];if(b){const it=b.querySelector('i');if(it)it.textContent=d+'/'+L.c.length;}}
 function lvOpenBook(k){LVK=k;LVL=0;LVI=0;LVV=0;go('luyentap');const t=document.querySelectorAll('.tabs[data-g=luyentap] button')[3];if(t)t.click();lvRender();setTimeout(()=>{const el=$('lvw');if(el)el.scrollIntoView({behavior:'smooth'});},100);}
 try{lvRender();}catch(e){console.error(e);}
+</script>
+
+<style>
+/* --- Kết quả học tập --- */
+#kq .kq-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:10px 0 14px}
+#kq .kq-c{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:12px 14px}
+#kq .kq-c b{display:block;font-size:26px;color:var(--red);line-height:1.2}
+#kq .kq-c span{font-size:13px;color:var(--mut)}
+#kq .kq-ch{display:flex;align-items:flex-end;gap:4px;height:140px;border-bottom:1px solid var(--line);padding:0 2px;overflow-x:auto}
+#kq .kq-ch i{flex:0 0 18px;background:var(--red);border-radius:4px 4px 0 0;min-height:3px;position:relative}
+#kq .kq-ch i.lo{background:var(--gold)}
+#kq .kq-f{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+#kq .kq-f button{font:inherit;font-size:13px;padding:5px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+#kq .kq-f button.on{background:var(--red);border-color:var(--red);color:#fff}
+#kq .kq-t{overflow-x:auto}
+#kq table{font-size:14px}
+#kq td.n{text-align:right;font-weight:700;white-space:nowrap}
+#kq .kq-e{color:var(--mut);text-align:center;padding:24px}
+#hh-user .kq-btn{border-color:rgba(255,255,255,.7)}
+</style>
+<script>
+/* Kết quả học tập: ghi lại mỗi lần làm bài vào localStorage 'hh_results'
+   (được đồng bộ lên tài khoản khi học sinh đăng nhập). */
+(function(){
+  const KEY='hh_results',MAXN=400;
+  const KIND={tuvung:'Từ vựng',sapxep:'Sắp xếp câu',dich:'Dịch Việt–Trung',dethi:'Đề thi',trochoi:'Trò chơi'};
+  const read=()=>{try{const a=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(a)?a:[];}catch(e){return [];}};
+  window.hhLog=function(k,n,s,m){
+    const a=read();a.push({t:Date.now(),k,n,s:+s||0,m:m==null?null:+m});
+    while(a.length>MAXN)a.shift();
+    try{localStorage.setItem(KEY,JSON.stringify(a));}catch(e){}
+    if(typeof kqDraw==='function'&&document.getElementById('kq'))kqDraw();
+  };
+  /* gắn vào các phần có chấm điểm */
+  if(typeof show==='function'){const f=show;show=function(){f.apply(this,arguments);if(Q&&Q.i>=Q.list.length&&!Q.hhLogged){Q.hhLogged=1;hhLog('tuvung',Q.mode==='in'?'Nhập pinyin (10 câu)':'Trắc nghiệm nghĩa (10 câu)',Q.score,Q.list.length);}};}
+  if(typeof xcalc==='function'&&typeof xsub==='function'){
+    let lastT=null;const fc=xcalc;xcalc=function(k){const r=fc.apply(this,arguments);const el=document.getElementById(k+'xres');const m=el&&el.textContent.match(/(\d+)\s*\/\s*300/);lastT=m?+m[1]:lastT;return r;};
+    const fs=xsub;xsub=function(k){const X=xst(k),was=X.done;lastT=null;fs.apply(this,arguments);if(!was&&lastT!=null)hhLog('dethi','Đề mô phỏng '+(k==='h4'?'HSK 4':'HSK 3'),lastT,300);};
+  }
+  if(typeof window.sxSubmit==='function'){const f=window.sxSubmit;window.sxSubmit=function(){f.apply(this,arguments);const m=(document.getElementById('sxRes').textContent||'').match(/(\d+)\s*\/\s*40/);if(m)hhLog('sapxep','Sắp xếp câu HSK 3',+m[1],40);};}
+  if(typeof window.dcGrade==='function'){const f=window.dcGrade;window.dcGrade=function(i){f.apply(this,arguments);if(typeof DC!=='undefined'&&DC[i]&&!DC[i].x){const m=(document.getElementById('dcS'+i).textContent||'').match(/([\d.]+)\s*\/\s*10/);if(m)hhLog('dich','HSK 7–9 · '+DC[i].t,+m[1],10);}};}
+  if(typeof rrOver==='function'){const f=rrOver;rrOver=function(){f.apply(this,arguments);if(typeof RR!=='undefined')hhLog('trochoi','Gấu trúc chạy chữ'+(typeof GL!=='undefined'?' · HSK '+GL:''),RR.score,null);};}
+
+  let F='all';
+  const fmt=t=>{const d=new Date(t);return d.toLocaleDateString('vi-VN')+' '+d.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'});};
+  const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  window.kqFilter=function(f){F=f;kqDraw();};
+  window.kqDraw=function(){
+    const box=document.getElementById('kq');if(!box)return;
+    const all=read(),a=F==='all'?all:all.filter(r=>r.k===F),sc=a.filter(r=>r.m);
+    const avg=sc.length?Math.round(sc.reduce((x,r)=>x+r.s/r.m,0)/sc.length*100):null;
+    const week=all.filter(r=>r.t>Date.now()-7*864e5).length;
+    const best=all.filter(r=>r.k==='trochoi').reduce((x,r)=>Math.max(x,r.s),0);
+    const days=new Set(all.map(r=>new Date(r.t).toDateString())).size;
+    const last=sc.slice(-30);
+    box.innerHTML=`<div class='card'><h3 style='margin-top:0'>Kết quả học tập của tôi</h3>
+      <p style='margin:0;color:var(--mut)'>Mỗi lần làm bài có chấm điểm sẽ được ghi lại ở đây${document.getElementById('hh-user')?' và lưu vào tài khoản của bạn':''}.</p>
+      <div class='kq-cards'>
+        <div class='kq-c'><b>${all.length}</b><span>lần làm bài</span></div>
+        <div class='kq-c'><b>${week}</b><span>lần trong 7 ngày qua</span></div>
+        <div class='kq-c'><b>${days}</b><span>ngày đã học</span></div>
+        <div class='kq-c'><b>${avg==null?'–':avg+'%'}</b><span>điểm trung bình${F==='all'?'':' · '+KIND[F]}</span></div>
+        <div class='kq-c'><b>${best||'–'}</b><span>kỷ lục Gấu trúc chạy chữ</span></div>
+      </div>
+      <div class='kq-f' role='group' aria-label='Lọc theo phần'>${[['all','Tất cả']].concat(Object.entries(KIND)).map(([k,v])=>`<button type='button' class='${F===k?'on':''}' onclick="kqFilter('${k}')">${v}</button>`).join('')}</div>
+      ${last.length?`<p style='margin:6px 0;font-size:13px;color:var(--mut)'>Điểm ${last.length} lần gần nhất (theo % điểm tối đa; cột vàng là dưới 50%)</p>
+      <div class='kq-ch' role='img' aria-label='Biểu đồ điểm các lần làm bài gần nhất'>${last.map(r=>{const p=Math.round(r.s/r.m*100);return `<i class='${p<50?'lo':''}' style='height:${Math.max(2,p)}%' title='${esc(r.n)}: ${r.s}/${r.m} (${fmt(r.t)})'></i>`;}).join('')}</div>`:''}
+    </div>
+    <div class='card kq-t'>${a.length?`<table><tr><th>Thời gian</th><th>Phần</th><th>Bài</th><th>Điểm</th></tr>${a.slice().reverse().map(r=>`<tr><td>${fmt(r.t)}</td><td>${KIND[r.k]||r.k}</td><td>${esc(r.n)}</td><td class='n'>${r.m?r.s+' / '+r.m:r.s+' điểm'}</td></tr>`).join('')}</table>
+      <p style='margin:10px 0 0'><button type='button' class='btn ghost' id='kqClr'>Xóa lịch sử</button></p>`:`<div class='kq-e'>Chưa có kết quả nào. Hãy làm một bài ở Luyện tập, Đề thi hoặc chơi Gấu trúc chạy chữ nhé!</div>`}</div>`;
+    const b=document.getElementById('kqClr');
+    if(b)b.onclick=()=>{if(b.dataset.arm){try{localStorage.removeItem(KEY);}catch(e){}kqDraw();return;}b.dataset.arm=1;b.textContent='Bấm lần nữa để xóa hết';setTimeout(()=>{delete b.dataset.arm;b.textContent='Xóa lịch sử';},3000);};
+  };
+  kqDraw();
+  window.addEventListener('storage',e=>{if(e.key===KEY)kqDraw();});
+})();
 </script>
 
 </body>
