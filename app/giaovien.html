@@ -92,7 +92,7 @@ service cloud.firestore {
 <script type="module">
 const SDK='https://www.gstatic.com/firebasejs/10.12.2/';
 const $=id=>document.getElementById(id);
-const KIND={tuvung:'Từ vựng',sapxep:'Sắp xếp câu',dich:'Dịch Việt–Trung',dethi:'Đề thi',trochoi:'Trò chơi'};
+const KIND={tuvung:'Từ vựng',sapxep:'Sắp xếp câu',dich:'Dịch Việt–Trung',dethi:'Đề thi',trochoi:'Trò chơi',luyennoi:'Luyện nói'};
 Object.entries(KIND).forEach(([k,v])=>$('kind').insertAdjacentHTML('beforeend',`<option value="${k}">${v}</option>`));
 const esc=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const fmt=t=>t?new Date(t).toLocaleString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}):'–';
@@ -141,8 +141,8 @@ else{
     let h='<tr>'+H.map(([k,v])=>`<th scope="col" data-k="${k}">${v}${sortK===k?(sortD<0?' ↓':' ↑'):''}</th>`).join('')+'</tr>';
     if(!R.length)h+='<tr><td colspan="6" class="msg" style="text-align:center;padding:24px">Chưa có học sinh nào.</td></tr>';
     R.forEach(r=>{
-      h+=`<tr class="st" data-id="${r.id}" tabindex="0" style="cursor:pointer"><td>${r.photo?`<img class="av" src="${esc(r.photo)}" alt="" referrerpolicy="no-referrer">`:''}<b>${esc(r.name)}</b><br><span class="msg" style="font-size:12px">${esc(r.email)}</span></td><td class="n">${r.n}</td><td class="n">${r.days}</td><td class="n">${pill(r.avg)}</td><td>${r.lastR?`${esc(KIND[r.lastR.k]||r.lastR.k)} · ${esc(r.lastR.n)}<br><b>${r.lastR.m?r.lastR.s+' / '+r.lastR.m:r.lastR.s+' điểm'}</b>`:'–'}</td><td>${fmt(r.last)}</td></tr>`;
-      if(open[r.id])h+=`<tr class="det"><td colspan="6">${r.r.length?`<table><tr><th>Thời gian</th><th>Phần</th><th>Bài</th><th>Điểm</th></tr>${r.r.slice().reverse().map(x=>`<tr><td>${fmt(x.t)}</td><td>${esc(KIND[x.k]||x.k)}</td><td>${esc(x.n)}</td><td class="n">${x.m?x.s+' / '+x.m:x.s+' điểm'}</td></tr>`).join('')}</table>`:'<span class="msg">Chưa có lần làm bài nào trong bộ lọc này.</span>'}</td></tr>`;
+      h+=`<tr class="st" data-id="${r.id}" tabindex="0" style="cursor:pointer"><td>${r.photo?`<img class="av" src="${esc(r.photo)}" alt="" referrerpolicy="no-referrer">`:''}<b>${esc(r.name)}</b><br><span class="msg" style="font-size:12px">${esc(r.email)}</span></td><td class="n">${r.n}</td><td class="n">${r.days}</td><td class="n">${pill(r.avg)}</td><td>${r.lastR?`${esc(KIND[r.lastR.k]||r.lastR.k)} · ${esc(r.lastR.n)}<br><b>${r.lastR.m?r.lastR.s+' / '+r.lastR.m:r.lastR.k==='luyennoi'?'Đã luyện':r.lastR.s+' điểm'}</b>`:'–'}</td><td>${fmt(r.last)}</td></tr>`;
+      if(open[r.id])h+=`<tr class="det"><td colspan="6">${r.r.length?`<table><tr><th>Thời gian</th><th>Phần</th><th>Bài</th><th>Điểm</th></tr>${r.r.slice().reverse().map(x=>`<tr><td>${fmt(x.t)}</td><td>${esc(KIND[x.k]||x.k)}</td><td>${esc(x.n)}</td><td class="n">${x.m?x.s+' / '+x.m:x.k==='luyennoi'?'Đã luyện':x.s+' điểm'}</td></tr>`).join('')}</table>`:'<span class="msg">Chưa có lần làm bài nào trong bộ lọc này.</span>'}</td></tr>`;
     });
     $('tb').innerHTML=h;
     $('tb').querySelectorAll('th').forEach(th=>th.onclick=()=>{const k=th.dataset.k==='lastR'?'last':th.dataset.k;if(sortK===k)sortD=-sortD;else{sortK=k;sortD=k==='name'?1:-1;}draw();});

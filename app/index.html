@@ -1079,6 +1079,87 @@ html.hh-locked,html.hh-locked body{overflow:hidden}
 </div>
 <div id='lnply' style='display:none'></div>
 </section>
+<style>
+/* --- Luyện nói --- */
+#luyennoi .ln2-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin:8px 0 0;padding:0;list-style:none;counter-reset:st}
+#luyennoi .ln2-steps li{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg);font-size:14px;counter-increment:st}
+#luyennoi .ln2-steps li::before{content:counter(st);display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--red);color:#fff;font-weight:800;font-size:13px;margin-right:6px}
+#luyennoi .sh-vl{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+#luyennoi .sh-vl button{font:inherit;font-size:14px;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+#luyennoi .sh-vl button.on{background:var(--red);border-color:var(--red);color:#fff}
+#luyennoi .sh-v{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:14px;overflow:hidden}
+#luyennoi .sh-v>div,#luyennoi .sh-v iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+#luyennoi .sh-t{margin:10px 0 2px;font-weight:800}
+#luyennoi .sh-c{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+#luyennoi .sh-c .btn{padding:7px 14px;min-height:40px;font-size:14px}
+#luyennoi .sh-c select{font:inherit;padding:7px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);min-height:40px}
+#luyennoi .sh-ab{font-size:13px;color:var(--mut);font-variant-numeric:tabular-nums}
+#luyennoi .btn.rec{background:var(--bad);border-color:var(--bad);animation:shrec 1s ease-in-out infinite}
+@keyframes shrec{50%{opacity:.7}}
+@media (prefers-reduced-motion:reduce){#luyennoi .btn.rec{animation:none}}
+#luyennoi .sh-rl{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+#luyennoi .sh-rl div{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px}
+#luyennoi .sh-rl audio{height:36px;max-width:100%}
+#luyennoi .pa-s{text-align:center}
+#luyennoi .pa-hz{font-size:clamp(28px,7vw,44px);line-height:1.4;margin:6px 0}
+#luyennoi .pa-hz .ok{color:var(--ok)}#luyennoi .pa-hz .no{color:var(--bad);text-decoration:underline wavy}
+#luyennoi .pa-py{color:var(--red);font-weight:600}
+#luyennoi .pa-vi{color:var(--mut)}
+#luyennoi .pa-r{min-height:60px;margin-top:10px}
+#luyennoi .pa-r .res{font-size:40px}
+</style>
+<section id='luyennoi'><h2>Luyện nói</h2>
+<div class='tabs' data-g='luyennoi'></div>
+<div class='sub' data-g='luyennoi' data-n='0'>
+<div class='card'>
+<h3 style='margin-top:0'>Shadowing <span class='han'>跟读</span></h3>
+<p style='margin:0;color:var(--mut)'>Shadowing là nghe người bản xứ nói rồi <b>nói đuổi theo ngay sau</b>, bắt chước cả phát âm, thanh điệu, ngữ điệu và tốc độ, như cái bóng theo sau người nói.</p>
+<ol class='ln2-steps'>
+<li>Xem video một lượt, chỉ nghe để hiểu nội dung.</li>
+<li>Giảm tốc độ còn 0.75×, nghe lại và đọc nhẩm theo.</li>
+<li>Chọn một đoạn ngắn (A–B), bật lặp lại và nói to theo nhiều lần.</li>
+<li>Ghi âm giọng của em, nghe lại và so với video.</li>
+<li>Nâng dần lên tốc độ 1× cho đến khi nói kịp người trong video.</li>
+</ol>
+</div>
+<div class='card'>
+<div class='sh-vl' id='shvl' role='group' aria-label='Chọn video'></div>
+<div class='sh-v'><div id='shp'></div></div>
+<div class='sh-t' id='sht'></div>
+<div class='sh-c'>
+<button type='button' class='btn ghost' onclick='shSeek(-5)'>⟲ Lùi 5 giây</button>
+<label><span style='position:absolute;left:-9999px'>Tốc độ</span><select id='shr' aria-label='Tốc độ phát' onchange='shRate()'><option value='0.5'>0.5×</option><option value='0.75'>0.75×</option><option value='1' selected>1×</option><option value='1.25'>1.25×</option></select></label>
+<button type='button' class='btn ghost' onclick='shMark("a")'>Đặt điểm A</button>
+<button type='button' class='btn ghost' onclick='shMark("b")'>Đặt điểm B</button>
+<button type='button' class='btn ghost' id='shlp' onclick='shLoop()' aria-pressed='false'>🔁 Lặp A–B: Tắt</button>
+<span class='sh-ab' id='shab'>Chưa chọn đoạn</span>
+</div>
+<div class='sh-c'>
+<button type='button' class='btn' id='shrec' onclick='shRec()'>🎙 Ghi âm giọng của em</button>
+<span class='sh-ab' id='shrm'>Ghi âm trong lúc nói theo video (nên đeo tai nghe). Bản ghi chỉ lưu trên máy này, không gửi đi đâu.</span>
+</div>
+<div class='sh-rl' id='shrl'></div>
+</div>
+</div>
+<div class='sub' data-g='luyennoi' data-n='1'>
+<div class='card'>
+<h3 style='margin-top:0'>Luyện phát âm <span class='han'>发音练习</span></h3>
+<p style='margin:0;color:var(--mut)'>Nghe câu mẫu, bấm 🎙 rồi đọc to câu đó. App nhận giọng nói và tô <b style='color:var(--ok)'>xanh</b> chữ đọc đúng, <b style='color:var(--bad)'>đỏ</b> chữ cần đọc lại. Dùng tốt nhất trên Chrome hoặc Edge (máy tính và Android) và Safari (iPhone).</p>
+<div class='sh-c'><label><span style='position:absolute;left:-9999px'>Chủ đề</span><select id='pat' aria-label='Chủ đề' onchange='paNew()'></select></label><button type='button' class='btn ghost' onclick='paNew()'>Câu khác ↻</button></div>
+</div>
+<div class='card pa-s'>
+<div class='pa-hz han' id='pahz'></div>
+<div class='pa-py' id='papy'></div>
+<div class='pa-vi' id='pavi'></div>
+<div class='sh-c' style='justify-content:center'>
+<button type='button' class='btn ghost' onclick='paListen()'>🔊 Nghe mẫu</button>
+<button type='button' class='btn' id='pamic' onclick='paMic()'>🎙 Bấm để nói</button>
+</div>
+<div class='pa-r' id='par' aria-live='polite'></div>
+</div>
+</div>
+</section>
+
 <section id='sach'><h2>Sách và Đề thi</h2><div class='tabs' data-g='sach'></div>
 <div class='sub' data-g='sach' data-n='0'>
 <div class='card'><h3 style='margin-top:0'>📚 Bộ Giáo trình Hán ngữ 1–6 <span class='han'>汉语教程</span> (bộ mới)</h3><p class='bk-s'>Bộ giáo trình phổ biến nhất ở Việt Nam, đi từ phát âm và chữ Hán cơ bản (quyển 1) đến đọc hiểu nâng cao (quyển 6). Bấm <b>Đọc</b> để mở sách ngay trong app. Kéo xuống để lật trang, app nhớ trang bạn đọc dở.</p><div class='bk-g'><div class='bk'><div class='bk-cv'><span class='han'>汉语教程</span><b>1</b></div><div class='bk-t'>Giáo trình Hán ngữ 1</div><div class='bk-m'>Sơ cấp · 180 trang</div><div class='bk-b'><button type='button' class='btn' onclick="bkOpen(0)">📖 Đọc</button></div></div><div class='bk'><div class='bk-cv'><span class='han'>汉语教程</span><b>2</b></div><div class='bk-t'>Giáo trình Hán ngữ 2</div><div class='bk-m'>Sơ cấp · 238 trang</div><div class='bk-b'><button type='button' class='btn' onclick="bkOpen(1)">📖 Đọc</button></div></div><div class='bk'><div class='bk-cv'><span class='han'>汉语教程</span><b>3</b></div><div class='bk-t'>Giáo trình Hán ngữ 3</div><div class='bk-m'>Sơ – trung cấp · 165 trang</div><div class='bk-b'><button type='button' class='btn' onclick="bkOpen(2)">📖 Đọc</button></div></div><div class='bk'><div class='bk-cv'><span class='han'>汉语教程</span><b>4</b></div><div class='bk-t'>Giáo trình Hán ngữ 4</div><div class='bk-m'>Trung cấp · 173 trang</div><div class='bk-b'><button type='button' class='btn' onclick="bkOpen(3)">📖 Đọc</button></div></div><div class='bk'><div class='bk-cv'><span class='han'>汉语教程</span><b>5</b></div><div class='bk-t'>Giáo trình Hán ngữ 5</div><div class='bk-m'>Trung – cao cấp · 204 trang</div><div class='bk-b'><button type='button' class='btn' onclick="bkOpen(4)">📖 Đọc</button></div></div><div class='bk'><div class='bk-cv'><span class='han'>汉语教程</span><b>6</b></div><div class='bk-t'>Giáo trình Hán ngữ 6</div><div class='bk-m'>Cao cấp · 230 trang</div><div class='bk-b'><button type='button' class='btn' onclick="bkOpen(5)">📖 Đọc</button></div></div></div><p class='bk-s' style='margin:10px 0 0'>🔒 Sách chỉ được đọc trực tuyến trong app, không hỗ trợ tải về.</p></div>
@@ -1384,9 +1465,9 @@ const AU=(function(){
 const sfx=AU.sfx;
 
 /* điều hướng */
-const NAV=[['home','Trang chủ'],['gioithieu','Giới thiệu'],['kienthuc','Kho kiến thức'],['tudien','Từ điển'],['congcu','Công cụ'],['trochoi','Trò chơi'],['lotrinh','Lộ trình'],['butthuan','Bút thuận'],['luyentap','Luyện tập'],['luyendoc','Luyện đọc'],['luyennghe','Luyện nghe'],['ontap','Ôn tập'],['bosuutap','Bộ sưu tập'],['sach','Sách và Đề thi']];
+const NAV=[['home','Trang chủ'],['gioithieu','Giới thiệu'],['kienthuc','Kho kiến thức'],['tudien','Từ điển'],['congcu','Công cụ'],['trochoi','Trò chơi'],['lotrinh','Lộ trình'],['butthuan','Bút thuận'],['luyentap','Luyện tập'],['luyendoc','Luyện đọc'],['luyennghe','Luyện nghe'],['luyennoi','Luyện nói'],['ontap','Ôn tập'],['bosuutap','Bộ sưu tập'],['sach','Sách và Đề thi']];
 const PAGES=NAV;
-const TB={congcu:['Chuyển pinyin','Đọc số','Dịch Trung–Việt'],trochoi:['Ghép cặp','Đoán thanh điệu','Gấu trúc chạy chữ'],sach:['Sách','Đề thi','Đề mô phỏng HSK 3','Đề mô phỏng HSK 4'],luyentap:['Từ vựng','Sắp xếp câu HSK 3','Dịch Việt–Trung HSK 7–9','Luyện viết chữ','Kết quả của tôi'],lotrinh:['Người mới bắt đầu','HSK 1–3','HSK 4–6']};
+const TB={congcu:['Chuyển pinyin','Đọc số','Dịch Trung–Việt'],trochoi:['Ghép cặp','Đoán thanh điệu','Gấu trúc chạy chữ'],sach:['Sách','Đề thi','Đề mô phỏng HSK 3','Đề mô phỏng HSK 4'],luyentap:['Từ vựng','Sắp xếp câu HSK 3','Dịch Việt–Trung HSK 7–9','Luyện viết chữ','Kết quả của tôi'],lotrinh:['Người mới bắt đầu','HSK 1–3','HSK 4–6'],luyennoi:['Shadowing','Luyện phát âm']};
 const GK=Object.keys(TB);
 function dd(b){b.parentNode.classList.toggle('open');}
 function sw(g,n){
@@ -3486,7 +3567,7 @@ try{lvRender();}catch(e){console.error(e);}
    (được đồng bộ lên tài khoản khi học sinh đăng nhập). */
 (function(){
   const KEY='hh_results',MAXN=400;
-  const KIND={tuvung:'Từ vựng',sapxep:'Sắp xếp câu',dich:'Dịch Việt–Trung',dethi:'Đề thi',trochoi:'Trò chơi'};
+  const KIND={tuvung:'Từ vựng',sapxep:'Sắp xếp câu',dich:'Dịch Việt–Trung',dethi:'Đề thi',trochoi:'Trò chơi',luyennoi:'Luyện nói'};
   const read=()=>{try{const a=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(a)?a:[];}catch(e){return [];}};
   window.hhLog=function(k,n,s,m){
     const a=read();a.push({t:Date.now(),k,n,s:+s||0,m:m==null?null:+m});
@@ -3529,7 +3610,7 @@ try{lvRender();}catch(e){console.error(e);}
       ${last.length?`<p style='margin:6px 0;font-size:13px;color:var(--mut)'>Điểm ${last.length} lần gần nhất (theo % điểm tối đa; cột vàng là dưới 50%)</p>
       <div class='kq-ch' role='img' aria-label='Biểu đồ điểm các lần làm bài gần nhất'>${last.map(r=>{const p=Math.round(r.s/r.m*100);return `<i class='${p<50?'lo':''}' style='height:${Math.max(2,p)}%' title='${esc(r.n)}: ${r.s}/${r.m} (${fmt(r.t)})'></i>`;}).join('')}</div>`:''}
     </div>
-    <div class='card kq-t'>${a.length?`<table><tr><th>Thời gian</th><th>Phần</th><th>Bài</th><th>Điểm</th></tr>${a.slice().reverse().map(r=>`<tr><td>${fmt(r.t)}</td><td>${KIND[r.k]||r.k}</td><td>${esc(r.n)}</td><td class='n'>${r.m?r.s+' / '+r.m:r.s+' điểm'}</td></tr>`).join('')}</table>
+    <div class='card kq-t'>${a.length?`<table><tr><th>Thời gian</th><th>Phần</th><th>Bài</th><th>Điểm</th></tr>${a.slice().reverse().map(r=>`<tr><td>${fmt(r.t)}</td><td>${KIND[r.k]||r.k}</td><td>${esc(r.n)}</td><td class='n'>${r.m?r.s+' / '+r.m:r.k==='luyennoi'?'Đã luyện':r.s+' điểm'}</td></tr>`).join('')}</table>
       <p style='margin:10px 0 0'><button type='button' class='btn ghost' id='kqClr'>Xóa lịch sử</button></p>`:`<div class='kq-e'>Chưa có kết quả nào. Hãy làm một bài ở Luyện tập, Đề thi hoặc chơi Gấu trúc chạy chữ nhé!</div>`}</div>`;
     const b=document.getElementById('kqClr');
     if(b)b.onclick=()=>{if(b.dataset.arm){try{localStorage.removeItem(KEY);}catch(e){}kqDraw();return;}b.dataset.arm=1;b.textContent='Bấm lần nữa để xóa hết';setTimeout(()=>{delete b.dataset.arm;b.textContent='Xóa lịch sử';},3000);};
@@ -3767,6 +3848,82 @@ try{lvRender();}catch(e){console.error(e);}
     return true;
   }
   if(!add()){let n=0;const t=setInterval(()=>{if(add()||++n>40)clearInterval(t);},250);}
+})();
+</script>
+<script>
+/* ===== Luyện nói ===== */
+/* Danh sách video shadowing: thêm video mới bằng cách thêm {id:'mã video YouTube', t:'tên hiển thị'} */
+const SHV=[{id:'IU4Sw07L9PU',t:''}];
+let SHI=0,SHP=null,SHA=null,SHB=null,SHL=false,SHT=null,SHREADY=false;
+const shFmt=x=>x==null?'–':Math.floor(x/60)+':'+String(Math.floor(x%60)).padStart(2,'0');
+function shList(){$('shvl').innerHTML=SHV.length>1?SHV.map((v,k)=>`<button type='button' class='${k===SHI?'on':''}' onclick='shPick(${k})'>${v.t||'Video '+(k+1)}</button>`).join(''):'';}
+function shLoad(){
+  if(SHP||!$('shp'))return;
+  const mk=()=>{SHP=new YT.Player('shp',{videoId:SHV[SHI].id,playerVars:{rel:0,modestbranding:1,playsinline:1,cc_lang_pref:'zh'},
+    events:{onReady:()=>{SHREADY=true;shTitle();shRate();},onStateChange:()=>shTitle()}});};
+  if(window.YT&&YT.Player)mk();
+  else{window.onYouTubeIframeAPIReady=mk;if(!document.getElementById('yt-api')){const s=document.createElement('script');s.id='yt-api';s.src='https://www.youtube.com/iframe_api';s.onerror=()=>{$('sht').textContent='Không tải được YouTube. Kiểm tra kết nối mạng rồi tải lại trang.';};document.head.appendChild(s);}}
+  clearInterval(SHT);SHT=setInterval(()=>{if(!SHREADY||!SHL||SHA==null||SHB==null)return;const t=SHP.getCurrentTime();if(t>=SHB||t<SHA-1)SHP.seekTo(SHA,true);},200);
+}
+function shTitle(){try{const d=SHP.getVideoData();if(d&&d.title){SHV[SHI].t=SHV[SHI].t||d.title;$('sht').textContent=d.title;shList();}}catch(e){}}
+function shPick(k){SHI=k;SHA=SHB=null;SHL=false;shAB();shList();if(SHREADY)SHP.loadVideoById(SHV[k].id);}
+function shSeek(d){if(SHREADY)SHP.seekTo(Math.max(0,SHP.getCurrentTime()+d),true);}
+function shRate(){if(SHREADY)SHP.setPlaybackRate(+$('shr').value);}
+function shAB(){$('shab').textContent=SHA==null&&SHB==null?'Chưa chọn đoạn':`Đoạn A ${shFmt(SHA)} → B ${shFmt(SHB)}`;$('shlp').textContent='🔁 Lặp A–B: '+(SHL?'Bật':'Tắt');$('shlp').setAttribute('aria-pressed',SHL);$('shlp').classList.toggle('on',SHL);}
+function shMark(w){if(!SHREADY)return;const t=SHP.getCurrentTime();if(w==='a'){SHA=t;if(SHB!=null&&SHB<=SHA)SHB=null;}else{SHB=t;if(SHA==null||SHA>=SHB)SHA=Math.max(0,SHB-5);}shAB();}
+function shLoop(){if(SHA==null||SHB==null){$('shab').textContent='Hãy đặt điểm A và B trước (phát video tới chỗ muốn rồi bấm).';return;}SHL=!SHL;shAB();if(SHL){SHP.seekTo(SHA,true);SHP.playVideo();}}
+/* ghi âm */
+let SHR=null,SHC=[],SHN=0;
+async function shRec(){
+  const b=$('shrec');
+  if(SHR&&SHR.state==='recording'){SHR.stop();return;}
+  if(!navigator.mediaDevices||!window.MediaRecorder){$('shrm').textContent='Trình duyệt này không ghi âm được. Hãy dùng Chrome, Edge hoặc Safari bản mới.';return;}
+  let st;try{st=await navigator.mediaDevices.getUserMedia({audio:true});}catch(e){$('shrm').textContent='Chưa được phép dùng micro. Hãy bấm biểu tượng ổ khóa trên thanh địa chỉ và cho phép Micro.';return;}
+  SHC=[];SHR=new MediaRecorder(st);
+  SHR.ondataavailable=e=>{if(e.data.size)SHC.push(e.data);};
+  SHR.onstop=()=>{st.getTracks().forEach(t=>t.stop());b.classList.remove('rec');b.textContent='🎙 Ghi âm giọng của em';
+    const url=URL.createObjectURL(new Blob(SHC,{type:SHR.mimeType||'audio/webm'}));SHN++;
+    const d=document.createElement('div');d.innerHTML=`<b>Lần ${SHN}</b>${SHA!=null&&SHB!=null?` <span class='sh-ab'>(đoạn ${shFmt(SHA)}–${shFmt(SHB)})</span>`:''}`;
+    const a=document.createElement('audio');a.controls=true;a.src=url;d.appendChild(a);$('shrl').prepend(d);
+    if(typeof hhLog==='function')hhLog('luyennoi','Shadowing · '+(SHV[SHI].t||'video'),1,null);};
+  SHR.start();b.classList.add('rec');b.textContent='⏹ Dừng ghi âm';
+  if(SHREADY){if(SHA!=null)SHP.seekTo(SHA,true);SHP.playVideo();}
+}
+/* luyện phát âm */
+let PA=null,PAR=null;
+function paTopics(){$('pat').innerHTML='<option value="-1">Tất cả chủ đề</option>'+LN.map((t,k)=>`<option value='${k}'>${t.lv} · ${t.t}</option>`).join('');}
+function paNew(){
+  const k=+$('pat').value,ts=k>=0?[LN[k]]:LN,all=[];
+  ts.forEach(t=>t.l.forEach(l=>{if(l[1]&&l[1].length<=30)all.push(l);}));
+  PA=all[Math.floor(Math.random()*all.length)];if(!PA)return;
+  $('pahz').textContent=PA[1];$('papy').textContent=PA[2];$('pavi').textContent=PA[3];$('par').innerHTML='';
+}
+function paListen(){if(PA&&typeof tnSpeak==='function')tnSpeak(PA[1],.8);}
+const paClean=x=>Array.from(String(x)).filter(c=>/\p{Script=Han}|[0-9]/u.test(c));
+function paMic(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition,b=$('pamic');
+  if(!SR){$('par').innerHTML='<p style="color:var(--bad)">Trình duyệt này chưa hỗ trợ nhận giọng nói. Hãy mở bằng Chrome hoặc Edge (máy tính, Android) hoặc Safari (iPhone).</p>';return;}
+  if(PAR){PAR.stop();return;}
+  if(window.speechSynthesis)speechSynthesis.cancel();
+  PAR=new SR();PAR.lang='zh-CN';PAR.interimResults=false;PAR.maxAlternatives=3;
+  b.classList.add('rec');b.textContent='⏹ Đang nghe… bấm để dừng';$('par').innerHTML='<p style="color:var(--mut)">Hãy đọc to câu ở trên…</p>';
+  PAR.onresult=e=>{
+    const alts=Array.from(e.results[0]).map(a=>a.transcript),tg=paClean(PA[1]);
+    let best=null;
+    alts.forEach(h=>{const hs=paClean(h),pool=hs.slice(),hit=tg.map(c=>{const i=pool.indexOf(c);if(i>=0){pool.splice(i,1);return true;}return false;}),n=hit.filter(Boolean).length;if(!best||n>best.n)best={h,hit,n};});
+    const pct=Math.round(best.n*100/Math.max(1,tg.length));let j=0;
+    $('pahz').innerHTML=Array.from(PA[1]).map(c=>/\p{Script=Han}|[0-9]/u.test(c)?`<span class='${best.hit[j++]?'ok':'no'}'>${c}</span>`:c).join('');
+    $('par').innerHTML=`<div class='res'>${pct}%</div><p><b>${pct>=90?'Rất chuẩn! 太棒了！':pct>=70?'Khá tốt, đọc lại các chữ màu đỏ nhé! 加油！':'Nghe mẫu thêm một lần rồi thử lại nhé.'}</b></p><p style='color:var(--mut)'>App nghe được: <span class='han'>${best.h.replace(/[<>&]/g,'')}</span></p><p><button type='button' class='btn ghost' onclick='paMic()'>🎙 Nói lại</button> <button type='button' class='btn' onclick='paNew()'>Câu khác ↻</button></p>`;
+    if(typeof hhLog==='function')hhLog('luyennoi','Phát âm: '+PA[1],pct,100);
+  };
+  PAR.onerror=e=>{$('par').innerHTML=`<p style="color:var(--bad)">${e.error==='not-allowed'||e.error==='service-not-allowed'?'Chưa được phép dùng micro. Hãy cho phép Micro rồi thử lại.':e.error==='no-speech'?'Chưa nghe thấy gì. Bấm 🎙 và đọc to hơn nhé.':'Chưa nhận được giọng nói ('+e.error+'). Thử lại nhé.'}</p>`;};
+  PAR.onend=()=>{PAR=null;b.classList.remove('rec');b.textContent='🎙 Bấm để nói';};
+  try{PAR.start();}catch(e){PAR=null;}
+}
+/* chỉ tải YouTube khi mở mục Luyện nói */
+(function(){
+  shList();try{paTopics();paNew();}catch(e){}
+  const g0=go;go=function(p,s){const r=g0.apply(this,arguments);if(p==='luyennoi'){shLoad();}else if(SHREADY){try{SHP.pauseVideo();}catch(e){}}return r;};
 })();
 </script>
 </body>
