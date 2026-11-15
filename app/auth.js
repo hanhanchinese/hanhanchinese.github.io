@@ -5,7 +5,8 @@ const box = document.getElementById('hh-auth');
 const msg = document.getElementById('hh-auth-msg');
 const btn = document.getElementById('hh-auth-btn');
 const UIDKEY = 'hh__uid';
-const isAppKey = k => k !== UIDKEY && (k.startsWith('hh') || k.startsWith('hsk3-'));
+const INKEY = 'hh__in'; /* đánh dấu máy này đang đăng nhập */
+const isAppKey = k => !k.startsWith('hh__') && (k.startsWith('hh') || k.startsWith('hsk3-'));
 const say = (t, bad) => { msg.textContent = t; msg.className = bad ? 'bad' : ''; };
 
 function unlock() { box.hidden = true; document.documentElement.classList.remove('hh-locked'); }
@@ -23,7 +24,10 @@ if (!cfg) {
     import(SDK + 'firebase-app.js'), import(SDK + 'firebase-auth.js'), import(SDK + 'firebase-firestore.js')
   ]);
   const app = initializeApp(cfg);
-  const auth = A.getAuth(app);
+  /* Ghi nhớ đăng nhập lâu dài trên máy (không hết hạn khi đóng trình duyệt) */
+  let auth;
+  try { auth = A.initializeAuth(app, { persistence: [A.indexedDBLocalPersistence, A.browserLocalPersistence], popupRedirectResolver: A.browserPopupRedirectResolver }); }
+  catch (e) { auth = A.getAuth(app); }
   const db = F.getFirestore(app);
   const provider = new A.GoogleAuthProvider();
   provider.setCustomParameters({ prompt: 'select_account' });
@@ -57,14 +61,16 @@ if (!cfg) {
   window.addEventListener('pagehide', () => { if (ref) { clearTimeout(timer); const data = snapshot(); if (JSON.stringify(data) !== last) F.setDoc(ref, { data, updatedAt: F.serverTimestamp() }, { merge: true }); } });
 
   A.onAuthStateChanged(auth, async user => {
-    if (!user) { ref = null; chip(null); lock(); if (!inApp) say(''); return; }
-    say('Đang tải tiến độ học của bạn…');
+    if (!user) { ref = null; chip(null); rm0.call(localStorage, INKEY); lock(); if (!inApp) say(''); return; }
+    /* Đã đăng nhập: mở app ngay, tải tiến độ ở chế độ nền */
+    if (localStorage.getItem(UIDKEY) === user.uid) { set0.call(localStorage, INKEY, '1'); chip(user, () => A.signOut(auth)); unlock(); }
+    else say('Đang tải tiến độ học của bạn…');
     ref = F.doc(db, 'users', user.uid);
     let changed = false;
     try {
       const prev = localStorage.getItem(UIDKEY);
       if (prev && prev !== user.uid) { appKeys().forEach(k => rm0.call(localStorage, k)); changed = true; }
-      set0.call(localStorage, UIDKEY, user.uid);
+      set0.call(localStorage, UIDKEY, user.uid); set0.call(localStorage, INKEY, '1');
       const snap = await F.getDoc(ref);
       const remote = snap.exists() ? (snap.data().data || {}) : {};
       for (const [k, v] of Object.entries(remote)) {
@@ -85,7 +91,7 @@ if (!cfg) {
     clearTimeout(timer);
     if (ref) { try { await F.setDoc(ref, { data: snapshot(), updatedAt: F.serverTimestamp() }, { merge: true }); } catch (e) {} }
     ref = null;
-    appKeys().forEach(k => rm0.call(localStorage, k)); rm0.call(localStorage, UIDKEY);
+    appKeys().forEach(k => rm0.call(localStorage, k)); rm0.call(localStorage, UIDKEY); rm0.call(localStorage, INKEY);
     Object.keys(sessionStorage).filter(k => k.startsWith('hh__synced_')).forEach(k => sessionStorage.removeItem(k));
     await doOut(); location.reload();
   }
