@@ -2423,7 +2423,7 @@ const gpool=n=>[0,H1,H2,H3,H4,H5,H6][n];
 function drawGL(){$('glv').innerHTML='<span class="glv-l">Cấp độ:</span>'+[1,2,3,4,5,6].map(n=>`<button class="${GL===n?'on':''}" onclick="setGL(${n})">HSK ${n}</button>`).join('');}
 function setGL(n){GL=n;drawGL();memo();T={n:0,ok:0};tone();if(typeof RR!=='undefined'&&!RR.on&&$('rrov')&&!RR.miss.length)rrIntro();}
 let G;
-const MP=15;
+const MP=10;
 function memo(pl){
   const ps=shuffle((pl||gpool(GL)).map(w=>V.indexOf(w)).filter(i=>i>=0)).slice(0,MP);
   G={cards:shuffle(ps.flatMap(i=>[{i,t:V[i][0],h:1},{i,t:V[i][2]}])),sel:-1,ok:0,mv:0,lock:false};
@@ -4006,7 +4006,7 @@ try{lvRender();}catch(e){console.error(e);}
 /* Tính điểm và đếm ngược thời gian cho trò Ghép cặp và Đoán thanh điệu */
 (function(){
   const BK='hh_game_best',TK='hh_timer';
-  const MEMO_SEC=150,TONE_SEC=10,N=10;
+  const MEMO_SEC=100,TONE_SEC=10,N=10;
   const bestGet=k=>{try{return (JSON.parse(localStorage.getItem(BK)||'{}')||{})[k];}catch(e){return undefined;}};
   const bestSet=(k,v)=>{let o={};try{o=JSON.parse(localStorage.getItem(BK)||'{}')||{};}catch(e){}if(o[k]==null||v>o[k]){o[k]=v;try{localStorage.setItem(BK,JSON.stringify(o));}catch(e){}return true;}return false;};
   const nStar=p=>p>=90?3:p>=60?2:p>=30?1:0;
@@ -4017,9 +4017,9 @@ try{lvRender();}catch(e){console.error(e);}
   const tgl=()=>`<button type='button' class='gtg' onclick='gTimerToggle()' aria-pressed='${timerOn()}'>⏱ Đếm ngược: ${timerOn()?'Bật':'Tắt'}</button>`;
   const secs=ms=>Math.max(0,Math.ceil(ms/1000));
 
-  /* ---------- Ghép cặp: 15 cặp, 100 điểm, lật sai trừ 4 điểm; có 150 giây, bắt đầu tính từ lần lật đầu tiên ---------- */
+  /* ---------- Ghép cặp: 10 cặp, 100 điểm, lật sai trừ 5 điểm; có 100 giây, bắt đầu tính từ lần lật đầu tiên ---------- */
   let MT=null;
-  const mBase=()=>Math.max(10,100-(G.mv-G.ok)*4);
+  const mBase=()=>Math.max(10,100-(G.mv-G.ok)*5);
   const mScore=()=>G.over?Math.round(mBase()*G.ok/MP):mBase();
   const memo0=memo;
   memo=function(pl){clearInterval(MT);MT=null;memo0(pl);G.t0=0;G.over=false;G.tOn=timerOn();drawM();};
