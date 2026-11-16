@@ -840,71 +840,71 @@ html.hh-locked,html.hh-locked body{overflow:hidden}
 #bx .tw{overflow-x:auto}
 </style>
 <style>
-#hb1{scroll-margin-top:70px}
-#hb1 .hb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin:12px 0}
-#hb1 .hb-card{display:flex;align-items:center;gap:12px;text-align:left;font:inherit;color:var(--fg);background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px 12px;cursor:pointer;transition:border-color .2s,transform .15s}
-#hb1 .hb-card:hover{border-color:var(--red);transform:translateY(-1px)}
-#hb1 .hb-card.done{border-color:var(--ok)}
-#hb1 .hb-no{flex:none;width:40px;height:40px;border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px}
-#hb1 .hb-card.done .hb-no{background:var(--ok)}
-#hb1 .hb-tt{flex:1;display:flex;flex-direction:column;line-height:1.3}
-#hb1 .hb-tt b{font-size:18px}#hb1 .hb-tt small{color:var(--red)}#hb1 .hb-tt span{font-size:13px;color:var(--mut)}
-#hb1 .hb-pr{flex:none;font-weight:700;color:var(--mut);text-align:center;font-size:14px}
-#hb1 .hb-cast{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:10px}
-#hb1 .hb-cast>div{display:flex;gap:10px;align-items:flex-start;font-size:14px}
-#hb1 .hb-cast small{color:var(--mut)}
-#hb1 .hb-av{flex:none;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.15)}
-#hb1 .hb-top{display:flex;justify-content:space-between;align-items:center;margin:8px 0;color:var(--mut);font-weight:700}
-#hb1 .hb-head{display:flex;gap:14px;align-items:center}
-#hb1 .hb-big{flex:none;width:58px;height:58px;border-radius:16px;background:var(--red);color:#fff;font-size:30px;font-weight:800;display:flex;align-items:center;justify-content:center}
-#hb1 .hb-head h3{font-size:26px}
-#hb1 .hb-py,#hb1 .hb-lpy,#hb1 .hb-lpy2{color:var(--red);font-size:14px}
-#hb1 .hb-goal ul{margin:6px 0 0;padding-left:20px}#hb1 .hb-goal li{margin:3px 0}
-#hb1 .hb-tabs{position:sticky;top:0;z-index:4;background:var(--bg);padding:6px 0}
-#hb1 .hb-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-bottom:8px}
-#hb1 .hb-bar .btn{padding:6px 14px;font-size:14px}
-#hb1 .hb-ck{font-size:14px;display:inline-flex;align-items:center;gap:4px;margin-right:8px;cursor:pointer}
-#hb1 .hb-ck select{font:inherit;font-size:14px;padding:4px 6px;border:1.5px solid var(--line);border-radius:8px;background:var(--card);color:var(--fg)}
-#hb1 .hb-tip{font-size:13px;color:var(--mut);margin:4px 0 8px}
-#hb1 .hb-sp{border:1px solid var(--line);background:var(--card);border-radius:999px;cursor:pointer;font-size:15px;padding:3px 8px;color:var(--fg)}
-#hb1 .hb-sp:hover{border-color:var(--red)}
-#hb1 .hb-w{display:flex;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px dashed var(--line);border-radius:8px}
-#hb1 .hb-w.on{background:var(--soft)}
-#hb1 .hb-i{flex:none;width:24px;color:var(--mut);font-size:13px;text-align:right}
-#hb1 .hb-z{flex:none;min-width:70px;font-size:26px;border:0;background:none;color:var(--fg);cursor:pointer;text-align:left;padding:0}
-#hb1 .hb-m{flex:1;font-size:15px;line-height:1.35}#hb1 .hb-m b{color:var(--red)}#hb1 .hb-m i{color:var(--mut);font-size:13px}
-#hb1 .hb-scene{width:100%;max-width:520px;display:block;margin:0 auto 6px}
-#hb1 .hb-sc{font-size:14px;color:var(--mut);margin:4px 0 10px}
-#hb1 .hb-ln{display:flex;gap:10px;align-items:flex-start;margin:10px 0;cursor:pointer}
-#hb1 .hb-bub{flex:1;background:var(--bg);border:1.5px solid var(--line);border-radius:4px 14px 14px 14px;padding:8px 12px;transition:border-color .2s,background-color .2s}
-#hb1 .hb-ln.on .hb-bub{border-color:var(--red);background:var(--soft)}
-#hb1 .hb-ln.mine .hb-bub{border-style:dashed;border-color:var(--gold)}
-#hb1 .hb-ln.me .hb-bub{background:#FFF8E1;border-color:var(--gold)}
-#hb1 .hb-ln.me .hb-who::after{content:' · 🎤 Lượt của em!';color:#E67E22;font-weight:700}
-#hb1 .hb-who{font-size:12px;color:var(--mut);font-weight:700}
-#hb1 .hb-zh{font-size:22px;line-height:1.5}
-#hb1 .hb-lvi{display:none;font-size:14px;color:var(--mut);margin-top:2px}
-#hb1 .hb-text.vi .hb-lvi{display:block}#hb1 .hb-text.nopy .hb-lpy{display:none}
-#hb1 .hb-g p{line-height:1.55}
-#hb1 .hb-gn{display:inline-flex;width:24px;height:24px;border-radius:50%;background:var(--red);color:#fff;align-items:center;justify-content:center;font-size:13px}
-#hb1 .hb-gx>div{display:flex;gap:8px;align-items:center;padding:6px 0;border-top:1px dashed var(--line)}
-#hb1 .hb-gx .han{font-size:20px}#hb1 .hb-gx small{color:var(--red)}
-#hb1 .hb-q{display:flex;gap:10px;padding:10px 6px;border-top:1px dashed var(--line);border-radius:8px}
-#hb1 .hb-q.ok{background:rgba(46,160,67,.08)}#hb1 .hb-q.bad{background:rgba(207,34,46,.07)}
-#hb1 .hb-qn{flex:none;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
-#hb1 .hb-q>div{flex:1}
-#hb1 .hb-ch{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-#hb1 .hb-ch button{font:inherit;min-width:56px;padding:6px 14px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
-#hb1 .hb-ch button.han{font-size:20px}
-#hb1 .hb-ch button.on{border-color:var(--red);background:var(--soft);font-weight:700}
-#hb1 .hb-ch button.right{border-color:var(--ok);box-shadow:0 0 0 2px rgba(46,160,67,.25)}
-#hb1 .hb-qpy{font-size:20px;color:var(--red)}#hb1 .hb-qz{font-size:30px}#hb1 .hb-qs{font-size:19px;line-height:1.6}
-#hb1 .hb-blank{display:inline-block;min-width:48px;border-bottom:2px solid var(--red);color:transparent}
-#hb1 .hb-inp{font:inherit;font-size:17px;padding:6px 10px;border:2px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);width:180px;max-width:60%}
-#hb1 .hb-fb{font-size:14px;margin-top:6px}#hb1 .hb-q.ok .hb-fb{color:var(--ok)}#hb1 .hb-q.bad .hb-fb{color:var(--bad)}
-#hb1 .hb-sub{display:flex;gap:8px;justify-content:center;margin:14px 0}
-#hb1 .hb-res{text-align:center;border:2px solid var(--red)}#hb1 .hb-sc2{font-size:34px;font-weight:800;color:var(--red);margin:6px 0}
-#hb1 .hb-nav{display:flex;justify-content:space-between;margin:14px 0}
+:is(#hb1,#hb2){scroll-margin-top:70px}
+:is(#hb1,#hb2) .hb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin:12px 0}
+:is(#hb1,#hb2) .hb-card{display:flex;align-items:center;gap:12px;text-align:left;font:inherit;color:var(--fg);background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px 12px;cursor:pointer;transition:border-color .2s,transform .15s}
+:is(#hb1,#hb2) .hb-card:hover{border-color:var(--red);transform:translateY(-1px)}
+:is(#hb1,#hb2) .hb-card.done{border-color:var(--ok)}
+:is(#hb1,#hb2) .hb-no{flex:none;width:40px;height:40px;border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px}
+:is(#hb1,#hb2) .hb-card.done .hb-no{background:var(--ok)}
+:is(#hb1,#hb2) .hb-tt{flex:1;display:flex;flex-direction:column;line-height:1.3}
+:is(#hb1,#hb2) .hb-tt b{font-size:18px}:is(#hb1,#hb2) .hb-tt small{color:var(--red)}:is(#hb1,#hb2) .hb-tt span{font-size:13px;color:var(--mut)}
+:is(#hb1,#hb2) .hb-pr{flex:none;font-weight:700;color:var(--mut);text-align:center;font-size:14px}
+:is(#hb1,#hb2) .hb-cast{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:10px}
+:is(#hb1,#hb2) .hb-cast>div{display:flex;gap:10px;align-items:flex-start;font-size:14px}
+:is(#hb1,#hb2) .hb-cast small{color:var(--mut)}
+:is(#hb1,#hb2) .hb-av{flex:none;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+:is(#hb1,#hb2) .hb-top{display:flex;justify-content:space-between;align-items:center;margin:8px 0;color:var(--mut);font-weight:700}
+:is(#hb1,#hb2) .hb-head{display:flex;gap:14px;align-items:center}
+:is(#hb1,#hb2) .hb-big{flex:none;width:58px;height:58px;border-radius:16px;background:var(--red);color:#fff;font-size:30px;font-weight:800;display:flex;align-items:center;justify-content:center}
+:is(#hb1,#hb2) .hb-head h3{font-size:26px}
+:is(#hb1,#hb2) .hb-py,:is(#hb1,#hb2) .hb-lpy,:is(#hb1,#hb2) .hb-lpy2{color:var(--red);font-size:14px}
+:is(#hb1,#hb2) .hb-goal ul{margin:6px 0 0;padding-left:20px}:is(#hb1,#hb2) .hb-goal li{margin:3px 0}
+:is(#hb1,#hb2) .hb-tabs{position:sticky;top:0;z-index:4;background:var(--bg);padding:6px 0}
+:is(#hb1,#hb2) .hb-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-bottom:8px}
+:is(#hb1,#hb2) .hb-bar .btn{padding:6px 14px;font-size:14px}
+:is(#hb1,#hb2) .hb-ck{font-size:14px;display:inline-flex;align-items:center;gap:4px;margin-right:8px;cursor:pointer}
+:is(#hb1,#hb2) .hb-ck select{font:inherit;font-size:14px;padding:4px 6px;border:1.5px solid var(--line);border-radius:8px;background:var(--card);color:var(--fg)}
+:is(#hb1,#hb2) .hb-tip{font-size:13px;color:var(--mut);margin:4px 0 8px}
+:is(#hb1,#hb2) .hb-sp{border:1px solid var(--line);background:var(--card);border-radius:999px;cursor:pointer;font-size:15px;padding:3px 8px;color:var(--fg)}
+:is(#hb1,#hb2) .hb-sp:hover{border-color:var(--red)}
+:is(#hb1,#hb2) .hb-w{display:flex;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px dashed var(--line);border-radius:8px}
+:is(#hb1,#hb2) .hb-w.on{background:var(--soft)}
+:is(#hb1,#hb2) .hb-i{flex:none;width:24px;color:var(--mut);font-size:13px;text-align:right}
+:is(#hb1,#hb2) .hb-z{flex:none;min-width:70px;font-size:26px;border:0;background:none;color:var(--fg);cursor:pointer;text-align:left;padding:0}
+:is(#hb1,#hb2) .hb-m{flex:1;font-size:15px;line-height:1.35}:is(#hb1,#hb2) .hb-m b{color:var(--red)}:is(#hb1,#hb2) .hb-m i{color:var(--mut);font-size:13px}
+:is(#hb1,#hb2) .hb-scene{width:100%;max-width:520px;display:block;margin:0 auto 6px}
+:is(#hb1,#hb2) .hb-sc{font-size:14px;color:var(--mut);margin:4px 0 10px}
+:is(#hb1,#hb2) .hb-ln{display:flex;gap:10px;align-items:flex-start;margin:10px 0;cursor:pointer}
+:is(#hb1,#hb2) .hb-bub{flex:1;background:var(--bg);border:1.5px solid var(--line);border-radius:4px 14px 14px 14px;padding:8px 12px;transition:border-color .2s,background-color .2s}
+:is(#hb1,#hb2) .hb-ln.on .hb-bub{border-color:var(--red);background:var(--soft)}
+:is(#hb1,#hb2) .hb-ln.mine .hb-bub{border-style:dashed;border-color:var(--gold)}
+:is(#hb1,#hb2) .hb-ln.me .hb-bub{background:#FFF8E1;border-color:var(--gold)}
+:is(#hb1,#hb2) .hb-ln.me .hb-who::after{content:' · 🎤 Lượt của em!';color:#E67E22;font-weight:700}
+:is(#hb1,#hb2) .hb-who{font-size:12px;color:var(--mut);font-weight:700}
+:is(#hb1,#hb2) .hb-zh{font-size:22px;line-height:1.5}
+:is(#hb1,#hb2) .hb-lvi{display:none;font-size:14px;color:var(--mut);margin-top:2px}
+:is(#hb1,#hb2) .hb-text.vi .hb-lvi{display:block}:is(#hb1,#hb2) .hb-text.nopy .hb-lpy{display:none}
+:is(#hb1,#hb2) .hb-g p{line-height:1.55}
+:is(#hb1,#hb2) .hb-gn{display:inline-flex;width:24px;height:24px;border-radius:50%;background:var(--red);color:#fff;align-items:center;justify-content:center;font-size:13px}
+:is(#hb1,#hb2) .hb-gx>div{display:flex;gap:8px;align-items:center;padding:6px 0;border-top:1px dashed var(--line)}
+:is(#hb1,#hb2) .hb-gx .han{font-size:20px}:is(#hb1,#hb2) .hb-gx small{color:var(--red)}
+:is(#hb1,#hb2) .hb-q{display:flex;gap:10px;padding:10px 6px;border-top:1px dashed var(--line);border-radius:8px}
+:is(#hb1,#hb2) .hb-q.ok{background:rgba(46,160,67,.08)}:is(#hb1,#hb2) .hb-q.bad{background:rgba(207,34,46,.07)}
+:is(#hb1,#hb2) .hb-qn{flex:none;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+:is(#hb1,#hb2) .hb-q>div{flex:1}
+:is(#hb1,#hb2) .hb-ch{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+:is(#hb1,#hb2) .hb-ch button{font:inherit;min-width:56px;padding:6px 14px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+:is(#hb1,#hb2) .hb-ch button.han{font-size:20px}
+:is(#hb1,#hb2) .hb-ch button.on{border-color:var(--red);background:var(--soft);font-weight:700}
+:is(#hb1,#hb2) .hb-ch button.right{border-color:var(--ok);box-shadow:0 0 0 2px rgba(46,160,67,.25)}
+:is(#hb1,#hb2) .hb-qpy{font-size:20px;color:var(--red)}:is(#hb1,#hb2) .hb-qz{font-size:30px}:is(#hb1,#hb2) .hb-qs{font-size:19px;line-height:1.6}
+:is(#hb1,#hb2) .hb-blank{display:inline-block;min-width:48px;border-bottom:2px solid var(--red);color:transparent}
+:is(#hb1,#hb2) .hb-inp{font:inherit;font-size:17px;padding:6px 10px;border:2px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);width:180px;max-width:60%}
+:is(#hb1,#hb2) .hb-fb{font-size:14px;margin-top:6px}:is(#hb1,#hb2) .hb-q.ok .hb-fb{color:var(--ok)}:is(#hb1,#hb2) .hb-q.bad .hb-fb{color:var(--bad)}
+:is(#hb1,#hb2) .hb-sub{display:flex;gap:8px;justify-content:center;margin:14px 0}
+:is(#hb1,#hb2) .hb-res{text-align:center;border:2px solid var(--red)}:is(#hb1,#hb2) .hb-sc2{font-size:34px;font-weight:800;color:var(--red);margin:6px 0}
+:is(#hb1,#hb2) .hb-nav{display:flex;justify-content:space-between;margin:14px 0}
 .lv-card .lv-num{display:flex;gap:16px;flex-wrap:wrap;margin:8px 0}.lv-card .lv-num b{font-size:24px;color:var(--red)}
 </style>
 </head>
@@ -2458,7 +2458,7 @@ function ansT(t,b){
 const LT=[
  ['Làm quen 4 thanh điệu và thanh nhẹ','Học 21 thanh mẫu và các vận mẫu','Học chào hỏi và số đếm từ 1 đến 10','Xem 13 mẫu ngữ pháp cơ bản','Luyện tập 10 câu mỗi ngày và ôn lại từ sai','Tập viết 10 chữ đầu tiên theo bút thuận'],
  ['Học hết 15 bài giáo trình HSK 1 ở trên','Nắm 500 từ và 300 chữ Hán','Làm bài sắp xếp câu HSK 1 trong mục Luyện tập','Làm ít nhất 2 đề thi HSK 1'],
- ['Đạt 1.272 từ tích lũy và 600 chữ Hán','Học các mẫu ngữ pháp HSK 2','Làm bài sắp xếp câu HSK 2','Làm các đề thi HSK 2'],
+ ['Học hết 15 bài giáo trình HSK 2 ở trên','Đạt 1.272 từ tích lũy và 600 chữ Hán','Làm bài sắp xếp câu HSK 2','Làm các đề thi HSK 2'],
  ['Đạt 2.245 từ tích lũy và 900 chữ Hán','Học các mẫu ngữ pháp HSK 3','Làm bài sắp xếp câu và bổ ngữ xu hướng HSK 3','Làm các đề thi HSK 3'],
  ['Đạt 3.245 từ tích lũy và 1.200 chữ Hán','Học các mẫu ngữ pháp HSK 4','Đọc bài báo và văn bản ngắn bằng tiếng Trung','Làm đề thi HSK 4'],
  ['Đạt 4.316 từ tích lũy và 1.500 chữ Hán','Học các mẫu ngữ pháp HSK 5','Viết đoạn văn ngắn dùng ngữ pháp mới','Luyện nghe podcast ở mục Luyện nói'],
@@ -2466,7 +2466,7 @@ const LT=[
  ['Đạt 11.092 từ và 3.000 chữ Hán (HSK 7–9)','Luyện dịch Việt → Trung ở mục Luyện tập','Đọc báo, nghe tin tức tiếng Trung hằng ngày','Viết bài luận theo chủ đề xã hội']];
 const LTN=[null,[500,300],[1272,600],[2245,900],[3245,1200],[4316,1500],[5456,1800],[11092,3000]];
 function lt(){
-  $('ltw').innerHTML=LT.map((L,k)=>`<div class='sub' data-g='lotrinh' data-n='${k}'>${k===1?`<div id='hb1'></div>`:''}${k>1&&k<7?`<div class='card lv-card'><h3 style='margin-top:0'>Lộ trình HSK ${k} · khung HSK 3.0</h3><div class='lv-num'><span><b>${LTN[k][0].toLocaleString('vi-VN')}</b> từ tích lũy</span><span><b>${LTN[k][1].toLocaleString('vi-VN')}</b> chữ Hán</span></div><p style='color:var(--mut);margin:0'>Giáo trình bài học HSK ${k} đang được bổ sung. Trong lúc chờ, em hãy học từ vựng HSK ${k} ở bên dưới và luyện tập theo các bước sau.</p></div>`:''}${k===7?`<div class='card lv-card'><h3 style='margin-top:0'>Lộ trình HSK 7–9 · khung HSK 3.0</h3><div class='lv-num'><span><b>11.092</b> từ</span><span><b>3.000</b> chữ Hán</span></div><p style='color:var(--mut);margin:0'>Cấp cao nhất của khung HSK 3.0, dành cho người học muốn dùng tiếng Trung trong học thuật và công việc.</p></div>`:''}<div class='card'><div class='score'><span>Tiến độ</span><b id='lp${k}'>0/${L.length}</b></div><div class='bar'><i id='lb${k}' style='width:0'></i></div>${L.map(s=>`<label class='step'><input type='checkbox' onchange='lp(${k},this)'><span>${s}</span></label>`).join('')}</div></div>`).join('');
+  $('ltw').innerHTML=LT.map((L,k)=>`<div class='sub' data-g='lotrinh' data-n='${k}'>${k===1?`<div id='hb1'></div>`:''}${k===2?`<div id='hb2'></div>`:''}${k>2&&k<7?`<div class='card lv-card'><h3 style='margin-top:0'>Lộ trình HSK ${k} · khung HSK 3.0</h3><div class='lv-num'><span><b>${LTN[k][0].toLocaleString('vi-VN')}</b> từ tích lũy</span><span><b>${LTN[k][1].toLocaleString('vi-VN')}</b> chữ Hán</span></div><p style='color:var(--mut);margin:0'>Giáo trình bài học HSK ${k} đang được bổ sung. Trong lúc chờ, em hãy học từ vựng HSK ${k} ở bên dưới và luyện tập theo các bước sau.</p></div>`:''}${k===7?`<div class='card lv-card'><h3 style='margin-top:0'>Lộ trình HSK 7–9 · khung HSK 3.0</h3><div class='lv-num'><span><b>11.092</b> từ</span><span><b>3.000</b> chữ Hán</span></div><p style='color:var(--mut);margin:0'>Cấp cao nhất của khung HSK 3.0, dành cho người học muốn dùng tiếng Trung trong học thuật và công việc.</p></div>`:''}<div class='card'><div class='score'><span>Tiến độ</span><b id='lp${k}'>0/${L.length}</b></div><div class='bar'><i id='lb${k}' style='width:0'></i></div>${L.map(s=>`<label class='step'><input type='checkbox' onchange='lp(${k},this)'><span>${s}</span></label>`).join('')}</div></div>`).join('');
 }
 function lp(k,el){
   el.parentNode.classList.toggle('on',el.checked);
@@ -4620,5 +4620,6 @@ const SXL=[{"lv":0,"name":"HSK 1","d":"20 câu, 4 dạng","S":[{"t":"Dạng 1 �
 </script>
 
 <script src='lessons/hsk1.js'></script>
+<script src='lessons/hsk2.js'></script>
 </body>
 </html>

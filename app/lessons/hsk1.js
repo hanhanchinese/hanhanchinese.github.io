@@ -18,6 +18,8 @@ const CH={
  tian:{zh:'小天',py:'Xiǎotiān',vi:'Tiểu Thiên',d:'Con trai cô Vương, 6 tuổi.',g:'k',a:{bg:'#E1F5FE',skin:'#F8D5B5',hair:'#2B1B17',st:'kid',shirt:'#4FC3F7',kid:1}},
  seller:{zh:'售货员',py:'shòuhuòyuán',vi:'Người bán hàng',d:'',g:'f',a:{bg:'#FFF8E1',skin:'#F0C8A0',hair:'#4A2C1A',st:'bob',shirt:'#43A047',apron:1}},
  waiter:{zh:'服务员',py:'fúwùyuán',vi:'Nhân viên phục vụ',d:'',g:'m',a:{bg:'#F3E5F5',skin:'#F0C8A0',hair:'#222222',st:'short',shirt:'#FFFFFF',bow:1}},
+ ye:{zh:'爷爷',py:'yéye',vi:'Ông nội',d:'Ông của Đại Trung, sống ở Bắc Kinh.',g:'m',a:{bg:'#EFEBE9',skin:'#EFC9A4',hair:'#E0E0E0',st:'short',shirt:'#8D6E63',gl:1}},
+ nai:{zh:'奶奶',py:'nǎinai',vi:'Bà nội',d:'Bà của Đại Trung, nấu mì rất ngon.',g:'f',a:{bg:'#FBE9E7',skin:'#EFC9A4',hair:'#E8E8E8',st:'bun',shirt:'#AD1457'}},
  doc:{zh:'张医生',py:'Zhāng yīshēng',vi:'Bác sĩ Trương',d:'',g:'m',a:{bg:'#E0F2F1',skin:'#F0C8A0',hair:'#555555',st:'short',shirt:'#FFFFFF',coat:1,gl:1}}
 };
 function person(a,uid){
@@ -190,7 +192,7 @@ function ex(l){
     else if(q.t==='mc')c=`<div class='han hb-qs'>${esc(q.q).replace('___',"<span class='hb-blank'>____</span>")}</div>`+ch(i,q.o,1);
     else if(q.t==='tf')c=`<small class='hb-tip'>Theo bài khóa ${q.f.t}</small><div class='han hb-qs'>${esc(q.f.s)}</div><div class='hb-lpy2'>${esc(q.f.py)}</div>`+ch(i,['√','×']);
     else c=`<div class='hb-qs'>${esc(q.q)}</div>`+ch(i,q.o,1);
-    h+=`<div class='hb-q' id='hbq${i}'><span class='hb-qn'>${k}</span><div>${c}<div class='hb-fb'></div></div></div>`;
+    h+=`<div class='hb-q' id='hbQ${i}'><span class='hb-qn'>${k}</span><div>${c}<div class='hb-fb'></div></div></div>`;
   });
   h+=`</div><div class='hb-sub'><button type='button' class='btn' onclick='hbSubmit()'>Nộp bài</button> <button type='button' class='btn ghost' onclick='hbTab(3)'>Làm lại (đề mới)</button></div><div id='hbRes'></div>`;
   document.getElementById('hbBody').innerHTML=h;
@@ -201,7 +203,7 @@ window.hbIn=function(el){if(!EX||EX.done)return;EX.ans[+el.dataset.i]=el.value;}
 window.hbSubmit=function(){
   if(!EX||EX.done)return;EX.done=true;let ok=0;
   EX.Q.forEach((q,i)=>{
-    const a=EX.ans[i]||'',box=document.getElementById('hbq'+i),fb=box.querySelector('.hb-fb');let good,warn='';
+    const a=EX.ans[i]||'',box=document.getElementById('hbQ'+i),fb=box.querySelector('.hb-fb');let good,warn='';
     if(q.t==='in'){good=plain(a)===plain(q.a)&&a.trim()!=='';if(good&&tonal(a)!==tonal(q.a))warn=' (nhớ dấu thanh nhé)';}
     else good=a===q.a;
     if(good)ok++;box.classList.add(good?'ok':'bad');
