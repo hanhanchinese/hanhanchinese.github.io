@@ -840,6 +840,24 @@ html.hh-locked,html.hh-locked body{overflow:hidden}
 #bx .tw{overflow-x:auto}
 </style>
 <style>
+#dv .dv-lv{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+#dv .dv-lv button{position:relative;overflow:hidden;font:inherit;padding:10px 6px;border:2px solid var(--line);border-radius:12px;background:var(--card);color:var(--fg);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
+#dv .dv-lv button.on{border-color:var(--red);background:var(--soft)}#dv .dv-lv small{font-size:11px;color:var(--mut)}
+#dv .dv-lv i{position:absolute;left:0;bottom:0;height:4px;background:var(--ok)}
+#dv .dv-mode{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px}#dv .dv-mode label{display:flex;gap:4px;align-items:center;cursor:pointer}
+#dv .dv-card{background:var(--soft);border-radius:14px;padding:16px;margin:10px 0;text-align:center}
+#dv .dv-card small{color:var(--mut)}#dv .dv-vi{font-size:21px;font-weight:700;margin:6px 0;line-height:1.4}#dv .dv-py{color:var(--red);min-height:1.2em}
+#dv .rr-in input{font-size:22px}
+#dv .dv-tools{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}#dv .dv-tools .btn{flex:1;padding:6px 8px;font-size:14px;min-width:100px}
+#dv .dv-ok,#dv .dv-bad{font-size:22px;font-weight:800;text-align:center;margin:8px 0;animation:dvpop .35s}
+#dv .dv-ok{color:var(--ok)}#dv .dv-bad{color:var(--bad)}@keyframes dvpop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+#dv .dv-ans{text-align:center;margin:8px 0 12px}#dv .dv-ans .han{font-size:26px}#dv .dv-ans small{color:var(--red)}
+#dv .dv-g{color:var(--ok)}#dv .dv-x{color:var(--bad)}
+#dv .dv-sc{font-size:34px;font-weight:800;color:var(--red)}
+#dv .dv-list>div{display:flex;gap:10px;padding:8px;border-bottom:1px dashed var(--line)}#dv .dv-list span:first-child{font-weight:800;width:18px}
+#dv .dv-list .g>span:first-child{color:var(--ok)}#dv .dv-list .b>span:first-child{color:var(--bad)}#dv .dv-list .m>span:first-child{color:#E67E22}
+#dv .dv-list .han{font-size:19px}#dv .dv-list{margin:10px 0}
+#dv .hb-sp{border:1px solid var(--line);background:var(--card);border-radius:999px;cursor:pointer;padding:2px 8px;color:var(--fg)}
 :is(#hb1,#hb2){scroll-margin-top:70px}
 :is(#hb1,#hb2) .hb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin:12px 0}
 :is(#hb1,#hb2) .hb-card{display:flex;align-items:center;gap:12px;text-align:left;font:inherit;color:var(--fg);background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px 12px;cursor:pointer;transition:border-color .2s,transform .15s}
@@ -1157,7 +1175,7 @@ html.hh-locked,html.hh-locked body{overflow:hidden}
 <div class='rr-in'><input type='text' id='rri' autocomplete='off' autocapitalize='off' spellcheck='false' placeholder='Gõ chữ Hán hoặc pinyin rồi Enter' disabled><button type='button' class='btn' id='rrok' onclick='rrSubmit()' disabled>Nhảy!</button></div>
 <div class='rr-fb' id='rrfb'></div>
 <p class='rr-note'>Gõ <b>chữ Hán</b> (你好) hoặc <b>pinyin</b>, có dấu hay không đều được (nǐ hǎo · nihao · ni3hao3; ü gõ là v). Gõ đúng là gấu trúc tự nhảy qua. Sai hoặc hết giờ thì mất 1 mạng.</p>
-</div></div></section>
+</div></div><div class='sub' data-g='trochoi' data-n='3'><div class='card' id='dv'></div></div></section>
 
 <section id='lotrinh'><h2>Lộ trình</h2><div class='tabs' data-g='lotrinh'></div><div id='ltw'></div></section>
 
@@ -1655,7 +1673,7 @@ const sfx=AU.sfx;
 /* điều hướng */
 const NAV=[['home','Trang chủ'],['gioithieu','Giới thiệu'],['kienthuc','Kho kiến thức'],['tudien','Từ điển'],['congcu','Công cụ'],['trochoi','Trò chơi'],['lotrinh','Lộ trình'],['butthuan','Bút thuận'],['luyentap','Luyện tập'],['luyendoc','Luyện đọc'],['luyennghe','Luyện nghe'],['luyennoi','Luyện nói'],['ontap','Ôn tập'],['bosuutap','Bộ sưu tập'],['sach','Sách và Đề thi']];
 const PAGES=NAV;
-const TB={congcu:['Chuyển pinyin','Đọc số','Dịch Trung–Việt'],trochoi:['Ghép cặp','Đoán thanh điệu','Gấu trúc chạy chữ'],sach:['Sách','Thông tin kỳ thi','Đề HSK 1','Đề HSK 2','Đề HSK 3','Đề HSK 4'],luyentap:['HSK 1','HSK 2','HSK 3','HSK 4','HSK 5','HSK 6','HSK 7–9','Luyện viết chữ','Kết quả của tôi'],lotrinh:['Người mới bắt đầu','HSK 1','HSK 2','HSK 3','HSK 4','HSK 5','HSK 6','HSK 7–9'],luyennoi:['Shadowing','Luyện phát âm']};
+const TB={congcu:['Chuyển pinyin','Đọc số','Dịch Trung–Việt'],trochoi:['Ghép cặp','Đoán thanh điệu','Gấu trúc chạy chữ','Thử thách dịch câu'],sach:['Sách','Thông tin kỳ thi','Đề HSK 1','Đề HSK 2','Đề HSK 3','Đề HSK 4'],luyentap:['HSK 1','HSK 2','HSK 3','HSK 4','HSK 5','HSK 6','HSK 7–9','Luyện viết chữ','Kết quả của tôi'],lotrinh:['Người mới bắt đầu','HSK 1','HSK 2','HSK 3','HSK 4','HSK 5','HSK 6','HSK 7–9'],luyennoi:['Shadowing','Luyện phát âm']};
 const GK=Object.keys(TB);
 function dd(b){b.parentNode.classList.toggle('open');}
 function sw(g,n){
@@ -4574,6 +4592,87 @@ const SXL=[{"lv":0,"name":"HSK 1","d":"20 câu, 4 dạng","S":[{"t":"Dạng 1 �
     Object.values(QQ).forEach(({q})=>draw(q));
     SXG_EX.push({lv:L.lv,id:'sx'+L.lv,k:'Ngữ pháp',t:'Sắp xếp câu '+L.name,d:L.d,el:id});
   });
+})();
+
+/* ===== Trò chơi: Thử thách dịch câu (2.556 câu HSK 1–6) ===== */
+(function(){
+  const N=10,KEY='hh_dich';
+  let ST={},DV=null,LV=1,MODE='new',LOADING=false;
+  try{ST=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){}
+  const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(ST));}catch(e){}};
+  const el=()=>document.getElementById('dv');
+  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const zk=s=>String(s).replace(/[，。？！、：；“”‘’,.?!:;"'\s·…—\-]/g,'');
+  const pk=s=>String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/ü|u:/g,'v').replace(/[^a-zv]/g,'');
+  const pk2=s=>pk(String(s).replace(/[1-5]/g,''));
+  const say=t=>{try{const s=speechSynthesis;s.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=.85;s.speak(u);}catch(e){}};
+  const done=lv=>(ST['m'+lv]=ST['m'+lv]||[]);
+  function load(cb){if(window.DICH)return cb();if(LOADING)return;LOADING=true;el().innerHTML="<p style='text-align:center;color:var(--mut)'>Đang tải câu…</p>";const s=document.createElement('script');s.src='games/dich.js';s.onload=()=>{LOADING=false;cb();};s.onerror=()=>{LOADING=false;el().innerHTML="<p>Không tải được dữ liệu, em kiểm tra mạng rồi thử lại nhé.</p>";};document.head.appendChild(s);}
+  window.dvInit=function(){if(!el())return;try{if(typeof GL!=='undefined'&&GL>=1&&GL<=6&&(!DV||DV.end))LV=GL;}catch(e){}load(()=>{if(!DV||DV.end)menu();});};
+  function menu(){
+    DV=null;const T=window.DICH;
+    el().innerHTML=`<h3 style='margin-top:0'>📝 Thử thách dịch câu</h3>
+    <p style='margin-top:0;color:var(--mut)'>Nhìn câu tiếng Việt, gõ lại bằng <b>chữ Hán</b>. Dịch đúng là <b>“ĐỈNH CỦA CHÓP”</b>, sai thì <b>“DỊCH LẠI NHA”</b>! Mỗi lượt ${N} câu.</p>
+    <div class='dv-lv'>${[1,2,3,4,5,6].map(l=>{const m=done(l).length,t=T[l].length;return `<button type='button' class='${l===LV?'on':''}' onclick='dvLv(${l})'><b>HSK ${l}</b><small>${m}/${t} câu đã thuộc</small><i style='width:${Math.round(m*100/t)}%'></i></button>`;}).join('')}</div>
+    <div class='dv-mode'><label><input type='radio' name='dvm' value='new' ${MODE==='new'?'checked':''} onchange='dvMode(this.value)'> Câu chưa thuộc</label><label><input type='radio' name='dvm' value='all' ${MODE==='all'?'checked':''} onchange='dvMode(this.value)'> Ngẫu nhiên tất cả</label><label><input type='radio' name='dvm' value='seq' ${MODE==='seq'?'checked':''} onchange='dvMode(this.value)'> Theo thứ tự</label></div>
+    <button type='button' class='btn' style='width:100%;margin-top:10px' onclick='dvStart()'>▶ Bắt đầu HSK ${LV}</button>
+    <p class='rr-note'>💡 Cách tính điểm: tự dịch đúng ngay lần đầu được <b>10 điểm</b>; dùng gợi ý pinyin, nghe đáp án hoặc dịch lại lần hai được <b>5 điểm</b>; bấm “Xem đáp án” thì 0 điểm. Dấu câu và khoảng trắng không tính. Câu nào được 10 điểm sẽ vào danh sách <b>đã thuộc</b>.</p>`;
+  }
+  window.dvLv=l=>{LV=l;menu();};
+  window.dvMode=m=>{MODE=m;};
+  window.dvStart=function(){
+    const all=window.DICH[LV],m=new Set(done(LV));let idx=all.map((_,i)=>i);
+    if(MODE==='new'){const left=idx.filter(i=>!m.has(i));idx=left.length?left:idx;}
+    if(MODE==='seq'){const p=ST['p'+LV]||0;idx=idx.slice(p).concat(idx.slice(0,p)).slice(0,N);ST['p'+LV]=(p+N)%all.length;save();}
+    else{for(let i=idx.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[idx[i],idx[j]]=[idx[j],idx[i]];}idx=idx.slice(0,N);}
+    DV={lv:LV,q:idx,i:0,score:0,res:[],tries:0,help:false,ok:false,end:false};draw();
+  };
+  function draw(){
+    const q=window.DICH[DV.lv][DV.q[DV.i]];
+    el().innerHTML=`<div class='gsc'><span>HSK ${DV.lv}</span><span>Câu <b>${DV.i+1}/${DV.q.length}</b></span><span>Điểm: <b>${DV.score}</b></span></div>
+    <div class='dv-card'><small>Dịch sang tiếng Trung:</small><div class='dv-vi'>${esc(q[2])}</div><div class='dv-py' id='dvpy'></div></div>
+    <div class='rr-in'><input type='text' id='dvi' autocomplete='off' autocapitalize='off' spellcheck='false' placeholder='Gõ chữ Hán rồi Enter' onkeydown='if(event.key==="Enter")dvCheck()'><button type='button' class='btn' onclick='dvCheck()'>Kiểm tra</button></div>
+    <div class='dv-tools'><button type='button' class='btn ghost' onclick='dvHint()'>💡 Gợi ý pinyin</button><button type='button' class='btn ghost' onclick='dvListen()'>🔊 Nghe</button><button type='button' class='btn ghost' onclick='dvShow()'>👀 Xem đáp án</button></div>
+    <div class='dv-fb' id='dvfb'></div>`;
+    setTimeout(()=>{const i=document.getElementById('dvi');i&&i.focus();},50);
+  }
+  const cur=()=>window.DICH[DV.lv][DV.q[DV.i]];
+  window.dvHint=function(){if(!DV||DV.ok)return;DV.help=true;document.getElementById('dvpy').textContent=cur()[1];};
+  window.dvListen=function(){if(!DV)return;if(!DV.ok)DV.help=true;say(cur()[0]);};
+  window.dvShow=function(){if(!DV||DV.ok)return;finish(0,'show');};
+  window.dvCheck=function(){
+    if(!DV||DV.ok)return;const inp=document.getElementById('dvi'),a=inp.value.trim();if(!a){inp.focus();return;}
+    const q=cur(),good=zk(a)===zk(q[0]);
+    if(good){DV.tries++;finish(DV.tries===1&&!DV.help?10:5,'ok');return;}
+    DV.tries++;try{sfx('bad');}catch(e){}
+    const sameP=pk2(a)&&pk2(a)===pk(q[1]);
+    document.getElementById('dvfb').innerHTML=`<div class='dv-bad'>😅 DỊCH LẠI NHA!</div><p>${sameP?'Em gõ đúng pinyin rồi, giờ chuyển sang <b>chữ Hán</b> nhé.':diff(a,q[0])}</p>`;
+    inp.select();
+  };
+  function diff(a,b){a=zk(a);b=zk(b);let h='';for(let i=0;i<b.length;i++)h+=a[i]===b[i]?`<span class='dv-g'>${b[i]}</span>`:'<span class=\'dv-x\'>＿</span>';return `Các chữ đúng vị trí: <span class='han' style='font-size:20px'>${h}</span>`;}
+  function finish(pts,kind){
+    DV.ok=true;DV.score+=pts;const q=cur(),qi=DV.q[DV.i];DV.res.push([qi,pts]);
+    if(pts===10){const m=done(DV.lv);if(!m.includes(qi))m.push(qi);save();}
+    try{sfx(pts?'ok':'bad');}catch(e){}
+    document.getElementById('dvfb').innerHTML=(kind==='ok'?`<div class='dv-ok'>🔥 ĐỈNH CỦA CHÓP! +${pts}</div>`:`<div class='dv-bad'>Đáp án đây, lần sau cố lên nhé!</div>`)+
+      `<div class='dv-ans'><span class='han'>${esc(q[0])}</span> <button type='button' class='hb-sp' onclick='dvListen()'>🔊</button><br><small>${esc(q[1])}</small></div>
+      <button type='button' class='btn' style='width:100%' onclick='dvNext()'>${DV.i+1<DV.q.length?'Câu tiếp →':'Xem kết quả'}</button>`;
+    const i=document.getElementById('dvi');if(i)i.disabled=true;
+    if(kind==='ok')say(q[0]);
+  }
+  window.dvNext=function(){if(!DV)return;DV.i++;DV.tries=0;DV.help=false;DV.ok=false;if(DV.i<DV.q.length){draw();return;}over();};
+  function over(){
+    DV.end=true;const max=DV.q.length*10,T=window.DICH[DV.lv];
+    ST['b'+DV.lv]=Math.max(ST['b'+DV.lv]||0,DV.score);save();
+    try{if(typeof hhLog==='function')hhLog('trochoi','Thử thách dịch câu · HSK '+DV.lv,DV.score,max);}catch(e){}
+    try{sfx(DV.score>=max*.6?'win':'lose');}catch(e){}
+    el().innerHTML=`<div class='gres'><div style='font-size:22px'>${DV.score>=max*.9?'🏆 ĐỈNH CỦA CHÓP!':DV.score>=max*.6?'👏 Giỏi lắm!':'💪 Cố lên nha!'}</div><div class='dv-sc'>${DV.score}/${max} điểm</div><div style='color:var(--mut)'>Kỷ lục HSK ${DV.lv}: ${ST['b'+DV.lv]} · Đã thuộc ${done(DV.lv).length}/${T.length} câu</div></div>
+    <div class='dv-list'>${DV.res.map(([i,p])=>`<div class='${p===10?'g':p?'m':'b'}'><span>${p===10?'✓':p?'½':'✗'}</span><div><span class='han'>${esc(T[i][0])}</span> <button type='button' class='hb-sp' onclick='dvSay(${i})'>🔊</button><br><small>${esc(T[i][1])}</small><br><small style='color:var(--mut)'>${esc(T[i][2])}</small></div></div>`).join('')}</div>
+    <div style='display:flex;gap:8px'><button type='button' class='btn' style='flex:1' onclick='dvStart()'>Chơi tiếp HSK ${DV.lv}</button><button type='button' class='btn ghost' style='flex:1' onclick='dvMenu()'>Chọn cấp khác</button></div>`;
+  }
+  window.dvSay=i=>say(window.DICH[DV?DV.lv:LV][i][0]);
+  window.dvMenu=()=>menu();
+  const sw0=window.sw;if(typeof sw0==='function'){window.sw=function(p,s){sw0.apply(this,arguments);if(p==='trochoi'&&+s===3)dvInit();};}
 })();
 
 /* ===== Luyện tập chia theo cấp độ HSK ===== */
