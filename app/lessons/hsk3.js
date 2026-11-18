@@ -24,6 +24,7 @@ const CH={
  zhang:{zh:'老张',py:'Lǎo Zhāng',vi:'Anh Trương',d:'Đồng nghiệp của anh Lưu ở công ty.',g:'m',a:{bg:'#E8EAF6',skin:'#EBC29C',hair:'#262626',st:'spiky',shirt:'#3949AB',tie:1}},
  siji:{zh:'司机',py:'sījī',vi:'Bác tài xế',d:'',g:'m',a:{bg:'#FFFDE7',skin:'#E8BE96',hair:'#444444',st:'short',shirt:'#FBC02D',gl:1}},
  staff:{zh:'工作人员',py:'gōngzuò rényuán',vi:'Nhân viên',d:'',g:'f',a:{bg:'#E0F7FA',skin:'#F0C8A0',hair:'#2B1B17',st:'pony',shirt:'#0097A7',bow:1}},
+ coach:{zh:'教练',py:'jiàoliàn',vi:'Huấn luyện viên',d:'Huấn luyện viên phòng gym.',g:'m',a:{bg:'#FBE9E7',skin:'#E3B48C',hair:'#1A1A1A',st:'spiky',shirt:'#E64A19'}},
  doc:{zh:'张医生',py:'Zhāng yīshēng',vi:'Bác sĩ Trương',d:'',g:'m',a:{bg:'#E0F2F1',skin:'#F0C8A0',hair:'#555555',st:'short',shirt:'#FFFFFF',coat:1,gl:1}}
 };
 function person(a,uid){
