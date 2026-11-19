@@ -4658,7 +4658,7 @@ const SXL=[{"lv":0,"name":"HSK 1","d":"20 câu, 4 dạng","S":[{"t":"Dạng 1 �
   }
   window.dvSay=i=>say(window.DICH[DV?DV.lv:LV][i][0]);
   window.dvMenu=()=>menu();
-  const sw0=window.sw;if(typeof sw0==='function'){window.sw=function(p,s){sw0.apply(this,arguments);if(p==='trochoi'&&+s===3)dvInit();};}
+  const sw0=window.sw;if(typeof sw0==='function'){window.sw=function(p,s){sw0.apply(this,arguments);if(typeof p==='number')p=GK[p];if(p==='trochoi'&&+s===3)dvInit();};}
 })();
 
 /* ===== Luyện tập chia theo cấp độ HSK ===== */
@@ -4712,7 +4712,7 @@ const SXL=[{"lv":0,"name":"HSK 1","d":"20 câu, 4 dạng","S":[{"t":"Dạng 1 �
 <script src='lessons/hsk4.js'></script>
 <script>
 (function(){const M={6:['x5Init','exams/hsk5s.js','x5s'],7:['x6Init','exams/hsk6s.js','x6s'],8:['x79Init','exams/hsk79.js','x79']},ld={};function need(n){const m=M[n];if(!m)return;if(window[m[0]]){window[m[0]]();return;}if(ld[n])return;ld[n]=1;const s=document.createElement('script');s.src=m[1];s.onerror=()=>{ld[n]=0;const b=document.getElementById(m[2]);if(b)b.innerHTML="<p style='text-align:center;color:var(--mut)'>Không tải được đề, hãy kiểm tra mạng rồi mở lại tab.</p>";};document.body.appendChild(s);}
-const sw0=window.sw;if(typeof sw0==='function'){window.sw=function(p,n){sw0.apply(this,arguments);if(p==='sach')need(+n);};}
+const sw0=window.sw;if(typeof sw0==='function'){window.sw=function(p,n){sw0.apply(this,arguments);if(typeof p==='number')p=GK[p];if(p==='sach')need(+n);};}
 window.addEventListener('load',()=>{[6,7,8].forEach(n=>{const el=document.querySelector(".sub[data-g='sach'][data-n='"+n+"']");if(el&&el.offsetParent)need(n);});});})();
 </script>
 </body>
