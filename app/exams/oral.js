@@ -44,6 +44,33 @@ const EX=[
      ['最后，我会认真完成每一项任务，准时上下班，让领导和同事相信我。','Zuìhòu, wǒ huì rènzhēn wánchéng měi yí xiàng rènwu, zhǔnshí shàng-xiàbān, ràng lǐngdǎo hé tóngshì xiāngxìn wǒ.','Cuối cùng, mình sẽ hoàn thành tốt từng nhiệm vụ, đi làm đúng giờ, để sếp và đồng nghiệp tin tưởng mình.'],
      ['我相信，只要态度积极，就一定能很快适应新环境。','Wǒ xiāngxìn, zhǐyào tàidu jījí, jiù yídìng néng hěn kuài shìyìng xīn huánjìng.','Mình tin chỉ cần có thái độ tích cực thì nhất định sẽ nhanh chóng thích nghi với môi trường mới.']]}]}
  ]}
+,{lv:5,title:'Đề mẫu khẩu ngữ HSK 5',zh:'HSK（五级）口语样卷',audio:'1Y7ABMOTbS4gIPXiigp6SGMNQns0vQhO2',
+ intro:'Gồm <b>5 câu, khoảng 23 phút</b> (kể cả 10 phút chuẩn bị): nghe và kể lại 2 câu, nhìn tranh kể chuyện 1 câu, trả lời 2 câu hỏi.',
+ parts:[
+  {h:'Phần 1 · Nghe và kể lại (câu 1–2)',d:'Bật file nghe gốc, nghe đoạn văn rồi dùng lời của mình kể lại nội dung chính. Mỗi câu có <b>1,5 phút</b> để nói.',q:[1,2].map(n=>({n,sec:90}))},
+  {h:'Phần 2 · Nhìn tranh kể chuyện (câu 3)',d:'Nhìn 3 tranh theo thứ tự, kể thành một câu chuyện liền mạch. <b>Chuẩn bị 3 phút, nói 2 phút.</b>',q:[
+    {n:3,sec:120,prep:180,imgs:[['o5-3-1.webp','Tranh 1: cậu bé ngã xe đạp ngồi dưới đất, bố ngồi xuống xem chân cho con'],['o5-3-2.webp','Tranh 2: bố vịn yên xe, chạy theo giúp con tập đạp xe'],['o5-3-3.webp','Tranh 3: cậu bé tự đạp xe, bố chạy bên cạnh mỉm cười']],ref:[
+     ['周末，爸爸带儿子去公园学骑自行车。','Zhōumò, bàba dài érzi qù gōngyuán xué qí zìxíngchē.','Cuối tuần, bố đưa con trai ra công viên tập đi xe đạp.'],
+     ['刚开始，儿子骑得不稳，一不小心就摔倒了，膝盖也擦破了。他坐在地上，很想哭，说再也不想学了。','Gāng kāishǐ, érzi qí de bù wěn, yí bù xiǎoxīn jiù shuāidǎo le, xīgài yě cāpò le. Tā zuò zài dìshang, hěn xiǎng kū, shuō zài yě bù xiǎng xué le.','Lúc đầu, cậu bé đạp chưa vững, sơ ý một cái là ngã, đầu gối còn bị trầy. Cậu ngồi bệt xuống đất, muốn khóc, nói không muốn học nữa.'],
+     ['爸爸蹲下来，一边帮他检查伤口，一边鼓励他说：“学什么都会遇到困难，摔倒了就站起来，再试一次！”','Bàba dūn xiàlai, yìbiān bāng tā jiǎnchá shāngkǒu, yìbiān gǔlì tā shuō: “Xué shénme dōu huì yùdào kùnnan, shuāidǎo le jiù zhàn qǐlai, zài shì yí cì!”','Bố ngồi xuống, vừa xem vết thương vừa động viên: “Học gì cũng gặp khó khăn, ngã thì đứng dậy, thử lại lần nữa!”'],
+     ['于是，儿子重新骑上车，爸爸在后面扶着车座，跟着他一起跑。','Yúshì, érzi chóngxīn qíshang chē, bàba zài hòumian fúzhe chēzuò, gēnzhe tā yìqǐ pǎo.','Thế là cậu bé lại lên xe, bố vịn yên xe phía sau, chạy theo con.'],
+     ['练了一会儿，爸爸悄悄地放开了手。儿子自己骑了很远，他高兴极了，爸爸也在旁边开心地笑了。','Liànle yíhuìr, bàba qiāoqiāo de fàngkāile shǒu. Érzi zìjǐ qíle hěn yuǎn, tā gāoxìng jí le, bàba yě zài pángbiān kāixīn de xiào le.','Tập một lúc, bố lặng lẽ buông tay. Cậu bé tự đạp được một quãng xa, vui vô cùng, bố đứng bên cạnh cũng cười rạng rỡ.'],
+     ['这件事让儿子明白了：只要不怕失败、坚持下去，就一定能成功。','Zhè jiàn shì ràng érzi míngbai le: zhǐyào bú pà shībài, jiānchí xiàqu, jiù yídìng néng chénggōng.','Chuyện này giúp cậu bé hiểu: chỉ cần không sợ thất bại và kiên trì thì nhất định sẽ thành công.']]}]},
+  {h:'Phần 3 · Trả lời câu hỏi (câu 4–5)',d:'Mỗi câu có <b>3,5 phút chuẩn bị</b> và <b>2,5 phút trả lời</b>. Nên nói theo thứ tự: nêu quan điểm → 2–3 luận điểm có ví dụ → kết luận.',q:[
+    {n:4,sec:150,prep:210,zh:'你认为互联网对你的生活产生了哪些影响？',ref:[
+     ['我认为，互联网给我的生活带来了很大的影响，而且大部分是积极的。','Wǒ rènwéi, hùliánwǎng gěi wǒ de shēnghuó dàiláile hěn dà de yǐngxiǎng, érqiě dà bùfen shì jījí de.','Mình cho rằng internet ảnh hưởng rất lớn đến cuộc sống của mình, và phần lớn là tích cực.'],
+     ['首先，学习更方便了。遇到不懂的问题，上网一查就能找到答案，我还在网上学汉语、看公开课。','Shǒuxiān, xuéxí gèng fāngbiàn le. Yùdào bù dǒng de wèntí, shàngwǎng yì chá jiù néng zhǎodào dá’àn, wǒ hái zài wǎngshang xué Hànyǔ, kàn gōngkāikè.','Trước hết, việc học tiện hơn. Gặp vấn đề không hiểu, lên mạng tra là có đáp án; mình còn học tiếng Trung, xem các khóa học mở trên mạng.'],
+     ['其次，生活更便利了。买东西、点外卖、交水电费，用手机就能完成，节省了很多时间。','Qícì, shēnghuó gèng biànlì le. Mǎi dōngxi, diǎn wàimài, jiāo shuǐdiànfèi, yòng shǒujī jiù néng wánchéng, jiéshěngle hěn duō shíjiān.','Tiếp theo, cuộc sống tiện lợi hơn. Mua sắm, gọi đồ ăn, đóng tiền điện nước đều làm được trên điện thoại, tiết kiệm nhiều thời gian.'],
+     ['再次，我和远方的家人朋友联系更容易了，随时可以视频聊天。','Zàicì, wǒ hé yuǎnfāng de jiārén péngyou liánxì gèng róngyì le, suíshí kěyǐ shìpín liáotiān.','Thêm nữa, liên lạc với gia đình, bạn bè ở xa dễ hơn, lúc nào cũng gọi video được.'],
+     ['当然，互联网也有不好的地方，比如有时候我会花太多时间刷手机，影响休息。','Dāngrán, hùliánwǎng yě yǒu bù hǎo de dìfang, bǐrú yǒu shíhou wǒ huì huā tài duō shíjiān shuā shǒujī, yǐngxiǎng xiūxi.','Tất nhiên internet cũng có mặt không tốt, ví dụ đôi khi mình lướt điện thoại quá lâu, ảnh hưởng đến nghỉ ngơi.'],
+     ['所以，我觉得关键是要合理使用互联网，让它为我们的生活服务。','Suǒyǐ, wǒ juéde guānjiàn shì yào hélǐ shǐyòng hùliánwǎng, ràng tā wèi wǒmen de shēnghuó fúwù.','Vì vậy, mình nghĩ điều quan trọng là dùng internet hợp lý, để nó phục vụ cuộc sống của chúng ta.']]},
+    {n:5,sec:150,prep:210,zh:'人们常说：“活到老，学到老。”你是怎么理解这句话的？请谈谈你的看法。',ref:[
+     ['“活到老，学到老”的意思是，人的一生都应该不断学习，学习没有终点。我非常同意这句话。','“Huódào lǎo, xuédào lǎo” de yìsi shì, rén de yìshēng dōu yīnggāi búduàn xuéxí, xuéxí méiyǒu zhōngdiǎn. Wǒ fēicháng tóngyì zhè jù huà.','“Học, học nữa, học mãi” có nghĩa là cả đời người đều nên không ngừng học tập, việc học không có điểm dừng. Mình rất đồng ý với câu này.'],
+     ['第一，社会发展得越来越快，新知识、新技术不断出现。如果不学习，就会跟不上时代。','Dì-yī, shèhuì fāzhǎn de yuè lái yuè kuài, xīn zhīshi, xīn jìshù búduàn chūxiàn. Rúguǒ bù xuéxí, jiù huì gēn bu shàng shídài.','Thứ nhất, xã hội phát triển ngày càng nhanh, kiến thức và công nghệ mới liên tục xuất hiện. Nếu không học sẽ bị tụt lại.'],
+     ['第二，学习能让生活更丰富。比如我的奶奶六十多岁了，还在学用智能手机和画画儿，她每天都很开心。','Dì-èr, xuéxí néng ràng shēnghuó gèng fēngfù. Bǐrú wǒ de nǎinai liùshí duō suì le, hái zài xué yòng zhìnéng shǒujī hé huà huàr, tā měi tiān dōu hěn kāixīn.','Thứ hai, học tập làm cuộc sống phong phú hơn. Ví dụ bà mình hơn 60 tuổi vẫn học dùng điện thoại thông minh và vẽ tranh, ngày nào bà cũng vui.'],
+     ['第三，学习不只是在学校里读书，在工作和生活中向别人学习，也是一种学习。','Dì-sān, xuéxí bù zhǐ shì zài xuéxiào li dú shū, zài gōngzuò hé shēnghuó zhōng xiàng biérén xuéxí, yě shì yì zhǒng xuéxí.','Thứ ba, học không chỉ là đọc sách ở trường, học hỏi người khác trong công việc và cuộc sống cũng là học.'],
+     ['总之，不管多大年纪，我们都应该保持学习的热情，这样才能让自己不断进步。','Zǒngzhī, bùguǎn duō dà niánjì, wǒmen dōu yīnggāi bǎochí xuéxí de rèqíng, zhèyàng cái néng ràng zìjǐ búduàn jìnbù.','Tóm lại, dù bao nhiêu tuổi, chúng ta đều nên giữ niềm say mê học tập, như vậy mới không ngừng tiến bộ.']]}]}
+ ]}
 ];
 let CUR=0,REC=null,TM=null;
 function css(){if($('orcss'))return;const s=document.createElement('style');s.id='orcss';s.textContent=`
