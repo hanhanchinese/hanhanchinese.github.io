@@ -2,6 +2,7 @@ window.H79D={"L": [{"n": 1, "t": "tf", "s": "每年的11月至来年4月是北�
 /* ===== Đề mẫu HSK 7–9 (样卷) ===== */
 (function(){
 const D=window.H79D;
+window.hhAud=window.hhAud||function(b,id){const f=document.createElement('iframe');f.src='https://drive.google.com/file/d/'+id+'/preview';f.allow='autoplay';f.title='File nghe';f.style.cssText='width:100%;height:80px;border:0;border-radius:10px';b.replaceWith(f);};
 const AU_L='1bBR0Ozk0h-Gb_OSlFW5LEhfIUG0PX_4q',AU_S='1bGqY963gSbRltlp5JJZUpIrqcZloF2HR';
 const KEY='hh79';
 let S;try{S=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){S={};}
@@ -61,7 +62,7 @@ window.x79tab=function(i){TAB=i;S.tab=i;save();stopTimer();render();const t=box(
 function body(){const el=$('x79b');[lis,rea,wri,tra,spk][TAB](el);}
 
 /* ---------- Nghe ---------- */
-function audio(id,txt){return `<div class='card'><b>🎧 ${txt}</b><p style='margin:4px 0 8px;color:var(--mut);font-size:14px'>Nếu trình phát không hiện, <a href='https://drive.google.com/file/d/${id}/view' target='_blank' rel='noopener' style='color:var(--red)'>mở file trên Google Drive</a>.</p><iframe src='https://drive.google.com/file/d/${id}/preview' allow='autoplay' loading='lazy' title='File nghe'></iframe></div>`;}
+function audio(id,txt){return `<div class='card'><b>🎧 ${txt}</b><p style='margin:4px 0 8px;color:var(--mut);font-size:14px'>Nếu trình phát không hiện, <a href='https://drive.google.com/file/d/${id}/view' target='_blank' rel='noopener' style='color:var(--red)'>mở file trên Google Drive</a>.</p><button class='btn' onclick="hhAud(this,'${id}')">▶ Mở trình phát file nghe</button></div>`;}
 const nz=t=>String(t||'').replace(/[\s，。、；：！？,.;:!?“”"'（）()]/g,'');
 function lok(q){const v=S.a['L'+q.n];if(q.t==='fill'){const a=nz(v),b=nz(q.a);if(!a)return false;if(a===b||q.a.split('/').some(x=>nz(x)===a))return true;return S.lm[q.n]===1;}return v===q.a;}
 function lis(el){const done=!!S.ld;let h=audio(AU_L,'File nghe gốc · Phần nghe (câu 1–40)');

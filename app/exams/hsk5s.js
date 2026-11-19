@@ -1,4 +1,5 @@
 /* ===== Bộ máy đề mẫu HSK (nghe, đọc, viết) ===== */
+window.hhAud=window.hhAud||function(b,id){const f=document.createElement('iframe');f.src='https://drive.google.com/file/d/'+id+'/preview';f.allow='autoplay';f.title='File nghe';f.style.cssText='width:100%;height:80px;border:0;border-radius:10px';b.replaceWith(f);};
 window.XSmount=window.XSmount||function(C){
 const box=()=>document.getElementById(C.id);
 let S;try{S=JSON.parse(localStorage.getItem(C.key)||'{}');}catch(e){S={};}S.a=S.a||{};
@@ -39,7 +40,7 @@ G.clr=p=>{Object.keys(S.a).forEach(k=>{if(k[0]===p)delete S.a[k];});S[p+'d']=0;s
 function submit(p,fn,tot){const miss=tot-Object.keys(S.a).filter(k=>k[0]===p&&S.a[k]!==''&&S.a[k]!=null).length;if(miss>0&&!confirm('Còn '+miss+' câu chưa trả lời. Vẫn nộp bài?'))return;S[p+'d']=1;save();const c=fn();try{if(typeof hhLog==='function')hhLog('dethi',C.log+' · Đề mẫu · '+(p==='L'?'Nghe':'Đọc'),c,tot);}catch(e){}render();window.scrollTo({top:box().offsetTop,behavior:'smooth'});}
 /* Nghe */
 const lsc=()=>C.L.q.filter(q=>S.a['L'+q.n]===q.a).length;
-function lis(el){const done=!!S.Ld;let h=`<div class='card'><b>🎧 File nghe gốc · Phần nghe (câu ${C.L.range})</b><p style='margin:4px 0 8px;color:var(--mut);font-size:14px'>Nếu trình phát không hiện, <a href='https://drive.google.com/file/d/${C.audio}/view' target='_blank' rel='noopener' style='color:var(--red)'>mở file trên Google Drive</a>.</p><iframe src='https://drive.google.com/file/d/${C.audio}/preview' allow='autoplay' loading='lazy' title='File nghe'></iframe></div>`;
+function lis(el){const done=!!S.Ld;let h=`<div class='card'><b>🎧 File nghe gốc · Phần nghe (câu ${C.L.range})</b><p style='margin:4px 0 8px;color:var(--mut);font-size:14px'>Nếu trình phát không hiện, <a href='https://drive.google.com/file/d/${C.audio}/view' target='_blank' rel='noopener' style='color:var(--red)'>mở file trên Google Drive</a>.</p><button class='btn' onclick="hhAud(this,'${C.audio}')">▶ Mở trình phát file nghe</button></div>`;
   C.L.q.forEach(q=>{const g=C.L.groups.find(x=>x[0]===q.n);if(g)h+=`<h3>${g[1]}</h3><p style='color:var(--mut);margin-top:0'>${g[2]}</p>`;h+=`<div class='x7q'><b class='n'>${q.n}.</b>${opts('L'+q.n,q.o,q.a,done)}</div>`;});
   h+=done?result('L',lsc(),C.L.q.length):`<div class='card'><button class='btn' onclick='${P}_.lsub()'>Nộp bài phần nghe</button></div>`;el.innerHTML=h;}
 G.lsub=()=>submit('L',lsc,C.L.q.length);
