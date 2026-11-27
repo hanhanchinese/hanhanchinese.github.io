@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23b3201f'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='%23fff'%3E%E6%B1%89%3C/text%3E%3C/svg%3E">
+<title>80 bài văn nghị luận · Đọc dịch Trung–Việt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&family=Ma+Shan+Zheng&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f3ea; --paper:#fffdf8; --ink:#2a2622; --muted:#7a7066; --line:#e6dfd2;
+  --accent:#a8322d; --accent-soft:#f6e4e1; --hl:#ffe9a8; --sheet:#ffffff; --shadow:0 -6px 30px rgba(0,0,0,.14);
+  --fs:21px;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#1b1917;--paper:#23201d;--ink:#ece6dc;--muted:#a39a8f;--line:#3a352f;--accent:#e0756c;--accent-soft:#3a2523;--hl:#5a4a1c;--sheet:#2a2622;--shadow:0 -6px 30px rgba(0,0,0,.5)}
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Be Vietnam Pro",system-ui,sans-serif;-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:6px;padding:8px 10px}
+.top .ttl{flex:1;min-width:0;font-weight:600;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top .ttl small{color:var(--muted);font-weight:400}
+.ibtn{min-width:38px;height:38px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;font-size:15px}
+.ibtn:active,.ibtn:hover{background:var(--accent-soft)}
+main{max-width:720px;margin:0 auto;padding:14px 14px 120px}
+.essay-head{margin:10px 2px 18px}
+.essay-head .num{color:var(--accent);font-size:13px;font-weight:600;letter-spacing:.06em}
+.essay-head h1{font-family:"Noto Serif SC",serif;font-size:calc(var(--fs) + 9px);margin:4px 0 10px;font-weight:600}
+.essay-head .acts{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:7px 13px;font-size:13.5px}
+.chip:hover{border-color:var(--accent)}
+.para{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 14px 10px;margin:0 0 12px}
+.para.sub{background:none;border:0;padding:6px 2px 2px;text-align:center}
+.para.sub .zh{font-weight:600;font-size:calc(var(--fs) + 2px);color:var(--accent)}
+.para.prompt{background:var(--accent-soft);border-color:transparent}
+.tag{font-size:11.5px;color:var(--accent);font-weight:600;margin-bottom:4px;letter-spacing:.04em}
+.zh{font-family:"Noto Serif SC","Songti SC",serif;font-size:var(--fs);line-height:1.95;word-break:break-all}
+.w{border-radius:4px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .12s}
+.w:hover{background:color-mix(in srgb,var(--hl) 55%,transparent)}
+.w.sel{background:var(--hl);box-shadow:0 2px 0 var(--accent)}
+.w.saved{text-decoration:underline dotted var(--accent);text-underline-offset:5px}
+.ptools{display:flex;justify-content:flex-end;margin-top:4px}
+.tbtn{font-size:12.5px;color:var(--muted);padding:5px 8px;border-radius:8px}
+.tbtn:hover{color:var(--accent);background:var(--accent-soft)}
+.vi{border-top:1px dashed var(--line);margin-top:8px;padding-top:9px;font-size:15.5px;line-height:1.65;color:var(--ink)}
+.vi.err{color:var(--accent)}
+.navbtns{display:flex;gap:10px;margin-top:22px}
+.navbtns button{flex:1;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px;text-align:left;font-size:13px;color:var(--muted)}
+.navbtns button b{display:block;color:var(--ink);font-family:"Noto Serif SC",serif;font-size:16px;margin-top:2px}
+.navbtns button.r{text-align:right}
+.hint{font-size:13px;color:var(--muted);text-align:center;margin:4px 0 14px}
+
+/* sheet */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.18);z-index:40;opacity:0;pointer-events:none;transition:opacity .18s}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--sheet);border-radius:18px 18px 0 0;box-shadow:var(--shadow);max-height:72vh;display:flex;flex-direction:column;transform:translateY(105%);transition:transform .22s ease;max-width:720px;margin:0 auto}
+.sheet.on{transform:none}
+.grab{width:42px;height:5px;border-radius:3px;background:var(--line);margin:8px auto 2px}
+.sh-head{display:flex;align-items:flex-start;gap:8px;padding:6px 16px 10px;border-bottom:1px solid var(--line)}
+.sh-word{font-family:"Noto Serif SC",serif;font-size:34px;line-height:1.15;font-weight:600}
+.sh-sub{font-size:15px;color:var(--muted);margin-top:2px}
+.sh-sub .py{color:var(--accent);font-weight:500}
+.sh-head .grow{flex:1;min-width:0}
+.sh-body{overflow:auto;padding:10px 16px 22px;-webkit-overflow-scrolling:touch}
+.ext{display:flex;gap:6px;margin:0 0 10px;flex-wrap:wrap}
+.ext button{font-size:12.5px;border:1px solid var(--line);border-radius:8px;padding:5px 9px;color:var(--muted)}
+.ext button:hover{border-color:var(--accent);color:var(--accent)}
+.sec{margin:12px 0 4px;font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--accent);text-transform:uppercase}
+.rd{margin:6px 0 10px}
+.rd .rh{font-size:14px}.rd .rh b{color:var(--accent);font-weight:600}.rd .rh i{color:var(--muted);font-style:normal}
+.rd ol{margin:4px 0 0;padding-left:22px;font-size:15px;line-height:1.55}
+.chars{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.ch{border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:13.5px;line-height:1.45;cursor:pointer}
+.ch:hover{border-color:var(--accent)}
+.ch .c{font-family:"Noto Serif SC",serif;font-size:22px;font-weight:600;margin-right:6px}
+.ch .h{color:var(--accent);font-weight:600}
+.ch .m{color:var(--muted);display:block;margin-top:2px}
+.ex{font-size:15px;line-height:1.7;padding:8px 10px;border-left:3px solid var(--line);margin:6px 0;cursor:pointer;font-family:"Noto Serif SC",serif}
+.ex:hover{border-color:var(--accent)}
+.ex mark{background:var(--hl);color:inherit;border-radius:3px;padding:0 1px}
+.ex small{display:block;font-family:"Be Vietnam Pro",sans-serif;color:var(--muted);font-size:12px}
+.ai-btn{width:100%;margin:12px 0 4px;padding:11px;border-radius:12px;background:var(--accent);color:#fff;font-weight:600;font-size:14.5px}
+.ai{font-size:15px;line-height:1.65;background:var(--accent-soft);border-radius:12px;padding:10px 12px;margin-top:8px}
+.ai ul{margin:4px 0;padding-left:20px}
+.muted{color:var(--muted);font-size:14px}
+.nodef{font-size:14px;color:var(--muted);font-style:italic}
+
+/* drawers */
+.drawer{position:fixed;inset:0;z-index:60;background:var(--bg);transform:translateX(-100%);transition:transform .22s;display:flex;flex-direction:column}
+.drawer.on{transform:none}
+.drawer .dh{display:flex;align-items:center;gap:8px;padding:10px;border-bottom:1px solid var(--line)}
+.drawer .dh h2{flex:1;margin:0;font-size:17px}
+.drawer input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:inherit;font-size:16px}
+.dlist{overflow:auto;padding:8px 10px 40px;max-width:720px;width:100%;margin:0 auto}
+.it{display:flex;gap:12px;align-items:baseline;padding:11px 10px;border-radius:10px;cursor:pointer;width:100%;text-align:left}
+.it:hover,.it.cur{background:var(--accent-soft)}
+.it .n{color:var(--muted);font-size:13px;width:26px;flex:none;text-align:right}
+.it .t{font-family:"Noto Serif SC",serif;font-size:18px}
+.it .tb{display:flex;flex-direction:column;gap:2px;min-width:0}.it .hv{color:var(--accent);font-size:13px;font-weight:500}.it .vn{color:var(--muted);font-size:13.5px}
+.essay-head .sub2{font-size:15px;color:var(--muted);margin:-4px 0 12px}.essay-head .sub2 b{color:var(--accent);font-weight:500}
+.sw{display:flex;gap:10px;align-items:center;padding:10px;border-bottom:1px solid var(--line)}
+.sw .z{font-family:"Noto Serif SC",serif;font-size:22px;font-weight:600;min-width:60px;cursor:pointer}
+.sw .i{flex:1;font-size:13.5px;line-height:1.45}.sw .i b{color:var(--accent);font-weight:500}
+.loading{padding:60px 20px;text-align:center;color:var(--muted)}
+.credit{font-size:12px;color:var(--muted);text-align:center;padding:10px 16px 18px;border-top:1px solid var(--line)}.credit a{color:var(--muted)}
+.fsz{display:flex;align-items:center;gap:2px}
+.logo{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink)}
+.logo .mk{width:34px;height:34px;border-radius:50%;background:#fff6e8;border:2px solid #c9a24b;color:#b3201f;display:inline-grid;place-items:center;font-family:'Ma Shan Zheng','Noto Serif SC',serif;font-size:22px;line-height:1;flex:none}
+.logo .wm{font-weight:700;font-size:16px;letter-spacing:-.01em;line-height:1}
+.logo .wm span{color:var(--accent)}
+.logo.sm .mk{width:28px;height:28px;font-size:18px}
+.brandrow{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.brandrow .by{font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<header class="top">
+  <button class="ibtn" id="bMenu" aria-label="Mục lục">☰</button>
+  <span class="logo sm" aria-label="HanHan Chinese"><span class="mk">汉</span></span>
+  <div class="ttl" id="topTitle">Đang tải…</div>
+  <div class="fsz"><button class="ibtn" id="fMinus" aria-label="Chữ nhỏ hơn">A−</button><button class="ibtn" id="fPlus" aria-label="Chữ lớn hơn">A+</button></div>
+  <button class="ibtn" id="bSaved" aria-label="Sổ từ">★</button>
+</header>
+<main id="main"><div class="loading">Đang tải sách và từ điển…</div></main>
+
+<div class="scrim" id="scrim"></div>
+<section class="sheet" id="sheet" aria-live="polite">
+  <div class="grab"></div>
+  <div class="sh-head">
+    <div class="grow"><div class="sh-word" id="shWord"></div><div class="sh-sub" id="shSub"></div></div>
+    <button class="ibtn" id="shSpeak" aria-label="Phát âm" hidden>🔊</button>
+    <button class="ibtn" id="shStar" aria-label="Lưu từ">☆</button>
+    <button class="ibtn" id="shClose" aria-label="Đóng">✕</button>
+  </div>
+  <div class="sh-body" id="shBody"></div>
+</section>
+
+<section class="drawer" id="toc">
+  <div class="dh"><h2><span class="logo"><span class="mk">汉</span><span class="wm">HanHan <span>Chinese</span></span></span><div style="font-size:13px;font-weight:400;color:var(--muted);margin-top:6px">Mục lục · 80 bài văn nghị luận</div></h2><button class="ibtn" data-close="toc">✕</button></div>
+  <div style="padding:10px;max-width:720px;width:100%;margin:0 auto"><input id="tocQ" placeholder="Tìm tên bài, ví dụ: 苦, 才与器, 23…"></div>
+  <div class="dlist" id="tocList"></div>
+  <div class="credit">Tài liệu: 80 bài văn nghị luận · Kathy Dương. Từ điển: <a href="https://github.com/ph0ngp/CVDICT">CVDICT</a> (CC BY-SA 4.0), dựa trên CC-CEDICT. Âm Hán Việt: <a href="https://github.com/ph0ngp/hanviet-pinyin-wordlist">hanviet-pinyin-wordlist</a>.</div>
+</section>
+<section class="drawer" id="saved">
+  <div class="dh"><h2>Sổ từ đã lưu</h2><button class="ibtn" data-close="saved">✕</button></div>
+  <div class="dlist" id="savedList"></div>
+</section>
+
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const CJK = /[\u4e00-\u9fff]/;
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem('kd80:'+k); return v==null? d : JSON.parse(v);}catch(e){return d;} },
+  set(k, v){ try{ localStorage.setItem('kd80:'+k, JSON.stringify(v)); }catch(e){} }
+};
+
+const CREDIT_HTML = '';
+const TITLES = [["Khổ dữ điềm", "Đắng và ngọt"], ["Khoái dữ mạn", "Nhanh và chậm"], ["Lịch sử dữ vị lai", "Lịch sử và tương lai"], ["Giản ước dữ phồn phức", "Giản dị và cầu kỳ"], ["Hữu định lý dữ vô định pháp", "Có định lý và không có phép cố định"], ["Truyền thừa dữ tá giám", "Kế thừa và học hỏi"], ["Biến dữ bất biến", "Đổi và không đổi"], ["Bất vi dữ hữu vi", "Không làm và có làm"], ["Tài dữ khí", "Tài năng và khí độ"], ["Xuất thế dữ nhập thế", "Xuất thế và nhập thế"], ["Đạt nhân dữ đạt kỷ", "Giúp người thành đạt và tự mình thành đạt"], ["Thủ dữ xả", "Lấy và bỏ"], ["Sinh dữ thục", "Lạ và quen"], ["Thức nhân dữ dụng nhân", "Biết người và dùng người"], ["Tùng dữ khẩn", "Lỏng và chặt"], ["Đề tật dữ bộ ổn", "Bước nhanh và bước vững"], ["Đại đức dữ tiểu tiết", "Đức lớn và tiểu tiết"], ["Đạo đức dữ quy tắc", "Đạo đức và quy tắc"], ["Đạo lý dữ nhân sinh", "Đạo lý và cuộc đời"], ["Phát thanh dữ trầm mặc", "Lên tiếng và im lặng"], ["Phóng khí dữ kiên trì", "Từ bỏ và kiên trì"], ["Sơn yêu dữ sơn đỉnh", "Lưng chừng núi và đỉnh núi"], ["Thận tư dữ minh biện", "Suy nghĩ thận trọng và phân biệt rõ ràng"], ["Thủy giản dữ tất cự", "Khởi đầu đơn giản, kết thúc lớn lao"], ["Thủy dữ chung", "Bắt đầu và kết thúc"], ["Thuận ứng dữ dẫn đạo", "Thuận theo và dẫn dắt"], ["Tư tề dữ tự tỉnh", "Noi theo người hiền và tự xét mình"], ["Tư dữ hành", "Nghĩ và làm"], ["Tử tiết dữ cẩu hoạt", "Chết vì khí tiết và sống tạm bợ"], ["Tốc độ dữ ôn độ", "Tốc độ và sự ấm áp"], ["Vô úy dữ kính úy", "Không sợ hãi và biết kính sợ"], ["Đức dữ tài", "Đức và tài"], ["Đẳng dữ ổn", "Chờ đợi và vững vàng"], ["Đê điệu dữ cao điệu", "Khiêm tốn và phô trương"], ["Tồn hạ khứ dữ trạm khởi lai", "Ngồi xuống và đứng lên"], ["Phương dữ viên", "Vuông và tròn"], ["Phương bút dữ viên bút", "Nét bút vuông và nét bút tròn"], ["Cản khảo dữ đáp quyển", "Đi thi và làm bài"], ["Cao học dữ đê tựu", "Học cao và chấp nhận việc thấp"], ["Cá nhân dữ hoàn cảnh", "Cá nhân và môi trường"], ["Cá nhân dữ xã hội", "Cá nhân và xã hội"], ["Cá tính độc lập dữ hòa nhi bất đồng", "Cá tính độc lập và hòa hợp mà không đồng nhất"], ["Cá tính dữ trung dung", "Cá tính và trung dung"], ["Cổ dữ kim", "Xưa và nay"], ["Quảng đại dữ tinh vi", "Rộng lớn và tinh tế"], ["Quy ẩn dữ tiến thủ", "Ở ẩn và tiến thủ"], ["Hỗ tranh dữ hỗ trợ", "Cạnh tranh và giúp đỡ lẫn nhau"], ["Tiểu dữ đại", "Nhỏ và lớn"], ["Tân thời đại dữ tân tự ngã", "Thời đại mới và con người mới"], ["Hành dữ danh", "Việc làm và danh tiếng"], ["Dẫn tiến tá giám dữ tự chủ sáng tân", "Du nhập, học hỏi và tự chủ sáng tạo"], ["Dẫn thể hướng thượng dữ đê tư bồ bặc", "Kéo xà lên và bò sát thấp người"], ["Chất dữ lượng", "Chất và lượng"], ["Chuyên dữ tạp", "Chuyên sâu và đa tạp"], ["Tự giác dữ tự tín", "Tự giác và tự tin"], ["Tự tôn dữ tự khiêm", "Tự trọng và khiêm tốn"], ["Tố nhân dữ tố sự", "Làm người và làm việc"], ["Cá tính dữ quy tắc", "Cá tính và quy tắc"], ["Kiến thiết gia hương dữ xuất ngoại sấm đãng", "Xây dựng quê hương và ra ngoài lập nghiệp"], ["Nhượng dữ bất nhượng", "Nhường và không nhường"], ["Thích độ dữ cực hạn", "Vừa phải và giới hạn tột cùng"], ["Tư ân dữ công nghĩa", "Ơn riêng và lẽ phải chung"], ["Tri ân đồ báo dữ tri ân bất báo", "Biết ơn báo đáp và biết ơn không báo đáp"], ["Vãng dữ phản", "Đi và về"], ["Tương nhu dĩ mạt dữ tương vong giang hồ", "Nương tựa lẫn nhau và quên nhau giữa giang hồ"], ["Viễn lự dữ cận ưu", "Lo xa và lo gần"], ["Công bút dữ tả ý", "Vẽ tỉ mỉ và vẽ tả ý"], ["Địch dữ hữu", "Thù và bạn"], ["Tự do dữ ước thúc", "Tự do và ràng buộc"], ["Tác kiển dữ phá kiển", "Làm kén và phá kén"], ["Ưu dữ hành", "Lo lắng và hành động"], ["Vô ngã dữ hữu ngã", "Vô ngã và hữu ngã"], ["Hữu ý tứ dữ hữu ý nghĩa", "Thú vị và có ý nghĩa"], ["Trường xứ dữ đoản xứ", "Điểm mạnh và điểm yếu"], ["Chỉnh thể bả ác · cục bộ phân tích", "Nắm tổng thể · phân tích bộ phận"], ["Trực dữ khúc", "Thẳng và cong"], ["Trị dữ trực", "Đáng giá và ngay thẳng"], ["Hứng thú dữ chí thú", "Hứng thú và chí hướng"], ["Cương dữ nhu", "Cứng và mềm"], ["Bất năng dữ bất vi", "Không thể và không làm"]];
+let BOOK = [], DICT = new Map(), PTEXT = [];  // PTEXT[e][p] = string
+let cur = 0, sel = null; // sel = {e,p,i,j} token range
+let sample = null;
+let fs = store.get('fs', 21);
+let saved = store.get('saved', {});   // word -> {p,h,d,e,s}
+const aiCache = store.get('ai', {});
+const trCache = store.get('tr', {});
+const saveAi = () => { const k = Object.keys(aiCache); if (k.length > 300) k.slice(0, k.length-300).forEach(x => delete aiCache[x]); store.set('ai', aiCache); };
+const saveTr = () => store.set('tr', trCache);
+
+function applyFs(){ document.documentElement.style.setProperty('--fs', fs+'px'); store.set('fs', fs); }
+applyFs();
+$('fMinus').onclick = () => { fs = Math.max(15, fs-2); applyFs(); };
+$('fPlus').onclick = () => { fs = Math.min(34, fs+2); applyFs(); };
+
+Promise.all([fetch('book.json').then(r=>r.json()), fetch('dict.json').then(r=>r.json())]).then(([b, d]) => {
+  BOOK = b; DICT = new Map(d);
+  PTEXT = BOOK.map(e => e.p.map(toks => toks.join('')));
+  buildToc();
+  route();
+}).catch(err => { $('main').innerHTML = '<div class="loading">Không tải được dữ liệu. Hãy tải lại trang.</div>'; });
+
+try { window.claude && claude.use('sample').then(s => { sample = s; document.body.classList.toggle('has-ai', !!s); refreshAiButtons(); }); } catch(e){}
+function refreshAiButtons(){ document.querySelectorAll('[data-ai]').forEach(b => b.hidden = !sample); }
+
+/* ---------- routing ---------- */
+function route(){
+  const m = /^#bai-(\d+)$/.exec(location.hash);
+  let n = m ? +m[1] : store.get('last', 1);
+  if (!(n>=1 && n<=BOOK.length)) n = 1;
+  renderEssay(n-1);
+}
+window.addEventListener('hashchange', route);
+function go(n){ if (location.hash === '#bai-'+n) route(); else location.hash = 'bai-'+n; }
+
+/* ---------- essay ---------- */
+function isSub(text){ return text.length <= 28 && !/[。！？!?；;]/.test(text.slice(0,-1)) && !/[。]$/.test(text); }
+function renderEssay(i){
+  cur = i; store.set('last', i+1); closeSheet();
+  const e = BOOK[i];
+  $('topTitle').innerHTML = `<small>Bài ${e.n} ·</small> ${esc(e.t)}`;
+  document.title = `${e.n}. ${e.t} · Đọc dịch Trung–Việt`;
+  // locate subtitle: first short paragraph without sentence punctuation -> everything before is đề bài
+  let subIdx = PTEXT[i].findIndex((t, k) => k > 0 && isSub(t));
+  let h = `<div class="essay-head"><div class="brandrow"><span class="logo"><span class="mk">汉</span><span class="wm">HanHan <span>Chinese</span></span></span><span class="by">Đọc dịch Trung–Việt</span></div><div class="num">BÀI ${e.n} / ${BOOK.length}</div><h1>${esc(e.t)}</h1>${TITLES[i]?`<div class="sub2"><b>${esc(TITLES[i][0])}</b> · ${esc(TITLES[i][1])}</div>`:''}
+    <div class="acts"><button class="chip" data-ai id="trAll">🌐 Dịch cả bài</button><button class="chip" id="hideTr">Ẩn/hiện bản dịch</button></div></div>
+    <div class="hint">Chạm vào bất kỳ từ nào để xem nghĩa và cách dùng</div>`;
+  e.p.forEach((toks, k) => {
+    const sub = k === subIdx || (k>subIdx && subIdx>0 && false);
+    const prompt = subIdx > 0 && k < subIdx;
+    const cls = sub ? 'para sub' : prompt ? 'para prompt' : 'para';
+    h += `<div class="${cls}" data-p="${k}">${prompt && k===0 ? '<div class="tag">ĐỀ BÀI</div>' : ''}<div class="zh">${tokHtml(i, k, toks)}</div>`;
+    const tr = trCache[`${i}:${k}`];
+    h += `<div class="vi"${tr?'':' hidden'}>${tr?esc(tr):''}</div>`;
+    h += `<div class="ptools"><button class="tbtn" data-ai data-tr="${k}">${tr?'Ẩn bản dịch':'Dịch đoạn'}</button></div></div>`;
+  });
+  h += `<div class="navbtns">${i>0?`<button id="prevE">← Bài ${BOOK[i-1].n}<b>${esc(BOOK[i-1].t)}</b></button>`:'<span style="flex:1"></span>'}
+        ${i<BOOK.length-1?`<button class="r" id="nextE">Bài ${BOOK[i+1].n} →<b>${esc(BOOK[i+1].t)}</b></button>`:'<span style="flex:1"></span>'}</div>`;
+  $('main').innerHTML = h;
+  if ($('prevE')) $('prevE').onclick = () => go(BOOK[i-1].n);
+  if ($('nextE')) $('nextE').onclick = () => go(BOOK[i+1].n);
+  $('trAll').onclick = translateAll;
+  $('hideTr').onclick = () => { const vis = [...document.querySelectorAll('.vi')].some(v => !v.hidden && v.textContent); document.querySelectorAll('.para').forEach(p => { const v = p.querySelector('.vi'), b = p.querySelector('[data-tr]'); if (!v.textContent) return; v.hidden = vis; b.textContent = vis ? 'Hiện bản dịch' : 'Ẩn bản dịch'; }); };
+  refreshAiButtons();
+  window.scrollTo(0, 0);
+  markToc();
+}
+function tokHtml(e, p, toks){
+  return toks.map((w, j) => CJK.test(w) ? `<span class="w${saved[w]?' saved':''}" data-e="${e}" data-p="${p}" data-i="${j}">${esc(w)}</span>` : esc(w)).join('');
+}
+
+$('main').addEventListener('click', ev => {
+  const w = ev.target.closest('.w');
+  if (w) { const e=+w.dataset.e, p=+w.dataset.p, i=+w.dataset.i; openWord({e, p, i, j:i}); return; }
+  const t = ev.target.closest('[data-tr]');
+  if (t) { const k = +t.dataset.tr; const box = t.closest('.para').querySelector('.vi');
+    if (box.textContent && !box.classList.contains('err')) { box.hidden = !box.hidden; t.textContent = box.hidden ? 'Hiện bản dịch' : 'Ẩn bản dịch'; return; }
+    translatePara(k); }
+});
+
+/* ---------- translation ---------- */
+const busy = new Set();
+async function translatePara(k){
+  const key = `${cur}:${k}`, para = document.querySelector(`.para[data-p="${k}"]`); if (!para) return false;
+  const box = para.querySelector('.vi'), btn = para.querySelector('[data-tr]');
+  if (trCache[key]) { box.textContent = trCache[key]; box.hidden = false; box.classList.remove('err'); btn.textContent = 'Ẩn bản dịch'; return true; }
+  if (!sample || busy.has(key)) return false;
+  busy.add(key); box.hidden = false; box.classList.remove('err'); box.textContent = 'Đang dịch…'; btn.textContent = '…';
+  const e = BOOK[cur];
+  const prompt = `Bạn là dịch giả Trung–Việt chuyên văn nghị luận. Dịch đoạn văn sau (trích bài "${e.t}") sang tiếng Việt trôi chảy, trang trọng, sát nghĩa. Giữ hình ảnh của thành ngữ/điển tích/câu thơ; nếu có, thêm chú thích rất ngắn trong ngoặc vuông ngay sau. Chỉ trả về bản dịch, không thêm lời dẫn.\n\nĐoạn văn:\n${PTEXT[cur][k]}`;
+  try {
+    const r = await sample(prompt, { modelTier: 'default', onText: ({text}) => { if (cur === +key.split(':')[0]) box.textContent = text; } });
+    trCache[key] = r.text.trim(); saveTr();
+    if (cur === +key.split(':')[0]) { box.textContent = trCache[key]; btn.textContent = 'Ẩn bản dịch'; }
+    return true;
+  } catch(err) {
+    box.classList.add('err');
+    box.textContent = err && err.code === 'rate_limited' ? 'Đang bị giới hạn lượt, thử lại sau ít phút.' : err && err.code === 'not_granted' ? 'Trang chưa được phép dùng Claude để dịch.' : 'Chưa dịch được đoạn này, thử lại sau.';
+    btn.textContent = 'Dịch lại';
+    return false;
+  } finally { busy.delete(key); }
+}
+async function translateAll(){
+  const n = BOOK[cur].p.length, me = cur;
+  for (let k = 0; k < n; k++) { if (cur !== me) return; const ok = await translatePara(k); if (!ok && !trCache[`${me}:${k}`]) return; }
+}
+
+/* ---------- dictionary helpers ---------- */
+function hvOf(word){
+  const d = DICT.get(word); if (d && d[0].h) return d[0].h;
+  return [...word].map(c => { const x = DICT.get(c); return x ? (x[0].h || '') : ''; }).filter(Boolean).join(' ');
+}
+function pyOf(word){
+  const d = DICT.get(word); if (d) return d[0].p;
+  return [...word].map(c => { const x = DICT.get(c); return x ? x[0].p : ''; }).join(' ');
+}
+function selWord(s){ return BOOK[s.e] ? (s.p < 0 ? [BOOK[s.e].t] : BOOK[s.e].p[s.p]).slice(s.i, s.j+1).join('') : ''; }
+function selTokens(s){ return s.p < 0 ? [BOOK[s.e].t] : BOOK[s.e].p[s.p]; }
+function sentenceOf(text, idx, len){
+  const stops = /[。！？!?；…]/;
+  let a = idx; while (a > 0 && !stops.test(text[a-1])) a--;
+  let b = idx + len; while (b < text.length && !stops.test(text[b])) b++;
+  while (b < text.length && /[。！？!?；…”"』」]/.test(text[b])) b++;
+  while (a < idx && /[”"』」，、\s]/.test(text[a])) a++;
+  return { s: text.slice(a, b), off: idx - a };
+}
+function curSentence(s){
+  const toks = selTokens(s); const text = toks.join('');
+  const off = toks.slice(0, s.i).join('').length;
+  return sentenceOf(text, off, selWord(s).length).s;
+}
+function occurrences(word, max){
+  const out = []; let total = 0;
+  for (let e = 0; e < PTEXT.length; e++) for (let p = 0; p < PTEXT[e].length; p++) {
+    const t = PTEXT[e][p]; let i = t.indexOf(word);
+    while (i >= 0) { total++; if (out.length < max) { const r = sentenceOf(t, i, word.length); if (!out.some(o => o.s === r.s)) out.push({ e, p, ...r }); } i = t.indexOf(word, i + word.length); }
+  }
+  return { out, total };
+}
+
+/* ---------- sheet ---------- */
+function openWord(s){
+  sel = s;
+  document.querySelectorAll('.w.sel').forEach(x => x.classList.remove('sel'));
+  for (let k = s.i; k <= s.j; k++) { const el = document.querySelector(`.w[data-e="${s.e}"][data-p="${s.p}"][data-i="${k}"]`); el && el.classList.add('sel'); }
+  const word = selWord(s);
+  renderSheet(word, s);
+  $('sheet').classList.add('on'); $('scrim').classList.add('on');
+}
+function openPlain(word){ sel = null; document.querySelectorAll('.w.sel').forEach(x => x.classList.remove('sel')); renderSheet(word, null); $('sheet').classList.add('on'); $('scrim').classList.add('on'); }
+function closeSheet(){ $('sheet').classList.remove('on'); $('scrim').classList.remove('on'); document.querySelectorAll('.w.sel').forEach(x => x.classList.remove('sel')); if (aiCtl) { aiCtl.abort(); aiCtl = null; } }
+$('scrim').onclick = closeSheet; $('shClose').onclick = closeSheet;
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+
+let aiCtl = null, sheetWord = '';
+function renderSheet(word, s){
+  sheetWord = word;
+  if (aiCtl) { aiCtl.abort(); aiCtl = null; }
+  const ents = DICT.get(word);
+  $('shWord').textContent = word;
+  const py = pyOf(word), hv = hvOf(word);
+  $('shSub').innerHTML = `<span class="py">${esc(py)}</span>${hv ? ` · Hán Việt: <b>${esc(hv)}</b>` : ''}`;
+  $('shStar').textContent = saved[word] ? '★' : '☆';
+  let h = '';
+  if (s) {
+    const toks = selTokens(s);
+    const canL = s.i > 0 && CJK.test(toks[s.i-1]), canR = s.j < toks.length-1 && CJK.test(toks[s.j+1]);
+    if (canL || canR || s.j > s.i) {
+      h += `<div class="ext">${canL?`<button data-ext="L">＋ ghép chữ trước: ${esc(toks[s.i-1])}</button>`:''}${canR?`<button data-ext="R">＋ ghép chữ sau: ${esc(toks[s.j+1])}</button>`:''}${s.j>s.i?'<button data-ext="reset">↺ chỉ từ đã chạm</button>':''}</div>`;
+    }
+  }
+  h += '<div class="sec">Nghĩa</div>';
+  if (ents) {
+    ents.forEach(r => {
+      h += `<div class="rd"><div class="rh"><b>${esc(r.p)}</b>${r.h?` <i>· ${esc(r.h)}</i>`:''}</div><ol>${r.d.map(x => `<li>${esc(x)}</li>`).join('')}</ol></div>`;
+    });
+  } else {
+    h += `<div class="nodef">Cụm “${esc(word)}” chưa có trong từ điển — xem nghĩa từng chữ bên dưới${sample?', hoặc bấm nút giải thích':''}.</div>`;
+  }
+  const chars = [...word].filter(c => CJK.test(c));
+  if (chars.length > 1) {
+    h += '<div class="sec">Từng chữ</div><div class="chars">';
+    chars.forEach(c => { const d = DICT.get(c); h += `<div class="ch" data-ch="${esc(c)}"><span class="c">${esc(c)}</span><span class="h">${esc(d? d[0].h || d[0].p : '')}</span> <span class="muted">${esc(d? d[0].p:'')}</span><span class="m">${esc(d ? d[0].d.slice(0,3).join('; ') : '—')}</span></div>`; });
+    h += '</div>';
+  }
+  if (s && sample) h += `<button class="ai-btn" data-ai id="aiBtn">✨ Giải thích nghĩa trong câu & cách dùng</button><div id="aiOut"></div>`;
+  const occ = occurrences(word, 6);
+  h += `<div class="sec">Cách dùng trong sách · ${occ.total} lần</div>`;
+  if (!occ.out.length) h += '<div class="muted">Không tìm thấy.</div>';
+  occ.out.forEach(o => {
+    const before = esc(o.s.slice(0, o.off)), mid = esc(o.s.slice(o.off, o.off + word.length)), after = esc(o.s.slice(o.off + word.length));
+    h += `<div class="ex" data-go="${o.e}:${o.p}">${before}<mark>${mid}</mark>${after}<small>Bài ${BOOK[o.e].n} · ${esc(BOOK[o.e].t)}</small></div>`;
+  });
+  $('shBody').innerHTML = h; $('shBody').scrollTop = 0;
+  const key = aiKey(word, s);
+  if (s && sample && aiCache[key]) showAi(aiCache[key]);
+}
+$('shBody').addEventListener('click', ev => {
+  const x = ev.target.closest('[data-ext]');
+  if (x && sel) { const s = { ...sel }; if (x.dataset.ext === 'L') s.i--; else if (x.dataset.ext === 'R') s.j++; else { s.j = s.i; } openWord(s); return; }
+  const c = ev.target.closest('[data-ch]'); if (c) { openPlain(c.dataset.ch); return; }
+  const g = ev.target.closest('[data-go]');
+  if (g) { const [e, p] = g.dataset.go.split(':').map(Number); closeSheet(); if (e !== cur) { go(BOOK[e].n); setTimeout(() => flash(p), 80); } else flash(p); return; }
+  if (ev.target.id === 'aiBtn') explain();
+});
+function flash(p){ const el = document.querySelector(`.para[data-p="${p}"]`); if (!el) return; el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.animate([{ outline: '3px solid var(--accent)' }, { outline: '3px solid transparent' }], { duration: 1600 }); }
+
+function aiKey(word, s){ return s ? `${word}|${curSentence(s)}` : word; }
+function md(t){
+  const lines = esc(t).split('\n'); let out = '', inList = false;
+  for (let l of lines) {
+    l = l.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+    if (/^\s*[-•*]\s+/.test(l)) { if (!inList) { out += '<ul>'; inList = true; } out += '<li>' + l.replace(/^\s*[-•*]\s+/, '') + '</li>'; }
+    else { if (inList) { out += '</ul>'; inList = false; } out += l.trim() ? l + '<br>' : ''; }
+  }
+  return out + (inList ? '</ul>' : '');
+}
+function showAi(t){ const o = $('aiOut'); if (o) o.innerHTML = `<div class="ai">${md(t)}</div>`; const b = $('aiBtn'); if (b) b.hidden = true; }
+async function explain(){
+  if (!sample || !sel) return;
+  const word = selWord(sel), sent = curSentence(sel), key = aiKey(word, sel);
+  if (aiCache[key]) return showAi(aiCache[key]);
+  const btn = $('aiBtn'); btn.disabled = true; btn.textContent = 'Đang giải thích…';
+  aiCtl = new AbortController(); const ctl = aiCtl;
+  const prompt = `Bạn là giáo viên tiếng Trung cho người Việt đang luyện HSK 7–9 và viết văn nghị luận. Giải thích từ/cụm "${word}" trong câu sau, bằng tiếng Việt, ngắn gọn, chính xác.
+
+Câu: ${sent}
+
+Trả lời đúng định dạng sau (giữ các tiêu đề in đậm, không thêm lời dẫn):
+**Nghĩa trong câu:** (nghĩa cụ thể ở ngữ cảnh này)
+**Pinyin · Hán Việt:** (pinyin có dấu · âm Hán Việt)
+**Từ loại / sắc thái:** (từ loại; văn viết hay khẩu ngữ; thành ngữ thì nêu xuất xứ/nghĩa đen ngắn gọn)
+**Cách dùng:**
+- (cấu trúc hoặc kết hợp từ thường gặp, kèm nghĩa)
+- (1–2 ý nữa: phân biệt với từ gần nghĩa, lưu ý khi dùng trong văn nghị luận)
+**Ví dụ:**
+- (câu chữ Hán) — (pinyin) — (dịch)
+- (câu chữ Hán) — (pinyin) — (dịch)
+**Dịch cả câu:** (bản dịch câu trên)`;
+  try {
+    const r = await sample(prompt, { modelTier: 'default', signal: ctl.signal, onText: ({ text }) => { if (sheetWord === word) { const o = $('aiOut'); if (o) o.innerHTML = `<div class="ai">${md(text)}</div>`; } } });
+    aiCache[key] = r.text.trim(); saveAi();
+    if (sheetWord === word) showAi(aiCache[key]);
+  } catch (err) {
+    if (ctl.signal.aborted) return;
+    const o = $('aiOut'); if (o) o.innerHTML = `<div class="ai">${err && err.code === 'rate_limited' ? 'Đang bị giới hạn lượt, thử lại sau ít phút.' : 'Chưa giải thích được, thử lại sau.'}</div>`;
+    if ($('aiBtn')) { $('aiBtn').disabled = false; $('aiBtn').textContent = '✨ Thử lại'; }
+  }
+}
+
+/* ---------- speech ---------- */
+let zhVoice = null;
+function pickVoice(){ try { const v = speechSynthesis.getVoices(); zhVoice = v.find(x => /zh[-_]CN/i.test(x.lang)) || v.find(x => /^zh/i.test(x.lang)) || null; $('shSpeak').hidden = !zhVoice; } catch(e){} }
+try { if ('speechSynthesis' in window) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; } } catch(e){}
+$('shSpeak').onclick = () => { try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(sheetWord); u.lang = 'zh-CN'; if (zhVoice) u.voice = zhVoice; u.rate = .85; speechSynthesis.speak(u); } catch(e){} };
+
+/* ---------- saved words ---------- */
+$('shStar').onclick = () => {
+  const w = sheetWord; if (!w) return;
+  if (saved[w]) delete saved[w];
+  else { const d = DICT.get(w); saved[w] = { p: pyOf(w), h: hvOf(w), d: d ? d[0].d.slice(0, 3).join('; ') : '', e: cur, s: sel ? curSentence(sel) : '' }; }
+  store.set('saved', saved);
+  $('shStar').textContent = saved[w] ? '★' : '☆';
+  document.querySelectorAll('.w').forEach(el => el.classList.toggle('saved', !!saved[el.textContent]));
+};
+$('bSaved').onclick = () => {
+  const ks = Object.keys(saved).reverse();
+  $('savedList').innerHTML = ks.length ? ks.map(w => { const x = saved[w]; return `<div class="sw"><div class="z" data-w="${esc(w)}">${esc(w)}</div><div class="i"><b>${esc(x.p)}</b>${x.h?' · '+esc(x.h):''}<br>${esc(x.d||'')}${x.s?`<br><span class="muted">${esc(x.s)} — Bài ${BOOK[x.e]?BOOK[x.e].n:''}</span>`:''}</div><button class="ibtn" data-del="${esc(w)}" aria-label="Xoá">✕</button></div>`; }).join('') : '<div class="loading">Chưa có từ nào. Chạm vào một từ rồi bấm ☆ để lưu.</div>';
+  $('saved').classList.add('on');
+};
+$('savedList').addEventListener('click', ev => {
+  const d = ev.target.closest('[data-del]'); if (d) { delete saved[d.dataset.del]; store.set('saved', saved); $('bSaved').onclick(); document.querySelectorAll('.w').forEach(el => el.classList.toggle('saved', !!saved[el.textContent])); return; }
+  const z = ev.target.closest('[data-w]'); if (z) { $('saved').classList.remove('on'); openPlain(z.dataset.w); }
+});
+
+/* ---------- TOC ---------- */
+function buildToc(){
+  $('tocList').innerHTML = CREDIT_HTML + BOOK.map((e, i) => { const t = TITLES[i] || ['', '']; return `<button class="it" data-i="${i}"><span class="n">${e.n}</span><span class="tb"><span class="t">${esc(e.t)}</span><span class="hv">${esc(t[0])}</span><span class="vn">${esc(t[1])}</span></span></button>`; }).join('');
+}
+function markToc(){ document.querySelectorAll('#tocList .it').forEach(b => b.classList.toggle('cur', +b.dataset.i === cur)); }
+$('bMenu').onclick = () => { $('toc').classList.add('on'); const c = document.querySelector('#tocList .cur'); c && c.scrollIntoView({ block: 'center' }); };
+$('tocList').addEventListener('click', ev => { const b = ev.target.closest('.it'); if (b) { $('toc').classList.remove('on'); go(BOOK[+b.dataset.i].n); } });
+$('tocQ').addEventListener('input', () => { const q = $('tocQ').value.trim().toLowerCase(); document.querySelectorAll('#tocList .it').forEach(b => { b.hidden = q && !b.textContent.toLowerCase().includes(q); }); });
+document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => $(b.dataset.close).classList.remove('on'));
+})();
+</script>
+</body>
+</html>
