@@ -168,6 +168,8 @@ let saved = store.get('saved', {});   // word -> {p,h,d,e,s}
 const aiCache = store.get('ai', {});
 const trCache = store.get('tr', {});
 const saveAi = () => { const k = Object.keys(aiCache); if (k.length > 300) k.slice(0, k.length-300).forEach(x => delete aiCache[x]); store.set('ai', aiCache); };
+let STATIC_TR = {};
+const getTr = k => STATIC_TR[k] || trCache[k];
 const saveTr = () => store.set('tr', trCache);
 
 function applyFs(){ document.documentElement.style.setProperty('--fs', fs+'px'); store.set('fs', fs); }
@@ -175,8 +177,8 @@ applyFs();
 $('fMinus').onclick = () => { fs = Math.max(15, fs-2); applyFs(); };
 $('fPlus').onclick = () => { fs = Math.min(34, fs+2); applyFs(); };
 
-Promise.all([fetch('book.json').then(r=>r.json()), fetch('dict.json').then(r=>r.json())]).then(([b, d]) => {
-  BOOK = b; DICT = new Map(d);
+Promise.all([fetch('book.json').then(r=>r.json()), fetch('dict.json').then(r=>r.json()), fetch('tr.json').then(r=>r.ok?r.json():{}).catch(()=>({}))]).then(([b, d, t]) => {
+  STATIC_TR = t || {}; BOOK = b; DICT = new Map(d);
   PTEXT = BOOK.map(e => e.p.map(toks => toks.join('')));
   buildToc();
   route();
@@ -206,15 +208,15 @@ function renderEssay(i){
   let subIdx = PTEXT[i].findIndex((t, k) => k > 0 && isSub(t));
   let h = `<div class="essay-head"><div class="brandrow"><span class="logo"><span class="mk">汉</span><span class="wm">HanHan <span>Chinese</span></span></span><span class="by">Đọc dịch Trung–Việt</span></div><div class="num">BÀI ${e.n} / ${BOOK.length}</div><h1>${esc(e.t)}</h1>${TITLES[i]?`<div class="sub2"><b>${esc(TITLES[i][0])}</b> · ${esc(TITLES[i][1])}</div>`:''}
     <div class="acts"><button class="chip" data-ai id="trAll">🌐 Dịch cả bài</button><button class="chip" id="hideTr" data-ai>Hiện bản dịch</button></div></div>
-    <div class="hint">Chạm vào bất kỳ từ nào để xem nghĩa và cách dùng</div>`;
+    <div class="hint">Chạm vào bất kỳ từ nào để xem nghĩa và cách dùng</div><div class="hint notr" hidden>Bài này chưa có bản dịch sẵn.</div>`;
   e.p.forEach((toks, k) => {
     const sub = k === subIdx || (k>subIdx && subIdx>0 && false);
     const prompt = subIdx > 0 && k < subIdx;
     const cls = sub ? 'para sub' : prompt ? 'para prompt' : 'para';
     h += `<div class="${cls}" data-p="${k}">${prompt && k===0 ? '<div class="tag">ĐỀ BÀI</div>' : ''}<div class="zh">${tokHtml(i, k, toks)}</div>`;
-    const tr = trCache[`${i}:${k}`];
+    const tr = getTr(`${i}:${k}`);
     h += `<div class="vi"${tr?'':' hidden'}>${tr?esc(tr):''}</div>`;
-    h += `<div class="ptools"><button class="tbtn" data-ai data-tr="${k}">${tr?'Ẩn bản dịch':'Dịch đoạn'}</button></div></div>`;
+    h += `<div class="ptools"><button class="tbtn" data-ai${tr?' data-has-tr="1"':''} data-tr="${k}">${tr?'Ẩn bản dịch':'Dịch đoạn'}</button></div></div>`;
   });
   h += `<div class="navbtns">${i>0?`<button id="prevE">← Bài ${BOOK[i-1].n}<b>${esc(BOOK[i-1].t)}</b></button>`:'<span style="flex:1"></span>'}
         ${i<BOOK.length-1?`<button class="r" id="nextE">Bài ${BOOK[i+1].n} →<b>${esc(BOOK[i+1].t)}</b></button>`:'<span style="flex:1"></span>'}</div>`;
@@ -229,7 +231,7 @@ function renderEssay(i){
     paras.forEach(p => { p.querySelector('.vi').hidden = vis; p.querySelector('[data-tr]').textContent = vis ? 'Hiện bản dịch' : 'Ẩn bản dịch'; });
     $('hideTr').textContent = vis ? 'Hiện bản dịch' : 'Ẩn bản dịch';
   };
-  { const any = e.p.some((_, k) => trCache[`${i}:${k}`]); $('hideTr').textContent = any ? 'Ẩn bản dịch' : 'Hiện bản dịch'; $('hideTr').dataset.hasTr = any ? '1' : ''; }
+  { const any = e.p.some((_, k) => getTr(`${i}:${k}`)); $('hideTr').textContent = any ? 'Ẩn bản dịch' : 'Hiện bản dịch'; $('hideTr').dataset.hasTr = any ? '1' : ''; const nt = document.querySelector('.notr'); if (nt) nt.hidden = any || !!sample; }
   refreshAiButtons();
   window.scrollTo(0, 0);
   markToc();
@@ -252,7 +254,7 @@ const busy = new Set();
 async function translatePara(k){
   const key = `${cur}:${k}`, para = document.querySelector(`.para[data-p="${k}"]`); if (!para) return false;
   const box = para.querySelector('.vi'), btn = para.querySelector('[data-tr]');
-  if (trCache[key]) { box.textContent = trCache[key]; box.hidden = false; box.classList.remove('err'); btn.textContent = 'Ẩn bản dịch'; return true; }
+  if (getTr(key)) { box.textContent = getTr(key); box.hidden = false; box.classList.remove('err'); btn.textContent = 'Ẩn bản dịch'; return true; }
   if (!sample || busy.has(key)) return false;
   busy.add(key); box.hidden = false; box.classList.remove('err'); box.textContent = 'Đang dịch…'; btn.textContent = '…';
   const e = BOOK[cur];
@@ -271,7 +273,7 @@ async function translatePara(k){
 }
 async function translateAll(){
   const n = BOOK[cur].p.length, me = cur; if ($('hideTr')) $('hideTr').textContent = 'Ẩn bản dịch';
-  for (let k = 0; k < n; k++) { if (cur !== me) return; const ok = await translatePara(k); if (!ok && !trCache[`${me}:${k}`]) return; }
+  for (let k = 0; k < n; k++) { if (cur !== me) return; const ok = await translatePara(k); if (!ok && !getTr(`${me}:${k}`)) return; }
 }
 
 /* ---------- dictionary helpers ---------- */
