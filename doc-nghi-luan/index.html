@@ -183,7 +183,7 @@ Promise.all([fetch('book.json').then(r=>r.json()), fetch('dict.json').then(r=>r.
 }).catch(err => { $('main').innerHTML = '<div class="loading">Không tải được dữ liệu. Hãy tải lại trang.</div>'; });
 
 try { window.claude && claude.use('sample').then(s => { sample = s; document.body.classList.toggle('has-ai', !!s); refreshAiButtons(); }); } catch(e){}
-function refreshAiButtons(){ document.querySelectorAll('[data-ai]').forEach(b => b.hidden = !sample); }
+function refreshAiButtons(){ document.querySelectorAll('[data-ai]').forEach(b => b.hidden = !sample && !b.dataset.hasTr); }
 
 /* ---------- routing ---------- */
 function route(){
@@ -205,7 +205,7 @@ function renderEssay(i){
   // locate subtitle: first short paragraph without sentence punctuation -> everything before is đề bài
   let subIdx = PTEXT[i].findIndex((t, k) => k > 0 && isSub(t));
   let h = `<div class="essay-head"><div class="brandrow"><span class="logo"><span class="mk">汉</span><span class="wm">HanHan <span>Chinese</span></span></span><span class="by">Đọc dịch Trung–Việt</span></div><div class="num">BÀI ${e.n} / ${BOOK.length}</div><h1>${esc(e.t)}</h1>${TITLES[i]?`<div class="sub2"><b>${esc(TITLES[i][0])}</b> · ${esc(TITLES[i][1])}</div>`:''}
-    <div class="acts"><button class="chip" data-ai id="trAll">🌐 Dịch cả bài</button><button class="chip" id="hideTr">Ẩn/hiện bản dịch</button></div></div>
+    <div class="acts"><button class="chip" data-ai id="trAll">🌐 Dịch cả bài</button><button class="chip" id="hideTr" data-ai>Hiện bản dịch</button></div></div>
     <div class="hint">Chạm vào bất kỳ từ nào để xem nghĩa và cách dùng</div>`;
   e.p.forEach((toks, k) => {
     const sub = k === subIdx || (k>subIdx && subIdx>0 && false);
@@ -222,7 +222,14 @@ function renderEssay(i){
   if ($('prevE')) $('prevE').onclick = () => go(BOOK[i-1].n);
   if ($('nextE')) $('nextE').onclick = () => go(BOOK[i+1].n);
   $('trAll').onclick = translateAll;
-  $('hideTr').onclick = () => { const vis = [...document.querySelectorAll('.vi')].some(v => !v.hidden && v.textContent); document.querySelectorAll('.para').forEach(p => { const v = p.querySelector('.vi'), b = p.querySelector('[data-tr]'); if (!v.textContent) return; v.hidden = vis; b.textContent = vis ? 'Hiện bản dịch' : 'Ẩn bản dịch'; }); };
+  $('hideTr').onclick = () => {
+    const paras = [...document.querySelectorAll('.para')].filter(p => { const v = p.querySelector('.vi'); return v.textContent && !v.classList.contains('err'); });
+    if (!paras.length) { if (sample) translateAll(); return; }
+    const vis = paras.some(p => !p.querySelector('.vi').hidden);
+    paras.forEach(p => { p.querySelector('.vi').hidden = vis; p.querySelector('[data-tr]').textContent = vis ? 'Hiện bản dịch' : 'Ẩn bản dịch'; });
+    $('hideTr').textContent = vis ? 'Hiện bản dịch' : 'Ẩn bản dịch';
+  };
+  { const any = e.p.some((_, k) => trCache[`${i}:${k}`]); $('hideTr').textContent = any ? 'Ẩn bản dịch' : 'Hiện bản dịch'; $('hideTr').dataset.hasTr = any ? '1' : ''; }
   refreshAiButtons();
   window.scrollTo(0, 0);
   markToc();
@@ -263,7 +270,7 @@ async function translatePara(k){
   } finally { busy.delete(key); }
 }
 async function translateAll(){
-  const n = BOOK[cur].p.length, me = cur;
+  const n = BOOK[cur].p.length, me = cur; if ($('hideTr')) $('hideTr').textContent = 'Ẩn bản dịch';
   for (let k = 0; k < n; k++) { if (cur !== me) return; const ok = await translatePara(k); if (!ok && !trCache[`${me}:${k}`]) return; }
 }
 
