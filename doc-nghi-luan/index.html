@@ -169,6 +169,7 @@ const aiCache = store.get('ai', {});
 const trCache = store.get('tr', {});
 const saveAi = () => { const k = Object.keys(aiCache); if (k.length > 300) k.slice(0, k.length-300).forEach(x => delete aiCache[x]); store.set('ai', aiCache); };
 let STATIC_TR = {};
+const DATA_V = '20261127b';
 const getTr = k => STATIC_TR[k] || trCache[k];
 const saveTr = () => store.set('tr', trCache);
 
@@ -177,7 +178,7 @@ applyFs();
 $('fMinus').onclick = () => { fs = Math.max(15, fs-2); applyFs(); };
 $('fPlus').onclick = () => { fs = Math.min(34, fs+2); applyFs(); };
 
-Promise.all([fetch('book.json').then(r=>r.json()), fetch('dict.json').then(r=>r.json()), fetch('tr.json').then(r=>r.ok?r.json():{}).catch(()=>({}))]).then(([b, d, t]) => {
+Promise.all([fetch('book.json?v='+DATA_V).then(r=>r.json()), fetch('dict.json?v='+DATA_V).then(r=>r.json()), fetch('tr.json?v='+DATA_V).then(r=>r.ok?r.json():{}).catch(()=>({}))]).then(([b, d, t]) => {
   STATIC_TR = t || {}; BOOK = b; DICT = new Map(d);
   PTEXT = BOOK.map(e => e.p.map(toks => toks.join('')));
   buildToc();
